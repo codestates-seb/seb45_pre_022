@@ -11,10 +11,6 @@ const Questions = () => {
     <MainContainer>
       <QuestionsTopBar />
       <Question />
-      <Question />
-      <Question />
-      <Question />
-      <Question />
     </MainContainer>
   );
 };

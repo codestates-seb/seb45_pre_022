@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { Tag } from './Tags';
+import { EllipsisText } from './EllipsisText';
 
 // 하나의 질문 컨테이너
 const QuestionContainer = styled.div`
@@ -41,16 +42,11 @@ const QuestionSummary = styled.div`
 const QuestionTitle = styled.h3`
   margin-bottom: 5px;
   color: #0074cc;
-`;
+  cursor: pointer;
 
-// 텍스트 생략 컴포넌트
-const EllipsisText = styled.div`
-  display: -webkit-box;
-  overflow: hidden;
-  max-height: ${(props) => props.maxLine * props.lineHeight}px;
-  -webkit-line-clamp: ${(props) => props.maxLine};
-  -webkit-box-orient: vertical;
-  line-height: ${(props) => props.lineHeight}px;
+  &:hover {
+    color: #0088ff;
+  }
 `;
 
 // 질문 내용 스타일
@@ -62,13 +58,13 @@ const QuestionContent = styled(EllipsisText)`
 const TagContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-top: 10px;
 `;
 
 // 유저 정보 컨테이너
 const UserContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 10px;
 `;
 
 // 유저 정보
@@ -77,9 +73,26 @@ const UserInfo = styled.div`
   align-items: center;
 `;
 
-// 임시 유저 컴포넌트
+// 유저 정보 컴포넌트
 const User = styled.div`
-  border: 1px solid red;
+  margin-right: 10px;
+  font-size: 14px;
+`;
+
+// 유저 이름
+const UserName = styled(User)`
+  font-weight: bold;
+  color: #0074cc;
+`;
+
+// 유저 팔로워 수
+const Follower = styled(User)`
+  font-weight: bold;
+`;
+
+// 질문 생성 날짜
+const CreatedAt = styled(User)`
+  color: gray;
 `;
 
 const Question = () => {
@@ -87,6 +100,10 @@ const Question = () => {
   const votes = 2;
   const answers = 3;
   const views = 3;
+
+  const username = 'username';
+  const follower = 3;
+  const createdAt = '2023-08-10';
 
   return (
     <QuestionContainer>
@@ -110,10 +127,9 @@ const Question = () => {
             <Tag>Frontend</Tag>
           </TagContainer>
           <UserInfo>
-            <User>이미지</User>
-            <User>유저 이름</User>
-            <User>팔로워 수</User>
-            <User>작성 시간</User>
+            <UserName>{username}</UserName>
+            <Follower>{follower}</Follower>
+            <CreatedAt>{createdAt}</CreatedAt>
           </UserInfo>
         </UserContainer>
       </QuestionSummary>

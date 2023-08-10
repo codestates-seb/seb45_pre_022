@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Questions from './components/Questions';
-import Question from './components/Question';
+import Questions from './components/Questions/Questions';
+import Question from './components/Questions/Question';
 
 function App() {
   return (
@@ -9,9 +9,9 @@ function App() {
       <header style={{ backgroundColor: 'red' }}>header</header>
       <Routes>
         <Route path="/" element={<Questions />} />
-        <Route path="/questions/:id" element={<Question />} />
+        {/* <Route path="/questions/:id" element={<Question />} /> */}
       </Routes>
-      <footer style={{ backgroundColor: 'gray' }}>footer</footer>
+      {/* <footer style={{ backgroundColor: 'gray' }}>footer</footer> */}
     </BrowserRouter>
   );
 }

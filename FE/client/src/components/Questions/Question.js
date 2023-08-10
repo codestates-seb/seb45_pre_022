@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
+import { Tag } from './Tags';
 
+// 하나의 질문 컨테이너
 const QuestionContainer = styled.div`
   display: flex;
   width: 727px;
@@ -7,6 +9,7 @@ const QuestionContainer = styled.div`
   border-top: 1px solid lightgray;
 `;
 
+// 질문에 대한 정보 컨테이너
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,25 +19,31 @@ const InfoContainer = styled.div`
   margin-bottom: 4px;
 `;
 
-const VoteInfo = styled.div``;
-
+// 질문에 대한 각각의 정보 스타일
 const Info = styled.div`
   color: gray;
+  margin-top: 4px;
+  font-size: 13px;
+
+  &:first-child {
+    color: black;
+  }
 `;
 
+// 질문에 대한 제목, 내용 등 요약 컨테이너
 const QuestionSummary = styled.div`
   display: flex;
   flex-direction: column;
   width: 611px;
 `;
 
-const QuestionTitle = styled.div`
+// 질문 제목 스타일
+const QuestionTitle = styled.h3`
   margin-bottom: 5px;
-  font-size: 17px;
   color: #0074cc;
-  font-weight: 600;
 `;
 
+// 텍스트 생략 컴포넌트
 const EllipsisText = styled.div`
   display: -webkit-box;
   overflow: hidden;
@@ -44,15 +53,47 @@ const EllipsisText = styled.div`
   line-height: ${(props) => props.lineHeight}px;
 `;
 
-const QuestionContent = styled(EllipsisText)``;
+// 질문 내용 스타일
+const QuestionContent = styled(EllipsisText)`
+  font-size: 14px;
+`;
+
+// 태그 컨테이너
+const TagContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+`;
+
+// 유저 정보 컨테이너
+const UserContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+// 유저 정보
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+// 임시 유저 컴포넌트
+const User = styled.div`
+  border: 1px solid red;
+`;
 
 const Question = () => {
+  // 임시 상태 값
+  const votes = 2;
+  const answers = 3;
+  const views = 3;
+
   return (
     <QuestionContainer>
       <InfoContainer>
-        <VoteInfo>{2} votes</VoteInfo>
-        <Info>{3} answers</Info>
-        <Info>{3} views</Info>
+        <Info>{votes} votes</Info>
+        <Info>{answers} answers</Info>
+        <Info>{views} views</Info>
       </InfoContainer>
       <QuestionSummary>
         <QuestionTitle>리액트 컴포넌트에서 문제가 생겼습니다!</QuestionTitle>
@@ -62,6 +103,19 @@ const Question = () => {
           quis, totam nam inventore est possimus ea sunt non velit quo animi
           error autem iusto deleniti vitae perferendis corrupti quibusdam!
         </QuestionContent>
+        <UserContainer>
+          <TagContainer>
+            <Tag>React</Tag>
+            <Tag>JavaScript</Tag>
+            <Tag>Frontend</Tag>
+          </TagContainer>
+          <UserInfo>
+            <User>이미지</User>
+            <User>유저 이름</User>
+            <User>팔로워 수</User>
+            <User>작성 시간</User>
+          </UserInfo>
+        </UserContainer>
       </QuestionSummary>
     </QuestionContainer>
   );

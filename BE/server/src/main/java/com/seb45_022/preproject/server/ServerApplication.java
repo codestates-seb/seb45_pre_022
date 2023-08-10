@@ -1,13 +1,13 @@
-package com.seb45_022.preproject.stackoverflow;
+package com.seb45_022.preproject.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StackOverflowApplication {
+public class ServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StackOverflowApplication.class, args);
+		SpringApplication.run(ServerApplication.class, args);
 	}
 
 }

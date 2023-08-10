@@ -36,9 +36,8 @@ public class AnswerService {
     private AnswerEntity findAnswer(long answerId) {
         Optional<AnswerEntity> optionalAnswer =
                 answerRepository.findById(answerId);
-        AnswerEntity findAnswer = optionalAnswer.orElseThrow(() ->
+        return optionalAnswer.orElseThrow(() ->
                 new RuntimeException());
-        return findAnswer;
     }
     public void deleteAnswer(long answerId) {
         AnswerEntity foundAnswer = findAnswer(answerId);

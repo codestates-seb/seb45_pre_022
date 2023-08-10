@@ -1,18 +1,25 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Footer from './components/Footer';
 import './App.css';
+import { styled } from 'styled-components';
 import Header from './components/Header';
 import Questions from './components/Questions/Questions';
-import Question from './components/Questions/Question';
+import Footer from './components/Footer';
+import Sidebar from './components/Sidebar';
+
+const MainContainer = styled.div`
+  display: flex;
+`;
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        <Route path="/" element={<Questions />} />
-        {/* <Route path="/questions/:id" element={<Question />} /> */}
-      </Routes>
+      <MainContainer>
+        <Sidebar />
+        <Routes>
+          <Route path="/" element={<Questions />} />
+        </Routes>
+      </MainContainer>
       <Footer />
     </BrowserRouter>
   );

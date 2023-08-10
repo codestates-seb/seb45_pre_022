@@ -1,6 +1,10 @@
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 
+const LinkStyled = styled(Link)`
+  text-decoration: none;
+`;
+
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,25 +21,28 @@ const SubTitle = styled.div`
 
 const Element = styled.li`
   font-size: 13px;
-  padding: 4px 4px 4px 30px;
+  padding: 4px 10px 4px 20px;
   list-style: none;
   cursor: pointer;
+  border-right: 3px solid transparent;
 
   &:hover {
-    font-weight: 600;
+    text-shadow: 0 0 1px #000;
   }
 
   &:active {
-    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-right-color: #f48024;
+    text-shadow: 0 0 1px #000;
   }
 `;
 
 const Sidebar = () => {
   return (
     <SidebarContainer>
-      <Link to="/">
+      <LinkStyled to="/">
         <SubTitle>Home</SubTitle>
-      </Link>
+      </LinkStyled>
       <SubTitle>PUBLIC</SubTitle>
       <ul>
         <Element>Questions</Element>

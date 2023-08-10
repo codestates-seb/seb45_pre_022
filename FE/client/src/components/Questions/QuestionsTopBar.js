@@ -41,7 +41,8 @@ const TabContainer = styled.div`
 const Tab = styled.div`
   font-size: 12px;
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid lightgray;
+  border-right: none;
 
   &:first-child {
     border-top-left-radius: 7px;
@@ -51,12 +52,16 @@ const Tab = styled.div`
   &:last-child {
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
+    border-right: 1px solid lightgray;
   }
 `;
 
 const Filter = styled.div`
   font-size: 12px;
   padding: 10px;
+  background-color: #e1ecf4;
+  color: #39739d;
+  border-radius: 7px;
 `;
 
 const QuestionsTopBar = () => {

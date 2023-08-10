@@ -9,9 +9,9 @@ function App() {
       <header style={{ backgroundColor: 'red' }}>header</header>
       <Routes>
         <Route path="/" element={<Questions />} />
-        <Route path="/questions/:id" element={<Question />} />
+        {/* <Route path="/questions/:id" element={<Question />} /> */}
       </Routes>
-      <footer style={{ backgroundColor: 'gray' }}>footer</footer>
+      {/* <footer style={{ backgroundColor: 'gray' }}>footer</footer> */}
     </BrowserRouter>
   );
 }

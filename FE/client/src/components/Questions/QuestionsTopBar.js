@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 
+// 제목과 버튼이 있는 컨테이너
 const AskContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -8,6 +9,7 @@ const AskContainer = styled.div`
   margin-bottom: 12px;
 `;
 
+// 질문 버튼
 const AskButton = styled.button`
   background-color: #0a95ff;
   color: white;
@@ -17,11 +19,13 @@ const AskButton = styled.button`
   height: 40px;
 `;
 
+// 제목
 const Title = styled.h1`
   font-weight: normal;
   font-size: 27px;
 `;
 
+// 필터링 탭과 필터링 버튼이 있는 컨테이너
 const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -30,15 +34,18 @@ const FilterContainer = styled.div`
   margin-bottom: 12px;
 `;
 
+// 현재 글 갯수 카운트
 const QuestionsCount = styled.div`
   font-size: 17px;
   width: 250px;
 `;
 
+// 필터링 버튼 컨테이너
 const TabContainer = styled.div`
   display: flex;
 `;
 
+// 필터링 버튼
 const Tab = styled.div`
   font-size: 12px;
   padding: 10px;
@@ -67,6 +74,7 @@ const Tab = styled.div`
   }
 `;
 
+// 필터 버튼
 const Filter = styled.div`
   font-size: 12px;
   padding: 10px;

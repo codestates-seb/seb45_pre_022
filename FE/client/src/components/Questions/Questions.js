@@ -10,6 +10,11 @@ const Questions = () => {
   return (
     <MainContainer>
       <QuestionsTopBar />
+      <Question />
+      <Question />
+      <Question />
+      <Question />
+      <Question />
     </MainContainer>
   );
 };

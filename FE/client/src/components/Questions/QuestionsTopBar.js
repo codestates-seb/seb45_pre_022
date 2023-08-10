@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 const AskContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 727px;
+  width: 751px;
   height: 50px;
   margin-bottom: 12px;
 `;
@@ -26,7 +26,8 @@ const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 727px;
+  width: 751px;
+  margin-bottom: 12px;
 `;
 
 const QuestionsCount = styled.div`
@@ -72,7 +73,9 @@ const QuestionsTopBar = () => {
         <AskButton>Ask Question</AskButton>
       </AskContainer>
       <FilterContainer>
+        {/* TODO: 현재 글 갯수에 따라 Count 상태 변경 예정 */}
         <QuestionsCount>23,861,736 questions</QuestionsCount>
+        {/* TODO: 각 Tab 별 Style 지정 예정 */}
         <TabContainer>
           <Tab>Newest</Tab>
           <Tab>Active</Tab>

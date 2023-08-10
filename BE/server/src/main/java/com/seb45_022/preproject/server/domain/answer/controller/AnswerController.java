@@ -19,6 +19,7 @@ public class AnswerController { //답변 작성,수정,삭제만
     private final AnswerService answerService;
     private final AnswerMapper mapper;
 
+
     public AnswerController(AnswerService answerService, AnswerMapper mapper) {
         this.answerService = answerService;
         this.mapper = mapper;

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class AnswerEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long answerId;

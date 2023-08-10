@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 
 public interface AnswerMapper {
+
     AnswerEntity answerPostDtoToAnswer(AnswerDto.Post requestBody);
 
     AnswerEntity answerPatchDtoToAnswer(AnswerDto.Patch requestBody);

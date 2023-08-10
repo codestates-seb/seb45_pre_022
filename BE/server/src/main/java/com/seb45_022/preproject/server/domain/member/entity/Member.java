@@ -1,5 +1,6 @@
 package com.seb45_022.preproject.server.domain.member.entity;
 
+import com.seb45_022.preproject.server.domain.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,8 +36,8 @@ public class Member {
     @Column(length = 255, nullable = false)
     private MemberStatus status = MemberStatus.MEMBER_ACTIVE;
 
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-//    private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Question> questions = new ArrayList<>();
 //
 //    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
 //    private List<Answer> answers = new ArrayList<>();
@@ -45,10 +46,10 @@ public class Member {
 //    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "create_at")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
 
     @Column(name = "last_modified_at")
-    private LocalDateTime lastModifiedAt;
+    private LocalDateTime lastModifiedAt = LocalDateTime.now();
 
     public enum MemberStatus {
 

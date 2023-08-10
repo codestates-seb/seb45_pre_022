@@ -56,4 +56,13 @@ public class MemberDto {
         private String displayName;
         private Member.MemberStatus status;
     }
+
+    @AllArgsConstructor
+    @Getter
+    public static class PatchResponse {
+        private long memberId;
+        private String displayName;
+        private String password;
+        private Member.MemberStatus status;
+    }
 }

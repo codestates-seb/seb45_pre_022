@@ -31,7 +31,7 @@ public class MemberController {
     public ResponseEntity postMember(@RequestBody MemberDto.Post requestBody) {
         Member member = memberService.createMember(mapper.memberPostDtoToMember(requestBody));
         URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, member.getMemberId());
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(new SingleResponseDto<>("success create account"));
     }
 
     @PatchMapping("/{member-id}")
@@ -39,18 +39,18 @@ public class MemberController {
         requestBody.setMemberId(memberId);
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>("success modify account"), HttpStatus.OK);
     }
 
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
         Member member = memberService.findMember(memberId);
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberPostResponseDto(member)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
         memberService.removeMember(memberId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new SingleResponseDto<>("success delete account"), HttpStatus.NO_CONTENT);
     }
 }

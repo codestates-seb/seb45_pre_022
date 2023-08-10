@@ -4,7 +4,7 @@ import com.seb45_022.preproject.server.domain.answer.dto.AnswerDto;
 import com.seb45_022.preproject.server.domain.answer.entity.AnswerEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "Spring")
 
 public interface AnswerMapper {
 

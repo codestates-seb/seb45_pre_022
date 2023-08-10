@@ -19,6 +19,7 @@ public class AnswerDto {
     @AllArgsConstructor
     public static class Patch {
         private long answerId;
+        @NotBlank(message = "답변 내용은 공백이 아니어야 합니다")
         private String body;
     }
 

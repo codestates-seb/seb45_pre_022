@@ -4,6 +4,7 @@ import com.seb45_022.preproject.server.domain.answer.dto.AnswerDto;
 import com.seb45_022.preproject.server.domain.answer.entity.AnswerEntity;
 import com.seb45_022.preproject.server.domain.answer.mapper.AnswerMapper;
 import com.seb45_022.preproject.server.domain.answer.service.AnswerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/answers")
 @Validated
+@Slf4j
 public class AnswerController { //답변 작성,수정,삭제만
     private final AnswerService answerService;
     private final AnswerMapper mapper;

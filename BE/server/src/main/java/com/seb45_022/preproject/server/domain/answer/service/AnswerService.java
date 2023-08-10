@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class AnswerService {
 
-    //MemberRepository, MemberService, QuestionService 들어올 예정
+    //TODO MemberRepository, MemberService, QuestionService 들어올 예정
     private final AnswerRepository answerRepository;
 
     public AnswerService(AnswerRepository answerRepository) {
@@ -37,7 +37,7 @@ public class AnswerService {
         Optional<AnswerEntity> optionalAnswer =
                 answerRepository.findById(answerId);
         AnswerEntity findAnswer = optionalAnswer.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
+                new RuntimeException());
         return findAnswer;
     }
     public void deleteAnswer(long answerId) {

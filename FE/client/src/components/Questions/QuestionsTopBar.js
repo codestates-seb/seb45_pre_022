@@ -44,6 +44,16 @@ const Tab = styled.div`
   padding: 10px;
   border: 1px solid lightgray;
   border-right: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f4f4f4;
+  }
+
+  &:active,
+  &:focus {
+    background-color: #e4e4e4;
+  }
 
   &:first-child {
     border-top-left-radius: 7px;

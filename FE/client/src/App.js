@@ -1,15 +1,17 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Questions from './components/Questions';
-import Question from './components/Question';
 import Footer from './components/Footer';
+import './App.css';
+import Header from './components/Header';
+import Questions from './components/Questions/Questions';
+import Question from './components/Questions/Question';
 
 function App() {
   return (
     <BrowserRouter>
-      <header style={{ backgroundColor: 'red' }}>header</header>
+      <Header />
       <Routes>
         <Route path="/" element={<Questions />} />
-        <Route path="/questions/:id" element={<Question />} />
+        {/* <Route path="/questions/:id" element={<Question />} /> */}
       </Routes>
       <Footer />
     </BrowserRouter>

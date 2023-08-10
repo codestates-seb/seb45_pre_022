@@ -17,6 +17,12 @@ const AskButton = styled.button`
   border-radius: 7px;
   padding: 10.4px;
   height: 40px;
+  cursor: pointer;
+  font-weight: 700;
+
+  &:hover {
+    background-color: #0a84e1;
+  }
 `;
 
 // 제목

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
 import Questions from './components/Questions';
 import Question from './components/Question';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<Questions />} />
         <Route path="/questions/:id" element={<Question />} />
       </Routes>
-      <footer style={{ backgroundColor: 'gray' }}>footer</footer>
+      <Footer />
     </BrowserRouter>
   );
 }

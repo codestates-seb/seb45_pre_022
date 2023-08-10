@@ -27,20 +27,22 @@ public class AnswerService {
     }
 
     public AnswerEntity updateAnswer(AnswerEntity answer) {
-        AnswerEntity foundAnswer = findAnswer(answer.getAnswerId());
+        AnswerEntity foundAnswer = findVerifiedAnswer(answer.getAnswerId());
         foundAnswer.setLastModifiedAt(LocalDateTime.now());
         return answerRepository.save(foundAnswer);
     }
 
     //TODO BusinessLogicException클래스 및 ExceptionCode enum 구현 예정
-    private AnswerEntity findAnswer(long answerId) {
+    private AnswerEntity findVerifiedAnswer(long answerId) {
         Optional<AnswerEntity> optionalAnswer =
                 answerRepository.findById(answerId);
-        return optionalAnswer.orElseThrow(() ->
+        AnswerEntity findAnswer =
+                optionalAnswer.orElseThrow(() ->
                 new RuntimeException());
+        return findAnswer;
     }
     public void deleteAnswer(long answerId) {
-        AnswerEntity foundAnswer = findAnswer(answerId);
+        AnswerEntity foundAnswer = findVerifiedAnswer(answerId);
         answerRepository.delete(foundAnswer);
     }
 }

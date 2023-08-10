@@ -49,7 +49,7 @@ const StyledSpan = styled.span`
   margin-left: 2px;
 `;
 
-const Navtigation = styled.ol`
+const Navigation = styled.ol`
   display: flex;
   align-items: center;
   gap: 3px;
@@ -149,11 +149,11 @@ const Header = () => {
           </span>
         </Link>
       </LogoDiv>
-      <Navtigation>
+      <Navigation>
         <li>About</li>
         <li>Products</li>
         <li>For Teams</li>
-      </Navtigation>
+      </Navigation>
       <SearchForm>
         <div>
           <input placeholder="Search..." />

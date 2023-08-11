@@ -10,16 +10,29 @@ const MainContainer = styled.div`
   display: flex;
 `;
 
+import Signup from './components/Logins/Signup';
+import Login from './components/Logins/Login';
+
+const DefaultLayout = () => {
+  return (
+    <MainContainer>
+      <Sidebar />
+      <Questions />
+    </MainContainer>
+  );
+};
+
+
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <MainContainer>
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<Questions />} />
-        </Routes>
-      </MainContainer>
+      <Routes>
+        <Route path="/" element={<DefaultLayout />} />
+        <Route path="/ask" element={<AskPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
       <Footer />
     </BrowserRouter>
   );

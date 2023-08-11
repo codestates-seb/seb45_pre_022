@@ -7,18 +7,12 @@ import {
   ContentsContainer,
   DiscardButton,
 } from './AskPageStyles';
-import {
-  TitleContent,
-  ProblemContent,
-  TryContent,
-  TagsContent,
-} from './Contents';
+import { TitleContent, ProblemContent, TagsContent } from './Contents';
 
 const AskPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [titleDetails, setTitleDetails] = useState('');
   const [problemDetails, setProblemDetails] = useState('');
-  const [tryDetails, setTryDetails] = useState('');
   const [tags, setTags] = useState([]);
 
   const onHandleNext = () => {
@@ -33,10 +27,6 @@ const AskPage = () => {
     setProblemDetails(e.target.value);
   };
 
-  const onHandleTryDetails = (e) => {
-    setTryDetails(e.target.value);
-  };
-
   const onHandleTags = (e) => {
     setTags(e.target.value);
   };
@@ -44,7 +34,6 @@ const AskPage = () => {
   const onDiscardButton = () => {
     setTitleDetails('');
     setProblemDetails('');
-    setTryDetails('');
     setTags([]);
     setCurrentStep(1);
   };
@@ -91,12 +80,6 @@ const AskPage = () => {
           currentStep={currentStep}
           problemDetails={problemDetails}
           onHandleProblemDetails={onHandleProblemDetails}
-          onHandleNext={onHandleNext}
-        />
-        <TryContent
-          currentStep={currentStep}
-          tryDetails={tryDetails}
-          onHandleTryDetails={onHandleTryDetails}
           onHandleNext={onHandleNext}
         />
         <TagsContent

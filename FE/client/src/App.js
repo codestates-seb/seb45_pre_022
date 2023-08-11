@@ -11,7 +11,6 @@ import Signup from './components/Logins/Signup';
 
 const MainContainer = styled.div`
   display: flex;
-  flex-direction: column;
 `;
 
 const DefaultLayout = () => {
@@ -19,7 +18,6 @@ const DefaultLayout = () => {
     <MainContainer>
       <Sidebar />
       <Questions />
-      <Footer />
     </MainContainer>
   );
 };
@@ -27,16 +25,15 @@ const DefaultLayout = () => {
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <Header />
-        <div style={{ paddingTop: '52px' }}>
-          <Routes>
-            <Route path="/" element={<DefaultLayout />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/ask" element={<AskPage />} />
-          </Routes>
-        </div>
+      <Header />
+      <div style={{ paddingTop: '52px' }}>
+        <Routes>
+          <Route path="/" element={<DefaultLayout />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/ask" element={<AskPage />} />
+        </Routes>
+        <Footer />
       </div>
     </BrowserRouter>
   );

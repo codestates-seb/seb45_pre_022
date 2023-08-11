@@ -1,6 +1,6 @@
 package com.seb45_022.preproject.server.domain.comment.service;
 
-import com.seb45_022.preproject.server.domain.comment.entity.CommentEntity;
+import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.comment.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,29 +17,29 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public CommentEntity createComment(CommentEntity comment) {
+    public Comment createComment(Comment comment) {
         comment.setCreatedAt(LocalDateTime.now());
         comment.setLastModifiedAt(LocalDateTime.now());
 
         return commentRepository.save(comment);
     }
 
-    public CommentEntity updateComment(CommentEntity comment) {
-        CommentEntity foundComment = findVerifiedComment(comment.getCommentId());
+    public Comment updateComment(Comment comment) {
+        Comment foundComment = findVerifiedComment(comment.getCommentId());
         foundComment.setLastModifiedAt(LocalDateTime.now());
         return commentRepository.save(foundComment);
     }
 
-    private CommentEntity findVerifiedComment(long commentId) {
-        Optional<CommentEntity> optionalComment =
+    private Comment findVerifiedComment(long commentId) {
+        Optional<Comment> optionalComment =
                 commentRepository.findById(commentId);
-        CommentEntity findComment =
+        Comment findComment =
                 optionalComment.orElseThrow(() ->
                         new RuntimeException());
         return findComment;
     }
     public void deleteComment(long commentId) {
-        CommentEntity foundComment = findVerifiedComment(commentId);
+        Comment foundComment = findVerifiedComment(commentId);
         commentRepository.delete(foundComment);
     }
 

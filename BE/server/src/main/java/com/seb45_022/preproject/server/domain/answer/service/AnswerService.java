@@ -1,6 +1,6 @@
 package com.seb45_022.preproject.server.domain.answer.service;
 
-import com.seb45_022.preproject.server.domain.answer.entity.AnswerEntity;
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.answer.repository.AnswerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,30 +19,30 @@ public class AnswerService {
         this.answerRepository = answerRepository;
     }
 
-    public AnswerEntity createAnswer(AnswerEntity answer) {
+    public Answer createAnswer(Answer answer) {
         answer.setCreatedAt(LocalDateTime.now());
         answer.setLastModifiedAt(LocalDateTime.now());
 
         return answerRepository.save(answer);
     }
 
-    public AnswerEntity updateAnswer(AnswerEntity answer) {
-        AnswerEntity foundAnswer = findVerifiedAnswer(answer.getAnswerId());
+    public Answer updateAnswer(Answer answer) {
+        Answer foundAnswer = findVerifiedAnswer(answer.getAnswerId());
         foundAnswer.setLastModifiedAt(LocalDateTime.now());
         return answerRepository.save(foundAnswer);
     }
 
     //TODO BusinessLogicException클래스 및 ExceptionCode enum 구현 예정
-    private AnswerEntity findVerifiedAnswer(long answerId) {
-        Optional<AnswerEntity> optionalAnswer =
+    private Answer findVerifiedAnswer(long answerId) {
+        Optional<Answer> optionalAnswer =
                 answerRepository.findById(answerId);
-        AnswerEntity findAnswer =
+        Answer findAnswer =
                 optionalAnswer.orElseThrow(() ->
                 new RuntimeException());
         return findAnswer;
     }
     public void deleteAnswer(long answerId) {
-        AnswerEntity foundAnswer = findVerifiedAnswer(answerId);
+        Answer foundAnswer = findVerifiedAnswer(answerId);
         answerRepository.delete(foundAnswer);
     }
 }

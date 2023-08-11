@@ -1,7 +1,7 @@
 package com.seb45_022.preproject.server.domain.comment.controller;
 
 import com.seb45_022.preproject.server.domain.comment.dto.CommentDto;
-import com.seb45_022.preproject.server.domain.comment.entity.CommentEntity;
+import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.comment.mapper.CommentMapper;
 import com.seb45_022.preproject.server.domain.comment.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class CommentController {
     // 댓글 등록
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentDto.Post requestBody) {
-        CommentEntity createComment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
+        Comment createComment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
         CommentDto.Response response = mapper.commentToResponseDto(createComment);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -40,7 +40,7 @@ public class CommentController {
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
                                       @Valid @RequestBody CommentDto.Patch requestBody) {
         requestBody.setCommentId(commentId);
-        CommentEntity comment = mapper.commentPatchDtoToComment(requestBody);
+        Comment comment = mapper.commentPatchDtoToComment(requestBody);
         CommentDto.Response response = mapper.commentToResponseDto(commentService.updateComment(comment));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

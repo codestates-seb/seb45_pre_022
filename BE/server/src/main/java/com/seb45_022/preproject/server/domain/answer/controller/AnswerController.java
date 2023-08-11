@@ -1,7 +1,7 @@
 package com.seb45_022.preproject.server.domain.answer.controller;
 
 import com.seb45_022.preproject.server.domain.answer.dto.AnswerDto;
-import com.seb45_022.preproject.server.domain.answer.entity.AnswerEntity;
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.answer.mapper.AnswerMapper;
 import com.seb45_022.preproject.server.domain.answer.service.AnswerService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class AnswerController { //답변 작성,수정,삭제만
     // 답변 등록
     @PostMapping
     public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post requestBody) {
-        AnswerEntity createdAnswer = answerService.createAnswer(mapper.answerPostDtoToAnswer(requestBody));
+        Answer createdAnswer = answerService.createAnswer(mapper.answerPostDtoToAnswer(requestBody));
         AnswerDto.Response response = mapper.answerToResponseDto(createdAnswer);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -41,7 +41,7 @@ public class AnswerController { //답변 작성,수정,삭제만
     public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive long answerId,
                                       @Valid @RequestBody AnswerDto.Patch requestBody) {
         requestBody.setAnswerId(answerId);
-        AnswerEntity answer = mapper.answerPatchDtoToAnswer(requestBody);
+        Answer answer = mapper.answerPatchDtoToAnswer(requestBody);
         AnswerDto.Response response = mapper.answerToResponseDto(answerService.updateAnswer(answer));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -8,8 +8,8 @@ import javax.validation.constraints.NotBlank;
 
 public class AnswerDto {
     @Getter
-    @AllArgsConstructor
     public static class Post {
+        private String questionId;
         @NotBlank(message = "답변 내용은 공백이 아니어야 합니다")
         private String body;
     }

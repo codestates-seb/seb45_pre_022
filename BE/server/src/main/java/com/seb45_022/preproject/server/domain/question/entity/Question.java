@@ -1,10 +1,15 @@
 package com.seb45_022.preproject.server.domain.question.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +17,7 @@ import java.time.LocalDateTime;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long questionId;
 
     @Column(length = 500, nullable = false)
     private String title;
@@ -24,12 +29,21 @@ public class Question {
     private String tags;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime lastModifiedAt = LocalDateTime.now();
+    private LocalDateTime lastModifiedAt;
 
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID")
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @OneToMany(mappedBy = "question")
+    @JsonManagedReference
+    private List<Answer> answers;
+//
+//    public void addAnswers(AnswerEntity answer) {
+//        answers.add(answer);
+//    }
+
 }

@@ -1,5 +1,9 @@
 package com.seb45_022.preproject.server.domain.question.service;
 
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.answer.repository.AnswerRepository;
+import com.seb45_022.preproject.server.domain.member.entity.Member;
+import com.seb45_022.preproject.server.domain.member.service.MemberService;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionResponseDto;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
 import com.seb45_022.preproject.server.domain.question.repository.QuestionRepository;
@@ -15,22 +19,38 @@ import java.util.Optional;
 @Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final MemberService memberService;
+    private final AnswerRepository answerRepository;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository,
+                           MemberService memberService,
+                           AnswerRepository answerRepository) {
+
         this.questionRepository = questionRepository;
+        this.memberService = memberService;
+        this.answerRepository = answerRepository;
     }
 
     public Question createQuestion(Question question){
+        Member member = memberService.findVerifiedMember(question.getMember().getMemberId());
 
-        question.setCreatedAt(LocalDateTime.now());
-        question.setLastModifiedAt(LocalDateTime.now());
+
+        LocalDateTime now = LocalDateTime.now();
+        question.setCreatedAt(now);
+        question.setLastModifiedAt(now);
+
         questionRepository.save(question);
 
         return question;
     }
 
     public Question findQuestion(long questionId){
-        return verifiedQuestion(questionId);
+        Question question = verifiedQuestion(questionId);
+
+        List<Answer> answers = answerRepository.findByQuestion_QuestionId(questionId);
+        question.setAnswers(answers);
+
+        return question;
     }
 
     public Page<Question> findQuestions(int page, int size){
@@ -40,7 +60,7 @@ public class QuestionService {
     }
 
     public Question updateQuestion(Question question) {
-        Question verifiedQuestion = verifiedQuestion(question.getId());
+        Question verifiedQuestion = verifiedQuestion(question.getQuestionId());
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(title -> verifiedQuestion.setTitle(title));

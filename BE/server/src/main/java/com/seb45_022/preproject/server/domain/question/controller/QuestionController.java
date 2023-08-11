@@ -44,6 +44,8 @@ public class QuestionController {
         Question question = service.findQuestion(questionId);
 
         QuestionResponseDto response = mapper.QuestionToQuestionResponseDto(question);
+        System.out.println(question.getAnswers());
+        System.out.println(response.getAnswers());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -67,7 +69,7 @@ public class QuestionController {
     @PatchMapping("/{question_id}")
     public ResponseEntity patchQuestion(@PathVariable("question_id") @Positive long questionId,
                                         @RequestBody QuestionPatchDto questionPatchDto){
-        questionPatchDto.setId(questionId);
+        questionPatchDto.setQuestionId(questionId);
         Question question = mapper.QuestionPatchtDtoToQuestion(questionPatchDto);
         Question updatedQuestion = service.updateQuestion(question);
         QuestionResponseDto response = mapper.QuestionToQuestionResponseDto(updatedQuestion);

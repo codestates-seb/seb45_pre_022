@@ -40,15 +40,12 @@ public class Member {
     private MemberStatus status = MemberStatus.MEMBER_ACTIVE;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
     private List<Question> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "create_at")

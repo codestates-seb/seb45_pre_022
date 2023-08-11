@@ -5,7 +5,7 @@ import Header from './components/Header';
 import Questions from './components/Questions/Questions';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
-import AskPage from './Pages/AskPage';
+import AskPage from './Pages/AskPage/AskPage';
 
 const MainContainer = styled.div`
   display: flex;

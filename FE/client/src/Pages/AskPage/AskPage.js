@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { StyledButton } from '../components/Buttons/AskButton';
+import { StyledButton } from '../../components/Buttons/AskButton';
 import { useState } from 'react';
 
 const MainContainer = styled.div`
@@ -53,6 +53,7 @@ const Notice = styled.div`
 const ContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 `;
 
 const Content = styled.div`
@@ -92,10 +93,25 @@ const TextArea = styled.textarea`
   overflow: auto;
 `;
 
+const DiscardButton = styled.button`
+  color: red;
+  width: 200px;
+  border: none;
+  padding: 24px;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ffdbdb;
+  }
+`;
+
 const AskPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [titleDetails, setTitleDetails] = useState('');
   const [problemDetails, setProblemDetails] = useState('');
+  const [tryDetails, setTryDetails] = useState('');
+  const [tags, setTags] = useState([]);
 
   const onHandleNext = () => {
     setCurrentStep(currentStep + 1);
@@ -107,6 +123,22 @@ const AskPage = () => {
 
   const onHandleProblemDetails = (e) => {
     setProblemDetails(e.target.value);
+  };
+
+  const onHandleTryDetails = (e) => {
+    setTryDetails(e.target.value);
+  };
+
+  const onHandleTags = (e) => {
+    setTags(e.target.value);
+  };
+
+  const onDiscardButton = () => {
+    setTitleDetails('');
+    setProblemDetails('');
+    setTryDetails('');
+    setTags([]);
+    setCurrentStep(1);
   };
 
   return (
@@ -167,7 +199,7 @@ const AskPage = () => {
           <SubTitle>What are the details of your problem?</SubTitle>
           <Description>
             Introduce the problem and expand on what you put in the title.
-            Minimum 20 characters.
+            Minimum 220 characters.
           </Description>
           <TextArea
             rows="10"
@@ -175,15 +207,55 @@ const AskPage = () => {
             disabled={currentStep < 2}
           />
           {currentStep === 2 && (
-            // 20자 미만 작성 시 버튼 비활성화
+            // 220자 미만 작성 시 버튼 비활성화
             <NextButton
-              disabled={problemDetails.length < 20}
+              disabled={problemDetails.length < 220}
               onClick={onHandleNext}
             >
               Next
             </NextButton>
           )}
         </Content>
+        {/* Try */}
+        <Content disabled={currentStep < 3}>
+          <SubTitle>What did you try and what were you expecting?</SubTitle>
+          <Description>
+            Describe what you tried, what you expected to happen, and what
+            actually resulted. Minimum 20 characters.
+          </Description>
+          <TextArea
+            rows="10"
+            onChange={onHandleTryDetails}
+            disabled={currentStep < 3}
+          />
+          {currentStep === 3 && (
+            <NextButton
+              disabled={tryDetails.length < 20}
+              onClick={onHandleNext}
+            >
+              Next
+            </NextButton>
+          )}
+        </Content>
+        {/* Tags */}
+        <Content disabled={currentStep < 4}>
+          <SubTitle>tags</SubTitle>
+          <Description>
+            Add up to 5 tags to describe what your question is about. Start
+            typing to see suggestions.
+          </Description>
+          <Input
+            type="text"
+            placeholder="e.g. (javascript) (react)"
+            onChange={onHandleTags}
+          />
+          {currentStep === 4 && (
+            <NextButton disabled={tags.length === 0} onClick={onHandleNext}>
+              Next
+            </NextButton>
+          )}
+        </Content>
+        <DiscardButton onClick={onDiscardButton}>Discard draft</DiscardButton>
       </ContentsContainer>
     </MainContainer>
   );

@@ -6,6 +6,7 @@ import {
   Notice,
   ContentsContainer,
   DiscardButton,
+  PostButton,
 } from './AskPageStyles';
 import { TitleContent, ProblemContent, TagsContent } from './Contents';
 
@@ -88,7 +89,10 @@ const AskPage = () => {
           onHandleTags={onHandleTags}
           onHandleNext={onHandleNext}
         />
-        <DiscardButton onClick={onDiscardButton}>Discard draft</DiscardButton>
+        <div style={{ display: 'flex' }}>
+          <PostButton>Post your question</PostButton>
+          <DiscardButton onClick={onDiscardButton}>Discard draft</DiscardButton>
+        </div>
       </ContentsContainer>
     </MainContainer>
   );

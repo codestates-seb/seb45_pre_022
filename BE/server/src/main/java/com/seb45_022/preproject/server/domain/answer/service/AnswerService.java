@@ -52,7 +52,7 @@ public class AnswerService {
         answerRepository.delete(foundAnswer);
     }
 
-    private Answer findVerifiedAnswer(long answerId) {
+    public Answer findVerifiedAnswer(long answerId) {
         Optional<Answer> optionalAnswer =
                 answerRepository.findById(answerId);
         Answer findAnswer =

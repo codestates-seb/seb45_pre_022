@@ -1,8 +1,8 @@
 import { styled } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-// 질문 버튼
-const StyledButton = styled.button`
+// 버튼 스타일
+export const StyledButton = styled.button`
   background-color: #0a95ff;
   color: white;
   border: none;

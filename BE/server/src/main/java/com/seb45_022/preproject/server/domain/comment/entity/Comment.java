@@ -1,5 +1,9 @@
 package com.seb45_022.preproject.server.domain.comment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.member.entity.Member;
+import com.seb45_022.preproject.server.domain.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,4 +26,14 @@ public class Comment {
     private LocalDateTime createdAt;
 
     private LocalDateTime lastModifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "answer_id")
+    @JsonBackReference
+    private Answer answer;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }

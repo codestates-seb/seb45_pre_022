@@ -44,8 +44,6 @@ public class QuestionController {
         Question question = service.findQuestion(questionId);
 
         QuestionResponseDto response = mapper.QuestionToQuestionResponseDto(question);
-        System.out.println(question.getAnswers());
-        System.out.println(response.getAnswers());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

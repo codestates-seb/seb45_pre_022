@@ -19,7 +19,7 @@ public class QuestionResponseDto {
 
     private String body;
 
-    private String tags;
+    private List<String> tags;
 
     private List<Answer> answers;
 }

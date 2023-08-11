@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 const StyledFooter = styled.footer`
   background-color: #202225;

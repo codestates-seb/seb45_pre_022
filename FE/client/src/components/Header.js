@@ -5,11 +5,9 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: center;
   gap: 5px;
-  max-width: 1264px;
-  overflow: hidden;
-
   position: fixed;
-  right: 0%;
+  right: 0;
+  overflow: hidden;
 
   width: 100%;
   height: 52px;
@@ -146,7 +144,7 @@ const Header = () => {
     <HeaderContainer>
       <LogoDiv>
         <Link to="/">
-          <img src="icons/Stack_Overflow_icon.png" alt="logo" width="30"></img>
+          <img src="/icons/Stack_Overflow_icon.png" alt="logo" width="30"></img>
           <span>
             stack <StyledSpan>overflow</StyledSpan>
           </span>

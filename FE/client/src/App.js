@@ -5,35 +5,39 @@ import Header from './components/Header';
 import Questions from './components/Questions/Questions';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
+import Login from './components/Logins/Login';
+import Signup from './components/Logins/Signup';
 
 const MainContainer = styled.div`
   display: flex;
+  flex-direction: column;
 `;
-
-import Signup from './components/Logins/Signup';
-import Login from './components/Logins/Login';
 
 const DefaultLayout = () => {
   return (
     <MainContainer>
-      <Sidebar />
-      <Questions />
+      <div style={{ display: 'flex' }}>
+        <Sidebar />
+        <Questions />
+      </div>
+      <Footer />
     </MainContainer>
   );
 };
 
-
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<DefaultLayout />} />
-        <Route path="/ask" element={<AskPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
-      <Footer />
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Header />
+        <div style={{ paddingTop: '52px' }}>
+          <Routes>
+            <Route path="/" element={<DefaultLayout />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </div>
+      </div>
     </BrowserRouter>
   );
 }

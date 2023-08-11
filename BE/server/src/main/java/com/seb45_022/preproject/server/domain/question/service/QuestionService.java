@@ -9,6 +9,8 @@ import com.seb45_022.preproject.server.domain.member.service.MemberService;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionResponseDto;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
 import com.seb45_022.preproject.server.domain.question.repository.QuestionRepository;
+import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
+import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -89,7 +91,7 @@ public class QuestionService {
 
     public Question verifiedQuestion(long questionId){
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
-        Question question = optionalQuestion.orElseThrow(() -> new RuntimeException());
+        Question question = optionalQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
 
         return question;
     }

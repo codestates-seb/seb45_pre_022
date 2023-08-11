@@ -14,3 +14,4 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true #h2 db에 목데이터를 넣기위한 옵션

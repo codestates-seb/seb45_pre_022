@@ -139,11 +139,7 @@ const Header = () => {
     <HeaderContainer>
       <LogoDiv>
         <Link to="/">
-          <img
-            src="icons/Stack_Overflow_icon-icons.com_66761.png"
-            alt="logo"
-            width="30"
-          ></img>
+          <img src="icons/Stack_Overflow_icon.png" alt="logo" width="30"></img>
           <span>
             stack <StyledSpan>overflow</StyledSpan>
           </span>

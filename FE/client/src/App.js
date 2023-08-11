@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Questions from './components/Questions/Questions';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
+import AskPage from './Pages/AskPage/AskPage';
 import Login from './components/Logins/Login';
 import Signup from './components/Logins/Signup';
 
@@ -16,10 +17,8 @@ const MainContainer = styled.div`
 const DefaultLayout = () => {
   return (
     <MainContainer>
-      <div style={{ display: 'flex' }}>
-        <Sidebar />
-        <Questions />
-      </div>
+      <Sidebar />
+      <Questions />
       <Footer />
     </MainContainer>
   );
@@ -35,6 +34,7 @@ function App() {
             <Route path="/" element={<DefaultLayout />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/ask" element={<AskPage />} />
           </Routes>
         </div>
       </div>

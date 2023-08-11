@@ -10,6 +10,10 @@ public class CommentDto {
     @Getter
     @AllArgsConstructor
     public static class Post {
+        private long answerId;
+
+        private long memberId;
+
         @NotBlank(message = "댓글 내용은 공백이 아니어야 합니다")
         private String body;
     }

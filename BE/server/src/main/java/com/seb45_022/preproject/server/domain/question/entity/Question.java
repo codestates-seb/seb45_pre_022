@@ -1,5 +1,6 @@
 package com.seb45_022.preproject.server.domain.question.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
@@ -25,8 +26,8 @@ public class Question {
     @Column(length = 10000, nullable = false)
     private String body;
 
-    @Column(length = 255, nullable = false)
-    private String tags;
+    @ElementCollection
+    private List<String> tags;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -35,15 +36,11 @@ public class Question {
     private LocalDateTime lastModifiedAt;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @OneToMany(mappedBy = "question")
     @JsonManagedReference
     private List<Answer> answers;
-//
-//    public void addAnswers(AnswerEntity answer) {
-//        answers.add(answer);
-//    }
-
 }

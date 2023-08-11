@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +23,5 @@ public class QuestionPatchDto {
     private String body;
 
     @Column(length = 255, nullable = false)
-    private String tags;
+    private List<String> tags;
 }

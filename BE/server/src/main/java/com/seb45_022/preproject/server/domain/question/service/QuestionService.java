@@ -2,6 +2,8 @@ package com.seb45_022.preproject.server.domain.question.service;
 
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.answer.repository.AnswerRepository;
+import com.seb45_022.preproject.server.domain.comment.entity.Comment;
+import com.seb45_022.preproject.server.domain.comment.repository.CommentRepository;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.service.MemberService;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionResponseDto;
@@ -21,14 +23,17 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
     private final AnswerRepository answerRepository;
+    private final CommentRepository commentRepository;
 
     public QuestionService(QuestionRepository questionRepository,
                            MemberService memberService,
-                           AnswerRepository answerRepository) {
+                           AnswerRepository answerRepository,
+                           CommentRepository commentRepository) {
 
         this.questionRepository = questionRepository;
         this.memberService = memberService;
         this.answerRepository = answerRepository;
+        this.commentRepository = commentRepository;
     }
 
     public Question createQuestion(Question question){

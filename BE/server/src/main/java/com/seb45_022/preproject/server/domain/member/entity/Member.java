@@ -1,5 +1,8 @@
 package com.seb45_022.preproject.server.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,13 +40,16 @@ public class Member {
     private MemberStatus status = MemberStatus.MEMBER_ACTIVE;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private List<Question> questions = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-//    private List<Answer> answers = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-//    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Answer> answers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "create_at")
     private LocalDateTime createAt = LocalDateTime.now();

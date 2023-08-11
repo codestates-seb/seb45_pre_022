@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { StyledButton } from '../components/Buttons/AskButton';
+import { useState } from 'react';
 
 const MainContainer = styled.div`
   display: flex;
@@ -18,6 +19,12 @@ const Title = styled.div`
   margin: 24px 0;
   width: 1200px;
   height: 130px;
+`;
+
+const SubTitle = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
 `;
 
 const Notice = styled.div`
@@ -49,12 +56,16 @@ const ContentsContainer = styled.div`
 `;
 
 const Content = styled.div`
-  background-color: white;
+  background-color: 'white';
   width: 850px;
   border-radius: 7px;
   padding: 24px;
   border: 1px solid lightgrey;
   margin-bottom: 10px;
+  opacity: ${(props) =>
+    props.disabled ? '0.5' : '1'}; // 내용이 비활성화된 경우 흐림 효과
+  pointer-events: ${(props) =>
+    props.disabled ? 'none' : 'auto'}; // 내용이 비활성화된 경우 클릭 불가
 `;
 
 const Description = styled.div`
@@ -71,6 +82,7 @@ const Input = styled.input`
 const NextButton = styled(StyledButton)`
   width: auto;
   margin: 10px 0;
+  opacity: ${(props) => (props.disabled ? '0.5' : '1')};
 `;
 
 const TextArea = styled.textarea`
@@ -81,6 +93,22 @@ const TextArea = styled.textarea`
 `;
 
 const AskPage = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [titleDetails, setTitleDetails] = useState('');
+  const [problemDetails, setProblemDetails] = useState('');
+
+  const onHandleNext = () => {
+    setCurrentStep(currentStep + 1);
+  };
+
+  const onHandleTitleDetails = (e) => {
+    setTitleDetails(e.target.value);
+  };
+
+  const onHandleProblemDetails = (e) => {
+    setProblemDetails(e.target.value);
+  };
+
   return (
     <MainContainer>
       <TitleContainer>
@@ -115,26 +143,46 @@ const AskPage = () => {
       <ContentsContainer>
         {/* Title */}
         <Content>
-          <h2>Title</h2>
+          <SubTitle>Title</SubTitle>
           <Description>
             Be specific and imagine you’re asking a question to another person.
           </Description>
           <Input
             type="text"
             placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+            value={titleDetails}
+            onChange={onHandleTitleDetails}
           />
-          <NextButton>Next</NextButton>
+          {currentStep === 1 && (
+            <NextButton
+              disabled={titleDetails.length === 0}
+              onClick={onHandleNext}
+            >
+              Next
+            </NextButton>
+          )}
         </Content>
         {/* Problem? */}
-        <Content>
-          <h2>What are the details of your problem?</h2>
+        <Content disabled={currentStep < 2}>
+          <SubTitle>What are the details of your problem?</SubTitle>
           <Description>
             Introduce the problem and expand on what you put in the title.
             Minimum 20 characters.
           </Description>
-          {/* 조절 가능한 Textarea, 기본은 10줄정도 보임 */}
-          <TextArea rows="10" /> {/* 여기서 TextArea를 직접 사용합니다 */}
-          <NextButton>Next</NextButton>
+          <TextArea
+            rows="10"
+            onChange={onHandleProblemDetails}
+            disabled={currentStep < 2}
+          />
+          {currentStep === 2 && (
+            // 20자 미만 작성 시 버튼 비활성화
+            <NextButton
+              disabled={problemDetails.length < 20}
+              onClick={onHandleNext}
+            >
+              Next
+            </NextButton>
+          )}
         </Content>
       </ContentsContainer>
     </MainContainer>

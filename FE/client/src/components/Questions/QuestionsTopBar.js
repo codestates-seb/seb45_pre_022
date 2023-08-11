@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { AskButton } from '../Buttons/AskButton';
 
 // 제목과 버튼이 있는 컨테이너
 const AskContainer = styled.div`
@@ -7,22 +8,6 @@ const AskContainer = styled.div`
   width: 751px;
   height: 50px;
   margin-bottom: 12px;
-`;
-
-// 질문 버튼
-const AskButton = styled.button`
-  background-color: #0a95ff;
-  color: white;
-  border: none;
-  border-radius: 7px;
-  padding: 10.4px;
-  height: 40px;
-  cursor: pointer;
-  font-weight: 700;
-
-  &:hover {
-    background-color: #0a84e1;
-  }
 `;
 
 // 제목

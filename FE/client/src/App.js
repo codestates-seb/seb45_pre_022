@@ -5,21 +5,29 @@ import Header from './components/Header';
 import Questions from './components/Questions/Questions';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
+import AskPage from './Pages/AskPage';
 
 const MainContainer = styled.div`
   display: flex;
 `;
 
+const DefaultLayout = () => {
+  return (
+    <MainContainer>
+      <Sidebar />
+      <Questions />
+    </MainContainer>
+  );
+};
+
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <MainContainer>
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<Questions />} />
-        </Routes>
-      </MainContainer>
+      <Routes>
+        <Route path="/" element={<DefaultLayout />} />
+        <Route path="/ask" element={<AskPage />} />
+      </Routes>
       <Footer />
     </BrowserRouter>
   );

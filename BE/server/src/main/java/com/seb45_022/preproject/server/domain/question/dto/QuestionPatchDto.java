@@ -10,7 +10,7 @@ import javax.validation.constraints.Positive;
 @Setter
 public class QuestionPatchDto {
     @Positive
-    private long id;
+    private long questionId;
 
     @Positive
     private long memberId;

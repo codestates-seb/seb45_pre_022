@@ -9,6 +9,7 @@ import {
   PostButton,
 } from './AskPageStyles';
 import { TitleContent, ProblemContent, TagsContent } from './Contents';
+import axios from 'axios';
 
 const AskPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -29,7 +30,7 @@ const AskPage = () => {
   };
 
   const onHandleTags = (e) => {
-    setTags(e.target.value);
+    setTags(e.target.value.split(','));
   };
 
   const onDiscardButton = () => {
@@ -37,6 +38,27 @@ const AskPage = () => {
     setProblemDetails('');
     setTags([]);
     setCurrentStep(1);
+  };
+
+  const onPostButton = async () => {
+    const questionDetails = {
+      memberId: 20230811, // 임시로 아이디를 가정함
+      title: titleDetails,
+      body: problemDetails,
+      tags: tags,
+    };
+
+    console.log(questionDetails);
+
+    try {
+      const response = await axios.post(
+        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/questions',
+        questionDetails,
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   return (
@@ -90,7 +112,7 @@ const AskPage = () => {
           onHandleNext={onHandleNext}
         />
         <div style={{ display: 'flex' }}>
-          <PostButton>Post your question</PostButton>
+          <PostButton onClick={onPostButton}>Post your question</PostButton>
           <DiscardButton onClick={onDiscardButton}>Discard draft</DiscardButton>
         </div>
       </ContentsContainer>

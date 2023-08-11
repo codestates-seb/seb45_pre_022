@@ -65,41 +65,9 @@ export const ProblemContent = ({
   );
 };
 
-export const TryContent = ({
-  currentStep,
-  tryDetails,
-  onHandleTryDetails,
-  onHandleNext,
-}) => {
+export const TagsContent = ({ currentStep, onHandleTags }) => {
   return (
     <Content disabled={currentStep < 3}>
-      <SubTitle>What did you try and what were you expecting?</SubTitle>
-      <Description>
-        Describe what you tried, what you expected to happen, and what actually
-        resulted. Minimum 20 characters.
-      </Description>
-      <TextArea
-        rows="10"
-        onChange={onHandleTryDetails}
-        disabled={currentStep < 3}
-      />
-      {currentStep === 3 && (
-        <NextButton disabled={tryDetails.length < 20} onClick={onHandleNext}>
-          Next
-        </NextButton>
-      )}
-    </Content>
-  );
-};
-
-export const TagsContent = ({
-  currentStep,
-  tags,
-  onHandleTags,
-  onHandleNext,
-}) => {
-  return (
-    <Content disabled={currentStep < 4}>
       <SubTitle>tags</SubTitle>
       <Description>
         Add up to 5 tags to describe what your question is about. Start typing
@@ -110,11 +78,6 @@ export const TagsContent = ({
         placeholder="e.g. (javascript) (react)"
         onChange={onHandleTags}
       />
-      {currentStep === 4 && (
-        <NextButton disabled={tags.length === 0} onClick={onHandleNext}>
-          Next
-        </NextButton>
-      )}
     </Content>
   );
 };

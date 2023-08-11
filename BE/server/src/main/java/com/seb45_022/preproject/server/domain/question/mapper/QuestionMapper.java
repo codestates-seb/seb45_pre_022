@@ -1,5 +1,6 @@
 package com.seb45_022.preproject.server.domain.question.mapper;
 
+import com.seb45_022.preproject.server.domain.question.dto.QuestionDetailsResponseDto;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionPatchDto;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionPostDto;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionResponseDto;
@@ -47,4 +48,7 @@ public interface QuestionMapper {
 
     @Mapping(source = "member.memberId", target = "memberId")
     QuestionResponseDto QuestionToQuestionResponseDto(Question question);
+
+    @Mapping(source = "member.memberId", target = "memberId")
+    QuestionDetailsResponseDto QuestionToQuestionDetailsResponseDto(Question question);
 }

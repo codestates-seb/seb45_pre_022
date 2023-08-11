@@ -38,12 +38,11 @@ public class CommentService {
     }
 
     public Comment updateComment(Comment comment) {
-        answerService.findVerifiedAnswer(comment.getAnswer().getAnswerId());
-        memberService.findVerifiedMember(comment.getMember().getMemberId());
 
-        Comment foundComment = findVerifiedComment(comment.getCommentId());
-        foundComment.setLastModifiedAt(LocalDateTime.now());
-        return commentRepository.save(foundComment);
+        findVerifiedComment(comment.getCommentId());
+        comment.setCreatedAt(LocalDateTime.now());
+        comment.setLastModifiedAt(LocalDateTime.now());
+        return commentRepository.save(comment);
     }
 
     public Comment findVerifiedComment(long commentId) {

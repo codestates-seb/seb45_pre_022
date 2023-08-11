@@ -16,7 +16,6 @@ import java.util.Optional;
 @Service
 public class AnswerService {
 
-    //TODO MemberRepository, MemberService, QuestionService 들어올 예정
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final MemberService memberService;
@@ -40,12 +39,10 @@ public class AnswerService {
     }
 
     public Answer updateAnswer(Answer answer) {
-        questionService.verifiedQuestion(answer.getQuestion().getQuestionId());
-        memberService.findVerifiedMember(answer.getMember().getMemberId());
-
-        Answer foundAnswer = findVerifiedAnswer(answer.getAnswerId());
-        foundAnswer.setLastModifiedAt(LocalDateTime.now());
-        return answerRepository.save(foundAnswer);
+        findVerifiedAnswer(answer.getAnswerId());
+        answer.setCreatedAt(LocalDateTime.now());
+        answer.setLastModifiedAt(LocalDateTime.now());
+        return answerRepository.save(answer);
     }
     public void deleteAnswer(long answerId) {
         Answer foundAnswer = findVerifiedAnswer(answerId);

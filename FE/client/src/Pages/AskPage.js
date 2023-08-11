@@ -54,6 +54,7 @@ const Content = styled.div`
   border-radius: 7px;
   padding: 24px;
   border: 1px solid lightgrey;
+  margin-bottom: 10px;
 `;
 
 const Description = styled.div`
@@ -70,6 +71,13 @@ const Input = styled.input`
 const NextButton = styled(StyledButton)`
   width: auto;
   margin: 10px 0;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  height: 180px;
+  resize: vertical;
+  overflow: auto;
 `;
 
 const AskPage = () => {
@@ -105,6 +113,7 @@ const AskPage = () => {
         </Notice>
       </TitleContainer>
       <ContentsContainer>
+        {/* Title */}
         <Content>
           <h2>Title</h2>
           <Description>
@@ -114,6 +123,17 @@ const AskPage = () => {
             type="text"
             placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
           />
+          <NextButton>Next</NextButton>
+        </Content>
+        {/* Problem? */}
+        <Content>
+          <h2>What are the details of your problem?</h2>
+          <Description>
+            Introduce the problem and expand on what you put in the title.
+            Minimum 20 characters.
+          </Description>
+          {/* 조절 가능한 Textarea, 기본은 10줄정도 보임 */}
+          <TextArea rows="10" /> {/* 여기서 TextArea를 직접 사용합니다 */}
           <NextButton>Next</NextButton>
         </Content>
       </ContentsContainer>

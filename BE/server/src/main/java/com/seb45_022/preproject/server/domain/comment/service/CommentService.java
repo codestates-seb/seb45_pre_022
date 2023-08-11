@@ -40,7 +40,6 @@ public class CommentService {
     public Comment updateComment(Comment comment) {
 
         findVerifiedComment(comment.getCommentId());
-        comment.setCreatedAt(LocalDateTime.now());
         comment.setLastModifiedAt(LocalDateTime.now());
         return commentRepository.save(comment);
     }

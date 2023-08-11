@@ -40,7 +40,6 @@ public class AnswerService {
 
     public Answer updateAnswer(Answer answer) {
         findVerifiedAnswer(answer.getAnswerId());
-        answer.setCreatedAt(LocalDateTime.now());
         answer.setLastModifiedAt(LocalDateTime.now());
         return answerRepository.save(answer);
     }

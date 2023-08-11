@@ -3,12 +3,19 @@ import { styled } from 'styled-components';
 
 const HeaderContainer = styled.header`
   display: flex;
+  justify-content: center;
   gap: 5px;
   max-width: 1264px;
+  overflow: hidden;
 
+  position: fixed;
+  right: 0%;
+
+  width: 100%;
   height: 52px;
   background-color: white;
   border-bottom: 2px solid #e4e6e8;
+  border-top: 3px solid #f48224;
 `;
 
 const LogoDiv = styled.div`

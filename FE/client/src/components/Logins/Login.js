@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 const MainContainer = styled.div`
   padding: 24px;
+  background-color: #f1f2f3;
 `;
 
 const LoginBoxContainer = styled.div`

@@ -3,12 +3,17 @@ import { styled } from 'styled-components';
 
 const HeaderContainer = styled.header`
   display: flex;
+  justify-content: center;
   gap: 5px;
-  max-width: 1264px;
+  position: fixed;
+  right: 0;
+  overflow: hidden;
 
+  width: 100%;
   height: 52px;
   background-color: white;
   border-bottom: 2px solid #e4e6e8;
+  border-top: 3px solid #f48224;
 `;
 
 const LogoDiv = styled.div`
@@ -139,11 +144,7 @@ const Header = () => {
     <HeaderContainer>
       <LogoDiv>
         <Link to="/">
-          <img
-            src="icons/Stack_Overflow_icon-icons.com_66761.png"
-            alt="logo"
-            width="30"
-          ></img>
+          <img src="/icons/Stack_Overflow_icon.png" alt="logo" width="30"></img>
           <span>
             stack <StyledSpan>overflow</StyledSpan>
           </span>

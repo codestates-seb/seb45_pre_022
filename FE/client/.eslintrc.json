@@ -21,6 +21,7 @@
     "react/react-in-jsx-scope": 0, // React 컴포넌트를 사용할 때, JSX 범위 내에서 import React from 'react'를 해야하는 규칙을 비활성화
     "react/jsx-uses-react": 0, // JSX를 사용할 때, React 변수를 사용하지 않아도 되는 규칙을 비활성화, 위와 비슷한 동작.
     "no-unused-vars": "warn",
-    "no-empty": "warn"
+    "no-empty": "warn",
+    "react/prop-types": 0 // prop-types를 사용하지 않아도 되는 규칙을 비활성화
   }
 }

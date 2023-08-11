@@ -29,11 +29,9 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "answer_id")
-    @JsonBackReference
     private Answer answer;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 }

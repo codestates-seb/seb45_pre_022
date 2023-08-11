@@ -15,11 +15,12 @@ public class QuestionResponseDto {
 
     private long memberId;
 
+    private String displayName;
+
     private String title;
 
     private String body;
 
     private List<String> tags;
 
-    //private List<Answer> answers;
 }

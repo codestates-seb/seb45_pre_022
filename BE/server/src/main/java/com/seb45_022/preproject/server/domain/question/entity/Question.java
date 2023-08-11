@@ -36,11 +36,9 @@ public class Question {
     private LocalDateTime lastModifiedAt;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @OneToMany(mappedBy = "question")
-    @JsonManagedReference
     private List<Answer> answers;
 }

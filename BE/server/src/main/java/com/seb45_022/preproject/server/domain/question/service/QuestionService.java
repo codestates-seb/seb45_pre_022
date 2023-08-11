@@ -24,8 +24,6 @@ import java.util.Optional;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
-    private final AnswerRepository answerRepository;
-    private final CommentRepository commentRepository;
 
     public QuestionService(QuestionRepository questionRepository,
                            MemberService memberService,
@@ -34,13 +32,10 @@ public class QuestionService {
 
         this.questionRepository = questionRepository;
         this.memberService = memberService;
-        this.answerRepository = answerRepository;
-        this.commentRepository = commentRepository;
     }
 
     public Question createQuestion(Question question){
-        Member member = memberService.findVerifiedMember(question.getMember().getMemberId());
-
+        memberService.findVerifiedMember(question.getMember().getMemberId());
 
         LocalDateTime now = LocalDateTime.now();
         question.setCreatedAt(now);
@@ -53,9 +48,6 @@ public class QuestionService {
 
     public Question findQuestion(long questionId){
         Question question = verifiedQuestion(questionId);
-
-        List<Answer> answers = answerRepository.findByQuestion_QuestionId(questionId);
-        question.setAnswers(answers);
 
         return question;
     }

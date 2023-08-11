@@ -39,9 +39,10 @@ public class AnswerService {
     }
 
     public Answer updateAnswer(Answer answer) {
-        findVerifiedAnswer(answer.getAnswerId());
-        answer.setLastModifiedAt(LocalDateTime.now());
-        return answerRepository.save(answer);
+        Answer foundAnswer = findVerifiedAnswer(answer.getAnswerId());
+        foundAnswer.setLastModifiedAt(LocalDateTime.now());
+        foundAnswer.setBody(answer.getBody());
+        return answerRepository.save(foundAnswer);
     }
     public void deleteAnswer(long answerId) {
         Answer foundAnswer = findVerifiedAnswer(answerId);

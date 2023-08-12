@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 
 const MainContainer = styled.div`
   padding: 24px;
+  height: 95vh;
   background-color: #f1f2f3;
 `;
 

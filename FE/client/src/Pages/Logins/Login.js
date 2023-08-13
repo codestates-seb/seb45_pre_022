@@ -2,9 +2,13 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
   padding: 24px;
   background-color: #f1f2f3;
-  height: 100%;
 `;
 
 const LoginContainer = styled.div`

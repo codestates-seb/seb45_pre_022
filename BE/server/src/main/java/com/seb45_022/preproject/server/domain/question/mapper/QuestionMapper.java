@@ -37,6 +37,10 @@ public interface QuestionMapper {
         questionDetailsResponseDto.setTitle(question.getTitle());
         questionDetailsResponseDto.setBody(question.getBody());
         questionDetailsResponseDto.setTags(question.getTags());
+        questionDetailsResponseDto.setViews(question.getViews());
+        questionDetailsResponseDto.setAnswerCount(question.getAnswerCount());
+        questionDetailsResponseDto.setCreatedAt(String.valueOf(question.getCreatedAt()));
+        questionDetailsResponseDto.setLastModifiedAt(String.valueOf(question.getLastModifiedAt()));
 
         List<AnswerDto.Response> answerResponseList = mapAnswersToResponseList(question.getAnswers());
         questionDetailsResponseDto.setAnswers(answerResponseList);

@@ -35,6 +35,12 @@ public class Question {
     @Column(nullable = false)
     private LocalDateTime lastModifiedAt;
 
+    @Column
+    private int answerCount;
+
+    @Column
+    private int views;
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;

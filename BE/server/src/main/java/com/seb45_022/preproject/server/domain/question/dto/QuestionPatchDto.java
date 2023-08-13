@@ -11,23 +11,22 @@ import java.util.List;
 @Getter
 @Setter
 public class QuestionPatchDto {
-    @ApiModelProperty(example = "1", position = 1)
     @Positive
     private long questionId;
 
-    @ApiModelProperty(example = "1", position = 2)
+    @ApiModelProperty(value = "사용자 memberId",example = "1", position = 1)
     @Positive
     private long memberId;
 
-    @ApiModelProperty(example = "SampleQuestion", position = 3)
+    @ApiModelProperty(value = "수정할 질문 제목",example = "SampleQuestion", position = 2)
     @Column(length = 500, nullable = false)
     private String title;
 
-    @ApiModelProperty(example = "This is a SampleQuestion", position = 5)
+    @ApiModelProperty(value = "수정할 질문 내용",example = "This is a SampleQuestion", position = 3)
     @Column(length = 10000, nullable = false)
     private String body;
 
-    @ApiModelProperty(example = "[this,is,sample,tag]", position = 6)
+    @ApiModelProperty(value = "수정할 질문 태그 배열",example = "[this,is,sample,tag]", position = 4)
     @Column(length = 255, nullable = false)
     private List<String> tags;
 }

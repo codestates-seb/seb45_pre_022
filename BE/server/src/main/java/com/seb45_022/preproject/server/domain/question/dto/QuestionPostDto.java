@@ -9,18 +9,18 @@ import java.util.List;
 @Getter
 public class QuestionPostDto {
 
-    @ApiModelProperty(example = "1", position = 1)
+    @ApiModelProperty(value = "작성자 memeberId", required = true,example = "1", position = 1)
     @NotBlank(message = "작성자는 공백이 아니어야 합니다.")
     private long memberId;
 
-    @ApiModelProperty(example = "SampleQuestion", position =2)
+    @ApiModelProperty(value = "질문 제목", required = true,example = "SampleQuestion", position =2)
     @NotBlank(message = "제목은 공백이 아니어야 합니다.")
     private String title;
 
-    @ApiModelProperty(example = "This is a SampleQuestion", position =3)
+    @ApiModelProperty(value = "질문 내용", required = true,example = "This is a SampleQuestion", position =3)
     @NotBlank(message = "내용은 공백이 아니어야 합니다.")
     private String body;
 
-    @ApiModelProperty(example = "[this,is,sample,tag]", position =4)
+    @ApiModelProperty(value = "질문 태그 배열", required = false,example = "[this,is,sample,tag]", position =4)
     private List<String> tags;
 }

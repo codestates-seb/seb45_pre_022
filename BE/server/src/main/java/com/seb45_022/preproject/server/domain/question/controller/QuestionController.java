@@ -79,7 +79,7 @@ public class QuestionController {
                                        @RequestParam("size") @Positive int size){
 
         Page<Question> questionsPage = service.findQuestions(page, size);
-        PageInfo pageInfo = new PageInfo(page, size, (int) questionsPage.getTotalElements(),questionsPage.getTotalPages());
+        QuestionPageInfo pageInfo = new QuestionPageInfo(page, size, (int) questionsPage.getTotalElements(),questionsPage.getTotalPages());
 
         List<Question> questions = questionsPage.getContent();
         List<QuestionResponseDto> response =

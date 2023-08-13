@@ -9,11 +9,6 @@ import AskPage from './Pages/AskPage/AskPage';
 import Login from './Pages/Logins/Login';
 import Signup from './Pages/Logins/Signup';
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const DefaultLayout = () => {
   return (
     <div>
@@ -29,9 +24,20 @@ const DefaultLayout = () => {
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Header />
-        <div style={{ paddingTop: '52px' }}>
+        <div
+          style={{
+            paddingTop: '52px',
+            width: '100%',
+            height: '100vh',
+          }}
+        >
           <Routes>
             <Route path="/" element={<DefaultLayout />}>
               <Route path="" element={<Questions />} />

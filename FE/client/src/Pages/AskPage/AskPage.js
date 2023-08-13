@@ -10,12 +10,15 @@ import {
 } from './AskPageStyles';
 import { TitleContent, ProblemContent, TagsContent } from './Contents';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AskPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [titleDetails, setTitleDetails] = useState('');
   const [problemDetails, setProblemDetails] = useState('');
   const [tags, setTags] = useState([]);
+
+  const navigate = useNavigate();
 
   const onHandleNext = () => {
     setCurrentStep(currentStep + 1);
@@ -42,13 +45,11 @@ const AskPage = () => {
 
   const onPostButton = async () => {
     const questionDetails = {
-      memberId: 20230811, // 임시로 아이디를 가정함
+      memberId: 4, // 임시로 아이디를 가정함
       title: titleDetails,
       body: problemDetails,
       tags: tags,
     };
-
-    console.log(questionDetails);
 
     try {
       const response = await axios.post(
@@ -56,6 +57,7 @@ const AskPage = () => {
         questionDetails,
       );
       console.log(response.data);
+      navigate(`/questions/${response.data.id}`);
     } catch (error) {
       console.log(error.response);
     }

@@ -2,8 +2,10 @@ package com.seb45_022.preproject.server.domain.member.service;
 
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.repository.MemberRepository;
+import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
+import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,13 +18,13 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
 
-//        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-//        member.setPassword(encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
         Member saveMember = memberRepository.save(member);
 
         return saveMember;
@@ -35,7 +37,7 @@ public class MemberService {
         Optional.ofNullable(member.getDisplayName())
                 .ifPresent(name -> findMember.setDisplayName(name));
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(password));
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
 
         return memberRepository.save(findMember);
     }
@@ -45,6 +47,13 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
+    public void verifyAuthority(Member findMember, Long loginMemberId) {
+        if (!findMember.getMemberId().equals(loginMemberId)) {
+            throw new BusinessLogicException(ExceptionCode.NOT_IMPLEMENTATION);
+        }
+    }
+
+    @Transactional
     public void removeMember(long memberId) {
         Member findMember = findVerifiedMember(memberId);
         memberRepository.delete(findMember);
@@ -52,7 +61,7 @@ public class MemberService {
 
     private void verifyExistsEmail(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        if (optionalMember.isPresent()) throw new RuntimeException("존재하는 회원입니다.");
+        if (optionalMember.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 
     @Transactional(readOnly = true)
@@ -60,7 +69,7 @@ public class MemberService {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
         Member findMember =
-                optionalMember.orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+                optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
     }
 }

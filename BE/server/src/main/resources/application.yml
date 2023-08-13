@@ -15,3 +15,17 @@ spring:
       hibernate:
         format_sql: true
     defer-datasource-initialization: true #h2 db에 목데이터를 넣기위한 옵션
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: DEBUG
+server:
+  servlet:
+    encoding:
+      force-response: true
+jwt:
+  key: ${JWT_SECRET_KEY}                             # 시스템 환경 변수
+  access-token-expiration-minutes: 1800              # 30분
+  refresh-token-expiration-minutes: 86400            # 1일

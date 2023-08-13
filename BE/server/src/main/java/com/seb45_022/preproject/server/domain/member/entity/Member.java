@@ -35,6 +35,8 @@ public class Member {
     @Column(length = 255, unique = true, nullable = false)
     private String displayName;
 
+    private String role;
+
     @Enumerated(value = EnumType.STRING)
     @Column(length = 255, nullable = false)
     private MemberStatus status = MemberStatus.MEMBER_ACTIVE;
@@ -65,5 +67,8 @@ public class Member {
         MemberStatus(String status) {
             this.status = status;
         }
+    }
+    public Member(Long memberId) {
+        this.memberId = memberId;
     }
 }

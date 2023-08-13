@@ -4,6 +4,8 @@ import com.seb45_022.preproject.server.domain.member.dto.MemberDto;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.mapper.MemberMapper;
 import com.seb45_022.preproject.server.domain.member.service.MemberService;
+import com.seb45_022.preproject.server.global.argu.LoginMemberId;
+import com.seb45_022.preproject.server.global.dto.LoginMemberResponseDto;
 import com.seb45_022.preproject.server.global.dto.SingleResponseDto;
 import com.seb45_022.preproject.server.global.utils.UriCreator;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,7 @@ public class MemberController {
         requestBody.setMemberId(memberId);
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
 
-        return new ResponseEntity<>(new SingleResponseDto<>("success modify account"), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>("success modify member"), HttpStatus.OK);
     }
 
     @GetMapping("/{member-id}")
@@ -52,6 +54,13 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
         memberService.removeMember(memberId);
-        return new ResponseEntity<>(new SingleResponseDto<>("success delete account"), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new SingleResponseDto<>("success delete member"), HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity accountUserDetails(@LoginMemberId Long loginMemberId) {
+        Member findMember = memberService.findMember(loginMemberId);
+
+        return new ResponseEntity<>(new LoginMemberResponseDto(mapper.memberToLoginMemberResponseDto(findMember)), HttpStatus.OK);
     }
 }

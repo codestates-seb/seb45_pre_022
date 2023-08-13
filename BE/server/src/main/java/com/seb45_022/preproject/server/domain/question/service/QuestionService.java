@@ -35,7 +35,7 @@ public class QuestionService {
     }
 
     public Question createQuestion(Question question){
-        memberService.findVerifiedMember(question.getMember().getMemberId());
+        question.setMember(memberService.findVerifiedMember(question.getMember().getMemberId()));
 
         LocalDateTime now = LocalDateTime.now();
         question.setCreatedAt(now);

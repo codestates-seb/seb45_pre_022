@@ -9,6 +9,7 @@ public interface MemberMapper {
 
     Member memberPostDtoToMember(MemberDto.Post requestBody);
     Member memberPatchDtoToMember(MemberDto.Patch requestBody);
+    Member memberToLoginMemberResponseDto(Member member);
     MemberDto.PostResponse memberToMemberPostResponseDto(Member member);
     MemberDto.PatchResponse memberToMemberPatchResponseDto(Member member);
 

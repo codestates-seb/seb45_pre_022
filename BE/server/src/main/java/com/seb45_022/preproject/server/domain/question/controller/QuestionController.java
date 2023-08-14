@@ -6,6 +6,8 @@ import com.seb45_022.preproject.server.domain.question.mapper.QuestionMapper;
 import com.seb45_022.preproject.server.domain.question.service.QuestionService;
 import com.seb45_022.preproject.server.global.dto.AllDataDto;
 import com.seb45_022.preproject.server.global.dto.PageInfo;
+import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
+import com.seb45_022.preproject.server.global.security.utils.JwtUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import java.net.http.HttpResponse;
 import java.util.List;
@@ -28,10 +31,12 @@ import java.util.stream.Collectors;
 public class QuestionController {
     private final QuestionMapper mapper;
     private final QuestionService service;
+    private final JwtUtils jwtUtils;
 
-    public QuestionController(QuestionMapper mapper, QuestionService service) {
+    public QuestionController(QuestionMapper mapper, QuestionService service, JwtUtils jwtUtils) {
         this.mapper = mapper;
         this.service = service;
+        this.jwtUtils = jwtUtils;
     }
 
     @ApiOperation(value = "질문을 등록하는 메서드", notes = "사용자의 ID, 질문 제목, 질문 내용, 질문 태그(선택)을 사용해서 질문을 생성한다")
@@ -40,8 +45,11 @@ public class QuestionController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionPostDto questionPostDto){
+    public ResponseEntity postQuestion(@RequestBody QuestionPostDto questionPostDto, HttpServletRequest request){
+//        questionPostDto.setMemberId(jwtUtils.getMemberId(jwtUtils.getClaims(request)));
+
         Question question = mapper.QuestionPostDtoToQuestion(questionPostDto);
+
         service.createQuestion(question);
 
         QuestionResponseDto response = mapper.QuestionToQuestionResponseDto(question);
@@ -57,7 +65,7 @@ public class QuestionController {
     })
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/{question_id}")
-    public ResponseEntity getQuestion(@PathVariable("question_id") @Positive long questionId){
+    public ResponseEntity getQuestion(@PathVariable("question_id") @Positive long questionId, HttpServletRequest request){
         Question question = service.findQuestion(questionId);
         QuestionDetailsResponseDto response = mapper.QuestionToQuestionDetailsResponseDto(question);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -69,9 +77,9 @@ public class QuestionController {
             @ApiImplicitParam(name = "size", value = "한 페이지에 조회하는 글의 갯수", required = true, dataType = "int", paramType = "query")
     })
     @ApiResponses({
-      @ApiResponse(code = 200, message = "OK", response = QuestionMultiResponseDto.class),
-      @ApiResponse(code = 500, message = "Internal Sever Error"),
-      @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 200, message = "OK", response = QuestionMultiResponseDto.class),
+            @ApiResponse(code = 500, message = "Internal Sever Error"),
+            @ApiResponse(code = 404, message = "Not Found"),
     })
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping
@@ -79,11 +87,11 @@ public class QuestionController {
                                        @RequestParam("size") @Positive int size){
 
         Page<Question> questionsPage = service.findQuestions(page, size);
-        PageInfo pageInfo = new PageInfo(page, size, (int) questionsPage.getTotalElements(),questionsPage.getTotalPages());
+        QuestionPageInfo pageInfo = new QuestionPageInfo(page, size, (int) questionsPage.getTotalElements(),questionsPage.getTotalPages());
 
         List<Question> questions = questionsPage.getContent();
         List<QuestionResponseDto> response =
-                        questions.stream()
+                questions.stream()
                         .map(question -> mapper.QuestionToQuestionResponseDto(question))
                         .collect(Collectors.toList());
 

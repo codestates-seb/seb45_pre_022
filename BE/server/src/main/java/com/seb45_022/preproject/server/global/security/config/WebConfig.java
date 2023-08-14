@@ -21,6 +21,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 .addMapping("/**")
                 .allowedOrigins("*")
+                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080")
+                .allowCredentials(true)
+                .allowedHeaders("*")
                 .allowedMethods("*");
     }
 }

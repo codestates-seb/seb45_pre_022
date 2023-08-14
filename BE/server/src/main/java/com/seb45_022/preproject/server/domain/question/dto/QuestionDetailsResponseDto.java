@@ -10,28 +10,39 @@ import java.util.List;
 @Getter
 @Setter
 public class QuestionDetailsResponseDto {
-    @ApiModelProperty(example = "1", position = 1)
+    @ApiModelProperty(value = "질문 번호",example = "1", position = 1)
     private long questionId;
 
-    @ApiModelProperty(example = "1", position = 2)
+    @ApiModelProperty(value = "작성자 memeberId",example = "1", position = 2)
     private long memberId;
 
-    @ApiModelProperty(example = "HGD", position = 3)
+    @ApiModelProperty(value = "작성자 displayName",example = "HGD", position = 3)
     private String displayName;
 
-    @ApiModelProperty(example = "SampleQuestion", position = 4)
+    @ApiModelProperty(value = "질문 제목",example = "SampleQuestion", position = 4)
     private String title;
 
-    @ApiModelProperty(example = "This is a SampleQuestion", position = 5)
+    @ApiModelProperty(value = "질문 내용",example = "This is a SampleQuestion", position = 5)
     private String body;
 
-    @ApiModelProperty(example = "[this,is,sample,tag]",position = 6)
+    @ApiModelProperty(value = "질문 태그 배열",example = "[this,is,sample,tag]",position = 6)
     private List<String> tags;
 
-    @ApiModelProperty(example = "[{" +
-            "\"answerId\":1,\"memberId\":1,\"displayName\": \"HGD\",\"body\": \"This is a sample answer.\",\"createdAt\": \"2023-08-11T21:36:26.348484\",\"lastModifiedAt\": \"2023-08-11T21:36:26.348484\"," +
-            "\"comments\":"+"["+"{\"commentId\": 1,\"memberId\": 1,\"displayName\": \"HGD\",\"body\": \"This is a sample commet.\",\"createdAt\": \"2023-08-11T21:36:26.348725\",\"lastModifiedAt\": \"2023-08-11T21:36:26.348725\"}"+"]"
-            +"}]",position = 7)
-//    @ApiModelProperty(position = 7)
+    @ApiModelProperty(value = "질문에 달린 답변 갯수",example = "1", position = 7)
+    private int answerCount;
+
+    @ApiModelProperty(value = "질문 조회수",example = "1", position = 8)
+    private int views;
+
+    @ApiModelProperty(value = "질문 생성시간",example = "2023-08-01T12:34:56.123456", position = 9)
+    private String createdAt;
+
+    @ApiModelProperty(value = "질문 최종 수정시간",example = "2023-08-01T12:34:56.123456", position = 10)
+    private String lastModifiedAt;
+
+    @ApiModelProperty(value = "답변과 댓글",example = "[{" +
+            "\"answerId\":1,\"memberId\":1,\"displayName\": \"HGD\",\"body\": \"This is a sample answer.\",\"createdAt\": \"2023-08-01T12:34:56.123456\",\"lastModifiedAt\": \"2023-08-01T12:34:56.123456\"," +
+            "\"comments\":"+"["+"{\"commentId\": 1,\"memberId\": 1,\"displayName\": \"HGD\",\"body\": \"This is a sample commet.\",\"createdAt\": \"2023-08-01T12:34:56.123456\",\"lastModifiedAt\": \"2023-08-01T12:34:56.123456\"}"+"]"
+            +"}]",position = 11)
     private List<AnswerResponseDto> answers;
 }

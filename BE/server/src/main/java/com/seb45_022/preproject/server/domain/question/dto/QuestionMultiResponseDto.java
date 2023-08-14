@@ -12,9 +12,9 @@ public class QuestionMultiResponseDto {
     private List<QuestionResponseDto> questions;
 
     @ApiModelProperty(position = 2)
-    private PageInfo pageInfo;
+    private QuestionPageInfo pageInfo;
 
-    public QuestionMultiResponseDto(List<QuestionResponseDto> questionResponseDtos, PageInfo pageInfo) {
+    public QuestionMultiResponseDto(List<QuestionResponseDto> questionResponseDtos, QuestionPageInfo pageInfo) {
         this.questions = questionResponseDtos;
         this.pageInfo = pageInfo;
     }

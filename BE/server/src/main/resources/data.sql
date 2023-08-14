@@ -9,8 +9,8 @@ VALUES ('kakao@daum.com', 'zxcvxzcv1234', 'Kim', 'MEMBER_ACTIVE', NOW(), NOW());
 INSERT INTO "MEMBER" (email, password, display_name, status, create_at, last_modified_at)
 VALUES ('jhon@gmail.com', '456451234asdf', 'Jone', 'MEMBER_ACTIVE', NOW(), NOW());
 
-INSERT INTO "QUESTION" (title, body, created_at, last_modified_at, member_id)
-VALUES ('Sample Question', 'This is a sample question.', NOW(), NOW(), 1);
+INSERT INTO "QUESTION" (title, body, created_at, last_modified_at, member_id, answer_count, views)
+VALUES ('Sample Question', 'This is a sample question.', NOW(), NOW(), 1 ,0, 0);
 INSERT INTO "ANSWER" (body, created_at, last_modified_at, member_id, question_id)
 VALUES ('This is a sample answer.',NOW(), NOW(), 1, 1);
 INSERT INTO "COMMENT" (body, created_at, last_modified_at, answer_id, member_id)
@@ -20,10 +20,10 @@ INSERT INTO "QUESTION_TAGS" (QUESTION_QUESTION_ID, TAGS)VALUES (1, 'is');
 INSERT INTO "QUESTION_TAGS" (QUESTION_QUESTION_ID, TAGS)VALUES (1, 'sample');
 INSERT INTO "QUESTION_TAGS" (QUESTION_QUESTION_ID, TAGS)VALUES (1, 'tag');
 
-INSERT INTO "QUESTION" (title, body, created_at, last_modified_at, member_id)
+INSERT INTO "QUESTION" (title, body, created_at, last_modified_at, member_id, answer_count, views)
 VALUES ('h2 경로를 못바꾸겠어요', '저번에 했을때 jdbc:h2:tcp://localhost/~/test 경로인데
 이걸 못바꾸겠어요 새로운 경로로 다시만들고 싶은데 어떻게 바꾸는건지 시작화면에서 바꾸니깐 Database "C:/Users/ckehq/jpashop" not found, either pre-create it or allow remote database creation (not recommended in secure environments) [90149-220] 90149/90149 에러만 떠요...',
-        NOW(), NOW(), 2);
+        NOW(), NOW(), 2, 0, 0);
 INSERT INTO "ANSWER" (body, created_at, last_modified_at, member_id, question_id)
 VALUES ('안녕하세요. 차도범님, 공식 서포터즈 OMG입니다.
 기본적으로 h2화면에서 입력하는 url과 jdbc:h2:tcp://localhost/~/test
@@ -40,10 +40,10 @@ INSERT INTO "QUESTION_TAGS" (QUESTION_QUESTION_ID, TAGS)VALUES (2, '자바');
 INSERT INTO "QUESTION_TAGS" (QUESTION_QUESTION_ID, TAGS)VALUES (2, 'h2');
 
 
-INSERT INTO "QUESTION" (title, body, created_at, last_modified_at, member_id)
+INSERT INTO "QUESTION" (title, body, created_at, last_modified_at, member_id, answer_count, views)
 VALUES ('엔티티 클래스2 강의 부분입니다.', '실행했을때 H2 DB에CATEGORY,CATEGORY_ITEM,DELIVERY,ITEM,MEMBER,ORDERS,ORDER_ITEM 테이블이 생성되지않아서 문의드립니다.
 https://drive.google.com/file/d/1N63HWFHbE41DV2aGqkyVLrSnDDhDPcYg/view?usp=drive_link',
-        NOW(), NOW(), 4);
+        NOW(), NOW(), 4, 0, 0);
 INSERT INTO "ANSWER" (body, created_at, last_modified_at, member_id, question_id)
 VALUES ('오류 메시지를 보면 애플리케이션 컨텍스트를 로드하지 못했다는 IllegalStateException이 발생했다고 나와 있습니다. 이 오류는 스프링 애플리케이션 컨텍스트를 성공적으로 로드하지 못해서 발생하는 것으로 보입니다.
 

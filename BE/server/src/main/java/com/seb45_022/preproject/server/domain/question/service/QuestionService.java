@@ -40,6 +40,8 @@ public class QuestionService {
         LocalDateTime now = LocalDateTime.now();
         question.setCreatedAt(now);
         question.setLastModifiedAt(now);
+        question.setAnswerCount(0);
+        question.setViews(0);
 
         questionRepository.save(question);
 
@@ -49,12 +51,18 @@ public class QuestionService {
     public Question findQuestion(long questionId){
         Question question = verifiedQuestion(questionId);
 
+        question.setViews(question.getViews()+1);
+        question.setAnswerCount(question.getAnswers().size());
+        questionRepository.save(question);
         return question;
     }
 
     public Page<Question> findQuestions(int page, int size){
         Page<Question> questions = questionRepository.findAll(PageRequest.of(page-1,size));
 
+        for (Question element :questions) {
+            element.setAnswerCount(element.getAnswers().size());
+        }
         return questions;
     }
 

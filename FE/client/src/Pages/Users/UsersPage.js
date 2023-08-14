@@ -44,7 +44,6 @@ const UsersPage = () => {
       )
       .then((res) => {
         setUser(res.data.data);
-        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);

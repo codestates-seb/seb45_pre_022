@@ -69,7 +69,9 @@ const Question = () => {
               <UserInfo>
                 <UserName>{question.displayName}</UserName>
                 <Follower>{question.follower || 0}</Follower>
-                <CreatedAt>{moment(question.createdAt).fromNow()}</CreatedAt>
+                <CreatedAt>
+                  {moment.utc(question.createdAt).local().fromNow()}
+                </CreatedAt>
               </UserInfo>
             </UserContainer>
           </QuestionSummary>

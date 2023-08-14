@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() //스웨거 관련설정
                         .mvcMatchers(HttpMethod.POST, "/**").permitAll()
                         .mvcMatchers("members/my-page").authenticated()
                         .mvcMatchers(HttpMethod.GET, "/**").permitAll()

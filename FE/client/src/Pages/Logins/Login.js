@@ -2,7 +2,8 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import OAuth from '../../components/Logins/OAuth';
 import LoginNavBar from '../../components/Logins/LoginNav';
-import Form from '../../components/Logins/Form';
+import Form, { FormInput, FormLabel } from '../../components/Logins/Form';
+import LoginAndSignupButton from '../../components/Logins/LoginButton';
 
 const MainContainer = styled.div`
   display: flex;
@@ -58,42 +59,6 @@ export const FormLink = styled(Link)`
   }
 `;
 
-const LoginButton = styled.button`
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  font-weight: 600;
-  font-size: 13px;
-
-  color: #ffffff;
-  background-color: #0995ff;
-
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0073cc;
-  }
-  &:active {
-    background-color: #0162c0;
-  }
-`;
-
-export const FormLabel = styled.label`
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 20px;
-  padding: 2px 0px;
-`;
-
-export const FormInput = styled.input`
-  width: 100%;
-  padding: 8px 9px;
-  font-size: 13px;
-  border: 1px solid #babfc4;
-  border-radius: 5px;
-`;
-
 const Login = () => {
   return (
     <MainContainer>
@@ -116,7 +81,7 @@ const Login = () => {
           <OAuth />
           <FormContainer>
             <FormBox>
-              <Form label="Email" />
+              <Form label="Email" size="25" />
               <div>
                 <div
                   style={{
@@ -132,12 +97,10 @@ const Login = () => {
                   <FormInput></FormInput>
                 </div>
               </div>
-              <div style={{ width: '100%' }}>
-                <LoginButton>Log in</LoginButton>
-              </div>
+              <LoginAndSignupButton text="Log in" />
             </FormBox>
           </FormContainer>
-          <LoginNavBar />
+          <LoginNavBar situation="Log in" />
         </LoginContainer>
       </div>
     </MainContainer>

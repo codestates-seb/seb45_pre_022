@@ -1,6 +1,9 @@
 import { styled } from 'styled-components';
 import OAuth from '../../components/Logins/OAuth';
 import { FormLink } from './Login';
+import Form from '../../components/Logins/Form';
+import LoginAndSignupButton from '../../components/Logins/LoginButton';
+import LoginNavBar from '../../components/Logins/LoginNav';
 
 const MainContainer = styled.div`
   display: flex;
@@ -10,6 +13,7 @@ const MainContainer = styled.div`
   height: 100%;
   padding: 24px;
   background-color: #f1f2f3;
+  max-width: 1264px;
 `;
 
 const FlexRow = styled.div`
@@ -21,8 +25,12 @@ const FlexRow = styled.div`
 
 const ImgBox = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 const Signup = () => {
@@ -153,22 +161,25 @@ const Signup = () => {
             </FormLink>
           </div>
         </div>
-        <div style={{ backgroundColor: 'blue' }}>
+        <div>
           <OAuth />
-          <div style={{ backgroundColor: 'red' }}>
-            <div>
-              <span>Display name</span>
-              <input></input>
-            </div>
-            <div>
-              <span>Email</span>
-              <input></input>
-            </div>
-            <div>
-              <span>Password</span>
-              <input></input>
-            </div>
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              padding: '24px',
+              borderRadius: '5px',
+              boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <FormContainer>
+              <Form label="Display name" size="21" />
+              <Form label="Email" size="21" />
+              <Form label="Password" size="21" />
+              <LoginAndSignupButton text="Sign up" />
+            </FormContainer>
+            <div></div>
           </div>
+          <LoginNavBar situation="Sign up" />
         </div>
       </div>
     </MainContainer>

@@ -20,12 +20,16 @@ const LoginNav = styled.div`
   }
 `;
 
-const LoginNavBar = () => {
+const LoginNavBar = ({ situation }) => {
   return (
     <LoginNav>
       <div>
-        <span>{"Don't have an account? "}</span>
-        <FormLink>Sign up</FormLink>
+        <span>
+          {situation === 'Log in'
+            ? "Don't you have an account? "
+            : 'Already have an account? '}
+        </span>
+        <FormLink>{situation === 'Log in' ? 'Sign up' : 'Log in'}</FormLink>
       </div>
       <div>
         <span>{'Are you an employer? '}</span>

@@ -2,12 +2,13 @@ import { styled } from 'styled-components';
 
 // 태그 스타일
 export const Tag = styled.div`
-  font-size: 12px;
-  padding: 5px;
-  margin-right: 5px;
+  display: inline-flex;
   background-color: #e1ecf4;
   color: #39739d;
-  border-radius: 7px;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  font-size: 12px;
   cursor: pointer;
 
   &:hover {

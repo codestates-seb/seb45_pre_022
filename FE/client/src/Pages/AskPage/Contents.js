@@ -67,7 +67,6 @@ export const ProblemContent = ({
   );
 };
 
-// 인풋창 안에서 태그를 관리할 스타일을 정의합니다.
 const InputWrapper = styled.div`
   display: inline-flex;
   flex-wrap: wrap;
@@ -76,7 +75,6 @@ const InputWrapper = styled.div`
   background-color: white;
 `;
 
-// 개별 태그 스타일을 정의합니다.
 const Tag = styled.div`
   display: inline-flex;
   background-color: #e1ecf4;
@@ -88,36 +86,27 @@ const Tag = styled.div`
   cursor: pointer;
 `;
 
-// 실제 입력을 처리하는 Input 스타일을 정의합니다.
 const StyledInput = styled.input`
   border: none;
   outline: none;
   flex-grow: 1;
 `;
 
-// TagsContent 컴포넌트를 만들기 위한 함수입니다.
 export const TagsContent = ({ currentStep }) => {
-  // 사용자가 입력한 태그를 관리하기 위한 state 입니다.
   const [tags, setTags] = useState([]);
 
-  // 사용자가 입력한 태그를 처리하는 함수입니다.
   const handleTagInput = (e) => {
-    // 사용자가 스페이스바를 누를 경우
     if (e.key === ' ') {
-      // 스페이스바 앞에 입력된 텍스트를 가져옵니다.
       const newTag = e.target.value.trim();
 
-      // 텍스트가 비어있지 않다면 tags 배열에 추가합니다.
       if (newTag !== '') {
         setTags([...tags, newTag]);
-        e.target.value = ''; // 입력 창을 비웁니다.
+        e.target.value = '';
       }
     }
   };
 
-  // 태그를 삭제하는 함수입니다.
   const handleTagDelete = (index) => {
-    // 해당 인덱스의 태그를 제외하고 새 배열을 생성합니다.
     const newTags = tags.filter((_, i) => i !== index);
     setTags(newTags);
   };
@@ -138,7 +127,7 @@ export const TagsContent = ({ currentStep }) => {
         <StyledInput
           type="text"
           placeholder="e.g. (javascript) (react)"
-          onKeyDown={handleTagInput} // 키보드의 키를 누를 때마다 handleTagInput 함수를 호출합니다.
+          onKeyDown={handleTagInput}
         />
       </InputWrapper>
     </Content>

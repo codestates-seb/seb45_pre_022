@@ -53,6 +53,11 @@ const AskPage = () => {
       const response = await axios.post(
         'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/questions',
         questionDetails,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       );
       console.log(response.data);
       navigate(`/questions/${response.data.id}`);

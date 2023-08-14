@@ -1,6 +1,5 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { styled } from 'styled-components';
 import Header from './components/Header';
 import Questions from './components/Questions/Questions';
 import Footer from './components/Footer';
@@ -8,11 +7,6 @@ import Sidebar from './components/Sidebar';
 import AskPage from './Pages/AskPage/AskPage';
 import Login from './Pages/Logins/Login';
 import Signup from './Pages/Logins/Signup';
-
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
 
 const DefaultLayout = () => {
   return (
@@ -29,9 +23,20 @@ const DefaultLayout = () => {
 function App() {
   return (
     <BrowserRouter>
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Header />
-        <div style={{ paddingTop: '52px' }}>
+        <div
+          style={{
+            paddingTop: '52px',
+            width: '100%',
+            height: '100vh',
+          }}
+        >
           <Routes>
             <Route path="/" element={<DefaultLayout />}>
               <Route path="" element={<Questions />} />

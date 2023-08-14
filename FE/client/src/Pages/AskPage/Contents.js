@@ -7,6 +7,7 @@ import {
   TextArea,
 } from './AskPageStyles';
 import { styled } from 'styled-components';
+import { Tag } from '../../components/Buttons/Tags';
 
 export const TitleContent = ({
   currentStep,
@@ -72,17 +73,6 @@ const InputWrapper = styled.div`
   width: 100%;
   height: 35px;
   background-color: white;
-`;
-
-const Tag = styled.div`
-  display: inline-flex;
-  background-color: #e1ecf4;
-  color: #39739d;
-  padding: 5px;
-  margin: 5px;
-  border-radius: 5px;
-  font-size: 12px;
-  cursor: pointer;
 `;
 
 const StyledInput = styled.input`

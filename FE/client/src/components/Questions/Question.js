@@ -15,6 +15,7 @@ import {
 } from './QuestionPageStyles';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import moment from 'moment';
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
@@ -67,8 +68,8 @@ const Question = () => {
               </TagContainer>
               <UserInfo>
                 <UserName>{question.displayName}</UserName>
-                <Follower>{question.follower || 0} followers</Follower>
-                <CreatedAt>{question.createdAt}</CreatedAt>
+                <Follower>{question.follower || 0}</Follower>
+                <CreatedAt>{moment(question.createdAt).fromNow()}</CreatedAt>
               </UserInfo>
             </UserContainer>
           </QuestionSummary>

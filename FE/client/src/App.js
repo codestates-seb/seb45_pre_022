@@ -40,8 +40,8 @@ function App() {
           <Routes>
             <Route path="/" element={<DefaultLayout />}>
               <Route path="" element={<Questions />} />
-              <Route path="ask" element={<AskPage />} />
             </Route>
+            <Route path="ask" element={<AskPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>

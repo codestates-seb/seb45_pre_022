@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 // 하나의 질문 컨테이너
 export const QuestionContainer = styled.div`
   display: flex;
-  width: 727px;
+  width: 900px;
   padding: 16px;
   border-top: 1px solid lightgrey;
 `;

@@ -16,9 +16,12 @@ import {
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
+import { useNavigate } from 'react-router';
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuestions = async (page, size = 15) => {
@@ -40,6 +43,10 @@ const Question = () => {
 
     fetchQuestions(1);
   }, []);
+
+  const onHandleClickUsername = (e) => {
+    navigate(`/members/${e.target.id}`);
+  };
 
   return (
     <>
@@ -67,7 +74,12 @@ const Question = () => {
                 ))}
               </TagContainer>
               <UserInfo>
-                <UserName>{question.displayName}</UserName>
+                <UserName
+                  id={question.memberId}
+                  onClick={onHandleClickUsername}
+                >
+                  {question.displayName}
+                </UserName>
                 <Follower>{question.follower || 0}</Follower>
                 <CreatedAt>
                   {moment.utc(question.createdAt).local().fromNow()}

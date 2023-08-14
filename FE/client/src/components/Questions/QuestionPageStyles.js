@@ -88,6 +88,11 @@ export const User = styled.div`
 export const UserName = styled(User)`
   font-weight: bold;
   color: #0074cc;
+  cursor: pointer;
+
+  &:hover {
+    color: #0088ff;
+  }
 `;
 
 // 유저 팔로워 수

@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { EllipsisText } from './EllipsisText';
+import { NavLink } from 'react-router-dom';
 
 // 하나의 질문 컨테이너
 export const QuestionContainer = styled.div`
@@ -38,13 +39,18 @@ export const QuestionSummary = styled.div`
 `;
 
 // 질문 제목 스타일
-export const QuestionTitle = styled.h3`
+export const QuestionTitle = styled(NavLink)`
   margin-bottom: 5px;
   color: #0074cc;
   cursor: pointer;
+  text-decoration: none;
 
   &:hover {
     color: #0088ff;
+  }
+
+  &:active {
+    color: #00457a;
   }
 `;
 

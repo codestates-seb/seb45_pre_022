@@ -50,7 +50,12 @@ const Question = () => {
             <Info>{question.views} views</Info>
           </InfoContainer>
           <QuestionSummary>
-            <QuestionTitle>{question.title}</QuestionTitle>
+            <QuestionTitle
+              to={`/questions/${question.questionId}`}
+              activeClassName="active"
+            >
+              {question.title}
+            </QuestionTitle>
             <QuestionContent maxLine={2} lineHeight={20}>
               {question.body}
             </QuestionContent>

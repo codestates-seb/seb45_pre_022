@@ -94,13 +94,18 @@ export const TextArea = styled.textarea`
 
 export const DiscardButton = styled.button`
   color: red;
-  width: 200px;
   border: none;
-  padding: 24px;
+  padding: 12px;
   background-color: transparent;
   cursor: pointer;
+  border-radius: 7px;
 
   &:hover {
     background-color: #ffdbdb;
   }
+`;
+
+export const PostButton = styled(StyledButton)`
+  padding: 12px;
+  height: 100%;
 `;

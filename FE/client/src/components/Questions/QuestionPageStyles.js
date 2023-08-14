@@ -35,7 +35,7 @@ export const Info = styled.div`
 export const QuestionSummary = styled.div`
   display: flex;
   flex-direction: column;
-  width: 611px;
+  width: 750px;
 `;
 
 // 질문 제목 스타일

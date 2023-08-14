@@ -1,5 +1,7 @@
 package com.seb45_022.preproject.server.global.security.handler;
 
+import com.google.gson.Gson;
+import com.seb45_022.preproject.server.domain.member.dto.MemberDto;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.service.MemberService;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
@@ -60,13 +62,24 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String accessToken = delegateAccessToken(member, authorities);
         String refreshToken = delegateRefreshToken(member);
 
-        String uri = createURI(request, accessToken, refreshToken).toString();
+//        String uri = createURI(request, accessToken, refreshToken).toString();
 
         String headerValue = "Bearer "+ accessToken;
         response.setHeader("Authorization",headerValue);
         response.setHeader("Refresh",refreshToken);
 
-        getRedirectStrategy().sendRedirect(request,response,uri);
+//        getRedirectStrategy().sendRedirect(request,response,uri);
+        MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .memberId(member.getMemberId())
+                .displayName(member.getDisplayName())
+                .build();
+
+        String body = new Gson().toJson(loginResponse);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(body);
     }
 
     private String delegateAccessToken(Member member, List<String> authorities){
@@ -90,22 +103,22 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
     }
 
-    private URI createURI(HttpServletRequest request, String accessToken, String refreshToken){
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("access_token", accessToken);
-        queryParams.add("refresh_token", refreshToken);
-
-        String serverName = request.getServerName();
-
-        return UriComponentsBuilder
-                .newInstance()
-                .scheme("http")
-                .host(serverName)
-                //.host("localhost")
-                .port(80)
-                .path("/user")
-                .queryParams(queryParams)
-                .build()
-                .toUri();
-    }
+//    private URI createURI(HttpServletRequest request, String accessToken, String refreshToken){
+//        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+//        queryParams.add("access_token", accessToken);
+//        queryParams.add("refresh_token", refreshToken);
+//
+//        String serverName = request.getServerName();
+//
+//        return UriComponentsBuilder
+//                .newInstance()
+//                .scheme("http")
+//                .host(serverName)
+//                //.host("localhost")
+//                .port(80)
+//                .path("/user")
+//                .queryParams(queryParams)
+//                .build()
+//                .toUri();
+//    }
 }

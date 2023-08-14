@@ -60,7 +60,7 @@ const AskPage = () => {
         },
       );
       console.log(response.data);
-      navigate(`/questions/${response.data.id}`);
+      navigate(`/questions/${response.data.questionId}`);
     } catch (error) {
       console.log(error);
     }

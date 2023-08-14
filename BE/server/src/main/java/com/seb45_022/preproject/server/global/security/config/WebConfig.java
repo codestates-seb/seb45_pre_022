@@ -20,11 +20,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry
                 .addMapping("/**")
-                .allowedOrigins("*")
-                .allowedOrigins("http://localhost:8080")
-                .allowedOrigins("http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080")
-                .allowCredentials(true)
+                .allowedOrigins("http://localhost:8080", "http://localhost:3000","http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080")
                 .allowedHeaders("*")
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 }

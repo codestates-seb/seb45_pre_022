@@ -22,7 +22,7 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin
+//@CrossOrigin
 @Validated
 @Slf4j
 @RestController

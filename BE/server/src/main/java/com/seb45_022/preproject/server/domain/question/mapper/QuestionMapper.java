@@ -1,9 +1,8 @@
 package com.seb45_022.preproject.server.domain.question.mapper;
 
-import com.seb45_022.preproject.server.domain.answer.dto.AnswerDto;
+import com.seb45_022.preproject.server.domain.answer.dto.AnswerResponseDto;
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
-import com.seb45_022.preproject.server.domain.answer.mapper.AnswerMapper;
-import com.seb45_022.preproject.server.domain.comment.dto.CommentDto;
+import com.seb45_022.preproject.server.domain.comment.dto.CommentResponseDto;
 import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionDetailsResponseDto;
 import com.seb45_022.preproject.server.domain.question.dto.QuestionPatchDto;
@@ -38,20 +37,20 @@ public interface QuestionMapper {
         questionDetailsResponseDto.setBody(question.getBody());
         questionDetailsResponseDto.setTags(question.getTags());
 
-        List<AnswerDto.Response> answerResponseList = mapAnswersToResponseList(question.getAnswers());
+        List<AnswerResponseDto> answerResponseList = mapAnswersToResponseList(question.getAnswers());
         questionDetailsResponseDto.setAnswers(answerResponseList);
 
         return questionDetailsResponseDto;
     }
 
-    private static List<AnswerDto.Response> mapAnswersToResponseList(List<Answer> answers) {
+    private static List<AnswerResponseDto> mapAnswersToResponseList(List<Answer> answers) {
         return answers.stream()
                 .map(QuestionMapper::mapAnswerToResponse)
                 .collect(Collectors.toList());
     }
 
-    private static AnswerDto.Response mapAnswerToResponse(Answer answer) {
-        AnswerDto.Response response = new AnswerDto.Response();
+    private static AnswerResponseDto mapAnswerToResponse(Answer answer) {
+        AnswerResponseDto response = new AnswerResponseDto();
         response.setAnswerId(answer.getAnswerId());
         response.setMemberId(answer.getMember().getMemberId());
         response.setDisplayName(answer.getMember().getDisplayName());
@@ -59,7 +58,7 @@ public interface QuestionMapper {
         response.setCreatedAt(String.valueOf(answer.getCreatedAt()));
         response.setLastModifiedAt(String.valueOf(answer.getLastModifiedAt()));
 
-        List<CommentDto.Response> commentResponseList = answer.getComments().stream()
+        List<CommentResponseDto> commentResponseList = answer.getComments().stream()
                 .map(QuestionMapper::mapCommentToResponse)
                 .collect(Collectors.toList());
 
@@ -67,8 +66,8 @@ public interface QuestionMapper {
         return response;
     }
 
-    private static CommentDto.Response mapCommentToResponse(Comment comment) {
-        CommentDto.Response cResponse = new CommentDto.Response();
+    private static CommentResponseDto mapCommentToResponse(Comment comment) {
+        CommentResponseDto cResponse = new CommentResponseDto();
         cResponse.setCommentId(comment.getCommentId());
         cResponse.setMemberId(comment.getMember().getMemberId());
         cResponse.setDisplayName(comment.getMember().getDisplayName());

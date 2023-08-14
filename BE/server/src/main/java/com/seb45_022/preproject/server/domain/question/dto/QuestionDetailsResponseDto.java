@@ -1,7 +1,6 @@
 package com.seb45_022.preproject.server.domain.question.dto;
 
-import com.seb45_022.preproject.server.domain.answer.dto.AnswerDto;
-import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.answer.dto.AnswerResponseDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,5 +33,5 @@ public class QuestionDetailsResponseDto {
             "\"comments\":"+"["+"{\"commentId\": 1,\"memberId\": 1,\"displayName\": \"HGD\",\"body\": \"This is a sample commet.\",\"createdAt\": \"2023-08-11T21:36:26.348725\",\"lastModifiedAt\": \"2023-08-11T21:36:26.348725\"}"+"]"
             +"}]",position = 7)
 //    @ApiModelProperty(position = 7)
-    private List<AnswerDto.Response> answers;
+    private List<AnswerResponseDto> answers;
 }

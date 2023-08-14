@@ -15,7 +15,8 @@ public class LoginMemberIdResolver implements HandlerMethodArgumentResolver {
         boolean hasLoginAccountIdAnnotation = parameter.hasParameterAnnotation(LoginMemberId.class);
         boolean hasLongType = Long.class.isAssignableFrom(parameter.getParameterType());
 
-        return hasLoginAccountIdAnnotation && hasLongType;    }
+        return hasLoginAccountIdAnnotation && hasLongType;
+    }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,

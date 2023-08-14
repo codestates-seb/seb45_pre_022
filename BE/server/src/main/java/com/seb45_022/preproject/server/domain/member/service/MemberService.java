@@ -4,6 +4,7 @@ import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.repository.MemberRepository;
 import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
 import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
+import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,12 +21,15 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils customAuthorityUtils;
 
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
+        List<String> roles = customAuthorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
         Member saveMember = memberRepository.save(member);
 
         return saveMember;
@@ -71,5 +76,16 @@ public class MemberService {
         Member findMember =
                 optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
+    }
+
+    public Member createMemberOAuth2(Member member) {
+        Optional<Member> findMember = memberRepository.findByEmail(member.getEmail());
+        if(findMember.isPresent()){
+            return findMember.get();
+        }
+        List<String> roles = customAuthorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+        verifyExistsEmail(member.getEmail());
+        return memberRepository.save(member);
     }
 }

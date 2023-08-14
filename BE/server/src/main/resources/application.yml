@@ -21,18 +21,31 @@ spring:
         format_sql: ture
 
   #        ---- 여기부터 H2관련설정 -----
-  #    url: jdbc:h2:mem:test
-  #  jpa:
-  #    hibernate:
-  #      ddl-auto: create
-  #    show-sql: true
-  #    properties:
-  #      hibernate:
-  #        format_sql: true
-  #    defer-datasource-initialization: true #h2 db에 목데이터를 넣기위한 옵션
+#    url: jdbc:h2:mem:test
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#    defer-datasource-initialization: true #h2 db에 목데이터를 넣기위한 옵션
+#  sql:
+#    init:
+#      data-locations: classpath*:db/h2/data.sql
   mvc: #스웨거 관련설정
     pathmatch:
       matching-strategy: ant_path_matcher
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${G_CLIENT_ID}                   # 시스템 환경 변수
+            client-secret: ${G_CLIENT_SECRET}           # 시스템 환경 변수
+            scope:
+              - email
+              - profile
 
 logging:
   level:

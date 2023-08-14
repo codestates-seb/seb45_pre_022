@@ -68,11 +68,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());
-        claims.put("role", member.getRole());
+        claims.put("roles", member.getRoles());
         claims.put("displayName", member.getDisplayName());
         claims.put("id", member.getMemberId());
 
-        String subject = String.valueOf(member.getDisplayName());
+        String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.base64EncodedSecretKey(jwtTokenizer.getSecretKey());
 

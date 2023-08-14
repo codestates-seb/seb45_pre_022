@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping("/comments")
 @Validated

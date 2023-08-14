@@ -32,10 +32,6 @@ const AskPage = () => {
     setProblemDetails(e.target.value);
   };
 
-  const onHandleTags = (e) => {
-    setTags(e.target.value.split(','));
-  };
-
   const onDiscardButton = () => {
     setTitleDetails('');
     setProblemDetails('');
@@ -45,11 +41,13 @@ const AskPage = () => {
 
   const onPostButton = async () => {
     const questionDetails = {
-      memberId: 4, // 임시로 아이디를 가정함
+      memberId: 1, // 임시로 아이디를 가정함
       title: titleDetails,
       body: problemDetails,
       tags: tags,
     };
+
+    console.log(questionDetails);
 
     try {
       const response = await axios.post(
@@ -59,7 +57,7 @@ const AskPage = () => {
       console.log(response.data);
       navigate(`/questions/${response.data.id}`);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
@@ -110,7 +108,7 @@ const AskPage = () => {
         <TagsContent
           currentStep={currentStep}
           tags={tags}
-          onHandleTags={onHandleTags}
+          setTags={setTags}
           onHandleNext={onHandleNext}
         />
         <div style={{ display: 'flex' }}>

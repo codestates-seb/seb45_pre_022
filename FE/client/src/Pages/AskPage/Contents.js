@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Content,
   SubTitle,
@@ -92,9 +91,7 @@ const StyledInput = styled.input`
   flex-grow: 1;
 `;
 
-export const TagsContent = ({ currentStep }) => {
-  const [tags, setTags] = useState([]);
-
+export const TagsContent = ({ currentStep, tags, setTags }) => {
   const handleTagInput = (e) => {
     if (e.key === ' ') {
       const newTag = e.target.value.trim();

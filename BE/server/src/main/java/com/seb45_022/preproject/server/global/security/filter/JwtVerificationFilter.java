@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -63,7 +64,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String email = (String) claims.get("username");
         Long memberId = Long.valueOf((Integer) claims.get("id"));
-        Collection<GrantedAuthority> authorities = authorityUtils.createAuthorities((String) claims.get("role"));
+        Collection<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(new TokenPrincipalDto(memberId, email), null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

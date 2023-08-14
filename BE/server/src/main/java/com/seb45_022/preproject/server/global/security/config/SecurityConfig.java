@@ -1,11 +1,9 @@
 package com.seb45_022.preproject.server.global.security.config;
 
+import com.seb45_022.preproject.server.domain.member.service.MemberService;
 import com.seb45_022.preproject.server.global.security.filter.JwtAuthenticationFilter;
 import com.seb45_022.preproject.server.global.security.filter.JwtVerificationFilter;
-import com.seb45_022.preproject.server.global.security.handler.MemberAccessDeninedHandler;
-import com.seb45_022.preproject.server.global.security.handler.MemberAuthenticationEntryPoint;
-import com.seb45_022.preproject.server.global.security.handler.MemberAuthenticationFailureHandler;
-import com.seb45_022.preproject.server.global.security.handler.MemberAuthenticationSuccessHandler;
+import com.seb45_022.preproject.server.global.security.handler.*;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,6 +32,7 @@ public class SecurityConfig {
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
+    private final MemberService memberService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -59,13 +57,11 @@ public class SecurityConfig {
                         .mvcMatchers("members/my-page").authenticated()
                         .mvcMatchers(HttpMethod.GET, "/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, customAuthorityUtils, memberService))
                 );
         return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -94,7 +90,7 @@ public class SecurityConfig {
 
             builder
                     .addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }
 }

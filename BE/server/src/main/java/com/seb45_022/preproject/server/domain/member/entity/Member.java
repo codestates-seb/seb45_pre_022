@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,7 +32,8 @@ public class Member {
     @Column(length = 255, unique = true, nullable = false)
     private String displayName;
 
-    private String role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 255, nullable = false)
@@ -62,6 +60,7 @@ public class Member {
         MEMBER_SLEEP("휴면"),
         MEMBER_QUIT("탈퇴");
 
+        @Getter
         private String status;
 
         MemberStatus(String status) {

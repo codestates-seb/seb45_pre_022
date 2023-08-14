@@ -11,7 +11,7 @@ import Signup from './Pages/Logins/Signup';
 const DefaultLayout = () => {
   return (
     <div>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Sidebar />
         <Outlet />
       </div>

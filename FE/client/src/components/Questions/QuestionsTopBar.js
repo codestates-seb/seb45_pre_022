@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 import { AskButton } from '../Buttons/AskButton';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 // 제목과 버튼이 있는 컨테이너
 const AskContainer = styled.div`
@@ -40,7 +42,7 @@ const TabContainer = styled.div`
 const Tab = styled.div`
   font-size: 12px;
   padding: 10px;
-  border: 1px solid lightgray;
+  border: 1px solid lightgrey;
   border-right: none;
   cursor: pointer;
 
@@ -61,7 +63,7 @@ const Tab = styled.div`
   &:last-child {
     border-top-right-radius: 7px;
     border-bottom-right-radius: 7px;
-    border-right: 1px solid lightgray;
+    border-right: 1px solid lightgrey;
   }
 `;
 
@@ -75,6 +77,22 @@ const Filter = styled.div`
 `;
 
 const QuestionsTopBar = () => {
+  const [totalElements, setTotalElements] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(
+        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/questions?page=1&size=15',
+      )
+      .then((res) => {
+        const totalElements = res.data.pageInfo.totalElements;
+        setTotalElements(totalElements);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       <AskContainer>
@@ -82,8 +100,12 @@ const QuestionsTopBar = () => {
         <AskButton>Ask Question</AskButton>
       </AskContainer>
       <FilterContainer>
-        {/* TODO: 현재 글 갯수에 따라 Count 상태 변경 예정 */}
-        <QuestionsCount>23,861,736 questions</QuestionsCount>
+        {/* 갯수가 1 이하면 question 아니면 questions */}
+        {totalElements <= 1 ? (
+          <QuestionsCount>{totalElements} question</QuestionsCount>
+        ) : (
+          <QuestionsCount>{totalElements} questions</QuestionsCount>
+        )}
         {/* TODO: 각 Tab 별 Style 지정 예정 */}
         <TabContainer>
           <Tab>Newest</Tab>

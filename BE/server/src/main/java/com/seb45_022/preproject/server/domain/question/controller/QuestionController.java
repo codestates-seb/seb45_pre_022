@@ -36,7 +36,7 @@ public class QuestionController {
         this.jwtUtils = jwtUtils;
     }
 
-    @ApiOperation(value = "질문을 등록하는 메서드", notes = "JWT(필수), 질문 제목, 질문 내용, 질문 태그(선택)을 사용해서 질문을 생성한다")
+    @ApiOperation(value = "질문을 등록하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b>  JWT(필수) 질문 제목, 질문 내용, 질문 태그(선택)을 사용해서 질문을 생성한다")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created", response = QuestionResponseDto.class),
             @ApiResponse(code = 500, message = "Internal Sever Error")
@@ -98,7 +98,7 @@ public class QuestionController {
         return new ResponseEntity<>(new QuestionMultiResponseDto(response, pageInfo),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "하나의 질문을 수정하는 메서드", notes = "JWT(필수), 질문 제목, 질문 내용, 질문 태그를 수정하는 메서드")
+    @ApiOperation(value = "하나의 질문을 수정하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b>  질문 제목, 질문 내용, 질문 태그를 수정하는 메서드")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = QuestionResponseDto.class),
             @ApiResponse(code = 500, message = "Internal Sever Error"),
@@ -118,7 +118,7 @@ public class QuestionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "하나의 질문을 삭제하는 메서드", notes = "JWT(필수), 게시글을 삭제하는 메서드")
+    @ApiOperation(value = "하나의 질문을 삭제하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b> 게시글을 삭제하는 메서드")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @ApiResponses({
             @ApiResponse(code = 204, message = "NO CONTENT"),

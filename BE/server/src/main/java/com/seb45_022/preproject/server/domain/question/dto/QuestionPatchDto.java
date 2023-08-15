@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class QuestionPatchDto {
     @Positive
-    @ApiModelProperty(value = "수정할 questionId",example = "1", position = 1)
+    @ApiModelProperty(value = "수정할 questionId",example = "1", position = 1, hidden = true)
     private long questionId;
 
     public void setQuestionId(long questionId) {

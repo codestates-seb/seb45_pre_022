@@ -12,6 +12,7 @@ import com.seb45_022.preproject.server.domain.question.repository.QuestionReposi
 import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
 import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -57,8 +58,14 @@ public class QuestionService {
         return question;
     }
 
-    public Page<Question> findQuestions(int page, int size){
-        Page<Question> questions = questionRepository.findAll(PageRequest.of(page-1,size));
+    public Page<Question> findQuestions(int page, int size, String searchKeyword){
+        Page<Question> questions = null;
+
+        if(searchKeyword == null) {
+            questions = questionRepository.findAll(PageRequest.of(page - 1, size));
+        }else {
+            questions = questionRepository.findByTitleContaining(searchKeyword,PageRequest.of(page - 1, size));
+        }
 
         for (Question element :questions) {
             element.setAnswerCount(element.getAnswers().size());
@@ -68,6 +75,8 @@ public class QuestionService {
 
     public Question updateQuestion(Question question) {
         Question verifiedQuestion = verifiedQuestion(question.getQuestionId());
+
+        verifiedQuestionOwner(question.getMember().getMemberId(), verifiedQuestion);
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(title -> verifiedQuestion.setTitle(title));
@@ -80,19 +89,27 @@ public class QuestionService {
         return questionRepository.save(verifiedQuestion);
     }
 
-    public void deleteQuestion(long questionId){
-        Question question = verifiedQuestion(questionId);
-        questionRepository.delete(question);
+    public void deleteQuestion(long questionId, long memberId){
+        Question verifiedQuestion = verifiedQuestion(questionId);
+        verifiedQuestionOwner(memberId, verifiedQuestion);
+
+        questionRepository.delete(verifiedQuestion);
     }
 
-    public void deleteQuestions(){
-        questionRepository.deleteAll();
-    }
+//    public void deleteQuestions(){
+//        questionRepository.deleteAll();
+//    }
 
     public Question verifiedQuestion(long questionId){
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         Question question = optionalQuestion.orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
 
         return question;
+    }
+
+    public void verifiedQuestionOwner(long memberId, Question verifiedQuestion){
+        if (memberId != verifiedQuestion.getMember().getMemberId()){
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_MEMBER);
+        }
     }
 }

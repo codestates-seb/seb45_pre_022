@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "Spring")
 public interface QuestionMapper {
+    @Mapping(source = "memberId", target = "member.memberId")
     Question QuestionPatchtDtoToQuestion(QuestionPatchDto questionPatchDto);
 
     @Mapping(source = "memberId", target = "member.memberId")

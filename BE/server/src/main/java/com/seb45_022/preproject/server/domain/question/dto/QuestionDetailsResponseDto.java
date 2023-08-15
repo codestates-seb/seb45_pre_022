@@ -13,7 +13,7 @@ public class QuestionDetailsResponseDto {
     @ApiModelProperty(value = "질문 번호",example = "1", position = 1)
     private long questionId;
 
-    @ApiModelProperty(value = "작성자 memeberId",example = "1", position = 2)
+    @ApiModelProperty(value = "작성자 memeberId",example = "1", position = 2, hidden = true)
     private long memberId;
 
     @ApiModelProperty(value = "작성자 displayName",example = "HGD", position = 3)

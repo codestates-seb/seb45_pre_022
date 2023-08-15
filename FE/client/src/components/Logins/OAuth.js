@@ -55,12 +55,16 @@ const OAuthButton = styled.button`
   }
 `;
 
-const OAuth = () => {
+const OAuth = ({ situation }) => {
   return (
     <OAuthContainer>
       <OAuthButton backgroundcolor={'#ffffff'}>
         <img src="/icons/Google_G_Logo.png" alt="githublogo" width="18px"></img>
-        <span>Log in with Google</span>
+        <span>
+          {situation === 'Log in'
+            ? 'Log in with Google'
+            : 'Sign up with Google'}
+        </span>
       </OAuthButton>
       <OAuthButton backgroundcolor={'#2F3337'} textcolor={'#ffffff'}>
         <img
@@ -68,7 +72,11 @@ const OAuth = () => {
           alt="githublogo"
           width="18px"
         ></img>
-        <span>Log in with Github</span>
+        <span>
+          {situation === 'Log in'
+            ? 'Log in with Github'
+            : 'Sign up with Github'}
+        </span>
       </OAuthButton>
       <OAuthButton backgroundcolor={'#1977F2'} textcolor={'#ffffff'}>
         <img
@@ -76,7 +84,11 @@ const OAuth = () => {
           alt="facebooklogo"
           width="18px"
         ></img>
-        <span>Log in with Facebook</span>
+        <span>
+          {situation === 'Log in'
+            ? 'Log in with Facebook'
+            : 'Sign up with Facebook'}
+        </span>
       </OAuthButton>
     </OAuthContainer>
   );

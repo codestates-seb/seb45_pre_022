@@ -29,7 +29,9 @@ const LoginNavBar = ({ situation }) => {
             ? "Don't you have an account? "
             : 'Already have an account? '}
         </span>
-        <FormLink>{situation === 'Log in' ? 'Sign up' : 'Log in'}</FormLink>
+        <FormLink to={situation === 'Log in' ? '/signup' : '/login'}>
+          {situation === 'Log in' ? 'Sign up' : 'Log in'}
+        </FormLink>
       </div>
       <div>
         <span>{'Are you an employer? '}</span>

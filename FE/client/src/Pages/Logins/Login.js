@@ -4,6 +4,8 @@ import OAuth from '../../components/Logins/OAuth';
 import LoginNavBar from '../../components/Logins/LoginNav';
 import Form, { FormInput, FormLabel } from '../../components/Logins/Form';
 import LoginAndSignupButton from '../../components/Logins/LoginButton';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const MainContainer = styled.div`
   display: flex;
@@ -60,6 +62,28 @@ export const FormLink = styled(Link)`
 `;
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    axios.post(
+      'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/auth/login',
+      { username: email, password },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+  };
   return (
     <MainContainer>
       <div
@@ -78,10 +102,10 @@ const Login = () => {
               width="40px"
             ></img>
           </div>
-          <OAuth />
+          <OAuth situation="Log in" />
           <FormContainer>
-            <FormBox>
-              <Form label="Email" size="25" />
+            <FormBox onSubmit={onSubmit}>
+              <Form label="Email" size="25" onChange={handleEmailChange} />
               <div>
                 <div
                   style={{
@@ -94,13 +118,16 @@ const Login = () => {
                   <FormLink>Forgot password?</FormLink>
                 </div>
                 <div>
-                  <FormInput></FormInput>
+                  <FormInput
+                    type="password"
+                    onChange={handlePasswordChange}
+                  ></FormInput>
                 </div>
               </div>
               <LoginAndSignupButton text="Log in" />
             </FormBox>
           </FormContainer>
-          <LoginNavBar situation="Log in" />
+          <LoginNavBar situation="Log in" onSubmit={onSubmit} />
         </LoginContainer>
       </div>
     </MainContainer>

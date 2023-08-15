@@ -16,13 +16,13 @@ export const FormInput = styled.input`
   border-radius: 5px;
 `;
 
-const Form = ({ label, size }) => {
+const Form = ({ label, size, onChange }) => {
   let lower = label.toLowerCase();
 
   return (
     <div>
       <FormLabel>{label}</FormLabel>
-      <FormInput type={lower} size={size}></FormInput>
+      <FormInput type={lower} size={size} onChange={onChange}></FormInput>
     </div>
   );
 };

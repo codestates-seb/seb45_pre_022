@@ -4,6 +4,8 @@ import { FormLink } from './Login';
 import Form from '../../components/Logins/Form';
 import LoginAndSignupButton from '../../components/Logins/LoginButton';
 import LoginNavBar from '../../components/Logins/LoginNav';
+import { useState } from 'react';
+import axios from 'axios';
 
 const MainContainer = styled.div`
   display: flex;
@@ -13,7 +15,6 @@ const MainContainer = styled.div`
   height: 100%;
   padding: 24px;
   background-color: #f1f2f3;
-  max-width: 1264px;
 `;
 
 const FlexRow = styled.div`
@@ -27,13 +28,45 @@ const ImgBox = styled.div`
   display: flex;
 `;
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 10px;
 `;
 
 const Signup = () => {
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onDisplayNameChange = (e) => {
+    setDisplayName(e.target.value);
+  };
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = axios.post(
+        ' http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/',
+        { displayName, email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <MainContainer>
       <div style={{ display: 'flex' }}>
@@ -162,7 +195,7 @@ const Signup = () => {
           </div>
         </div>
         <div>
-          <OAuth />
+          <OAuth situation="Sign up" />
           <div
             style={{
               backgroundColor: '#ffffff',
@@ -171,15 +204,18 @@ const Signup = () => {
               boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <FormContainer>
-              <Form label="Display name" size="21" />
-              <Form label="Email" size="21" />
-              <Form label="Password" size="21" />
+            <FormContainer onSubmit={onSubmit}>
+              <Form
+                label="Display name"
+                size="21"
+                onChange={onDisplayNameChange}
+              />
+              <Form label="Email" size="21" onChange={onEmailChange} />
+              <Form label="Password" size="21" onChange={onPasswordChange} />
               <LoginAndSignupButton text="Sign up" />
             </FormContainer>
-            <div></div>
+            <LoginNavBar situation="Sign up" />
           </div>
-          <LoginNavBar situation="Sign up" />
         </div>
       </div>
     </MainContainer>

@@ -4,6 +4,7 @@ import { styled } from 'styled-components';
 import { getCookieValue } from '../custom/getCookie';
 import { useEffect } from 'react';
 import { login } from '../features/loginSlice';
+import axios from 'axios';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -146,6 +147,7 @@ const SignUpLink = styled(Link)`
 `;
 
 const LoginNav = styled.nav`
+  display: flex;
   ol {
     display: flex;
   }
@@ -158,9 +160,21 @@ const LoginNav = styled.nav`
 `;
 
 const Header = () => {
-  const isLogin = useSelector((state) => state.login.isLogin);
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const dispatch = useDispatch();
 
-  useEffect(() => {});
+  const { isLogin, memeberId, email, displayName } = useSelector(
+    (state) => state.login,
+  );
+
+  useEffect(() => {
+    const memberId = getCookieValue('memberId');
+    if (memberId) {
+      axios.get(`${apiUrl}/members/${memberId}`).then((res) => {
+        dispatch(login(res.data.data));
+      });
+    }
+  }, [isLogin]);
   return (
     <HeaderContainer>
       <LogoDiv>
@@ -193,6 +207,18 @@ const Header = () => {
       {isLogin ? (
         <LoginNav>
           <ol>
+            <li>
+              <Link>
+                <div>
+                  <img
+                    src="/icons/profile.png"
+                    alt="user-profile"
+                    width="24"
+                    height="24"
+                  ></img>
+                </div>
+              </Link>
+            </li>
             <li>
               <button>
                 <svg

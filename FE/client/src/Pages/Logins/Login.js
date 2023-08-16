@@ -4,11 +4,10 @@ import OAuth from '../../components/Logins/OAuth';
 import LoginNavBar from '../../components/Logins/LoginNav';
 import Form, { FormInput, FormLabel } from '../../components/Logins/Form';
 import LoginAndSignupButton from '../../components/Logins/LoginButton';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from '../../features/loginSlice';
-import { getCookieValue } from '../../custom/getCookie';
 
 const MainContainer = styled.div`
   display: flex;
@@ -66,10 +65,11 @@ export const FormLink = styled(Link)`
 
 const Login = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  console.log(process.env.REACT_APP_API_URL);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -90,17 +90,16 @@ const Login = () => {
           },
         },
       );
-      console.log(response.data);
 
       const expirationDate = new Date();
-      expirationDate.setTime(expirationDate.getTime() + 30 * 60 * 1000);
+      expirationDate.setTime(expirationDate.getTime() + 1 * 60 * 1000);
 
       document.cookie = `access_token=${response.data.accessToken}; path=/;`;
       document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`;
       document.cookie = `memberId=${
         response.data.memberId
       }; expires=${expirationDate.toUTCString()}; path=/`;
-      getCookieValue('access_token');
+      dispatch(login());
       navigate('/');
     } catch (error) {
       console.error('Error fetching data:', error);

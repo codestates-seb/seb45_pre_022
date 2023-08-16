@@ -93,10 +93,7 @@ export const SearchForm = styled.form`
     border-radius: 5px;
 
     &:focus {
-      box-shadow:
-        0 0 10px #e1ecf8,
-        0 0 10px #e1ecf8,
-        10px 0 10px #e1ecf8,
+      box-shadow: 0 0 10px #e1ecf8, 0 0 10px #e1ecf8, 10px 0 10px #e1ecf8,
         -10px 0 10px #e1ecf8;
     }
   }
@@ -138,5 +135,17 @@ export const SignUpLink = styled(Link)`
 
   &:hover {
     background-color: #0073cc;
+  }
+`;
+
+export const LoginNav = styled.nav`
+  ol {
+    display: flex;
+  }
+  ol > li {
+    list-style: none;
+  }
+  ol > li > button {
+    border: none;
   }
 `;

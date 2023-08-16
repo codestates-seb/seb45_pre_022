@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 export const HeaderContainer = styled.header`
   display: flex;
   justify-content: center;
-  gap: 5px;
   position: fixed;
   right: 0;
   overflow: hidden;

@@ -11,10 +11,18 @@ import {
   LogInLink,
   SignUpLink,
 } from './HeaderStyles';
+import { useNavigate } from 'react-router';
 
 const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchText, setSearchText] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/?page=1&size=100&search=${searchText}`);
+  };
 
   const handleInputClick = () => {
     setShowDropdown(true);
@@ -50,17 +58,21 @@ const Header = () => {
         <li>Products</li>
         <li>For Teams</li>
       </Navigation>
-      <SearchForm>
+      <SearchForm onSubmit={handleSearchSubmit}>
         <div>
           <input
+            type="text"
             placeholder="Search..."
             onClick={handleInputClick}
             onChange={handleSearchInputChange}
             value={searchText}
           />
           <i
+            role="button"
+            tabIndex={0}
             className="fa-solid fa-magnifying-glass fa-lg"
             style={{
+              cursor: 'pointer',
               position: 'absolute',
               left: '10px',
               top: '50%',

@@ -27,7 +27,7 @@ const Question = () => {
     const fetchQuestions = async (page, size = 15) => {
       try {
         const response = await axios.get(
-          'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/questions',
+          `${process.env.REACT_APP_API_URL}/questions`,
           {
             params: {
               page,
@@ -54,7 +54,7 @@ const Question = () => {
         <QuestionContainer key={question.questionId}>
           <InfoContainer>
             <Info>{question.votes} votes</Info>
-            <Info>{question.answers} answers</Info>
+            <Info>{question.answerCount} answers</Info>
             <Info>{question.views} views</Info>
           </InfoContainer>
           <QuestionSummary>

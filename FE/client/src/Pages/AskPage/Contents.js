@@ -6,6 +6,8 @@ import {
   NextButton,
   TextArea,
 } from './AskPageStyles';
+import { styled } from 'styled-components';
+import { Tag } from '../../components/Buttons/Tags';
 
 export const TitleContent = ({
   currentStep,
@@ -65,56 +67,56 @@ export const ProblemContent = ({
   );
 };
 
-export const TryContent = ({
-  currentStep,
-  tryDetails,
-  onHandleTryDetails,
-  onHandleNext,
-}) => {
+const InputWrapper = styled.div`
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 35px;
+  background-color: white;
+`;
+
+const StyledInput = styled.input`
+  border: none;
+  outline: none;
+  flex-grow: 1;
+`;
+
+export const TagsContent = ({ currentStep, tags, setTags }) => {
+  const handleTagInput = (e) => {
+    if (e.key === ' ') {
+      const newTag = e.target.value.trim();
+
+      if (newTag !== '') {
+        setTags([...tags, newTag]);
+        e.target.value = '';
+      }
+    }
+  };
+
+  const handleTagDelete = (index) => {
+    const newTags = tags.filter((_, i) => i !== index);
+    setTags(newTags);
+  };
+
   return (
     <Content disabled={currentStep < 3}>
-      <SubTitle>What did you try and what were you expecting?</SubTitle>
-      <Description>
-        Describe what you tried, what you expected to happen, and what actually
-        resulted. Minimum 20 characters.
-      </Description>
-      <TextArea
-        rows="10"
-        onChange={onHandleTryDetails}
-        disabled={currentStep < 3}
-      />
-      {currentStep === 3 && (
-        <NextButton disabled={tryDetails.length < 20} onClick={onHandleNext}>
-          Next
-        </NextButton>
-      )}
-    </Content>
-  );
-};
-
-export const TagsContent = ({
-  currentStep,
-  tags,
-  onHandleTags,
-  onHandleNext,
-}) => {
-  return (
-    <Content disabled={currentStep < 4}>
       <SubTitle>tags</SubTitle>
       <Description>
         Add up to 5 tags to describe what your question is about. Start typing
         to see suggestions.
       </Description>
-      <Input
-        type="text"
-        placeholder="e.g. (javascript) (react)"
-        onChange={onHandleTags}
-      />
-      {currentStep === 4 && (
-        <NextButton disabled={tags.length === 0} onClick={onHandleNext}>
-          Next
-        </NextButton>
-      )}
+      <InputWrapper>
+        {tags.map((tag, index) => (
+          <Tag key={index} onClick={() => handleTagDelete(index)}>
+            {tag}
+          </Tag>
+        ))}
+        <StyledInput
+          type="text"
+          placeholder="e.g. (javascript) (react)"
+          onKeyDown={handleTagInput}
+        />
+      </InputWrapper>
     </Content>
   );
 };

@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true, // 브라우저 환경을 의미, 브우에서 사용 가능한 전역 변수들을 자동으로 인식
-    "es2021": true
+    "es2021": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",

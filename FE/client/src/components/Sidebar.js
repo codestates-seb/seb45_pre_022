@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LinkStyled = styled(Link)`
   text-decoration: none;
+  color: inherit;
 `;
 
 const SidebarContainer = styled.div`
@@ -45,9 +46,15 @@ const Sidebar = () => {
       </LinkStyled>
       <SubTitle>PUBLIC</SubTitle>
       <ul>
-        <Element>Questions</Element>
-        <Element>Tags</Element>
-        <Element>Users</Element>
+        <LinkStyled to="/">
+          <Element>Questions</Element>
+        </LinkStyled>
+        <LinkStyled to="/tags">
+          <Element>Tags</Element>
+        </LinkStyled>
+        <LinkStyled to="/members">
+          <Element>Users</Element>
+        </LinkStyled>
         <Element>Companies</Element>
       </ul>
       <SubTitle>COLLECTIVES</SubTitle>

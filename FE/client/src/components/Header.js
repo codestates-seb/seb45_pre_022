@@ -81,6 +81,8 @@ const Navigation = styled.ol`
 const SearchForm = styled.form`
   display: flex;
   align-items: center;
+  width: 600px;
+
   > div {
     position: relative;
     padding: 5px;

@@ -46,7 +46,7 @@ const Sidebar = () => {
       </LinkStyled>
       <SubTitle>PUBLIC</SubTitle>
       <ul>
-        <LinkStyled to="/questions">
+        <LinkStyled to="/">
           <Element>Questions</Element>
         </LinkStyled>
         <LinkStyled to="/tags">

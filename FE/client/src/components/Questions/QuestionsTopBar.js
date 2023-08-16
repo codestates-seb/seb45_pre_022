@@ -81,9 +81,7 @@ const QuestionsTopBar = () => {
 
   useEffect(() => {
     axios
-      .get(
-        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/questions?page=1&size=15',
-      )
+      .get(`${process.env.REACT_APP_API_URL}/questions?page=1&size=15`)
       .then((res) => {
         const totalElements = res.data.pageInfo.totalElements;
         setTotalElements(totalElements);

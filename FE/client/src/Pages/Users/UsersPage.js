@@ -39,9 +39,7 @@ const UsersPage = () => {
 
   useEffect(() => {
     axios
-      .get(
-        `http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/members/${membersId}`,
-      )
+      .get(`${process.env.REACT_APP_API_URL}/members/${membersId}`)
       .then((res) => {
         setUser(res.data.data);
       })

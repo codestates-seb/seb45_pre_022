@@ -72,17 +72,22 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    axios.post(
-      'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/auth/login',
-      { username: email, password },
-      {
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const response = await axios.post(
+        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/auth/login',
+        { username: email, password },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      },
-    );
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
   return (
     <MainContainer>

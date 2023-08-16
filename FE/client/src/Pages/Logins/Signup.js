@@ -52,8 +52,8 @@ const Signup = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = axios.post(
-        ' http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/',
+      const response = await axios.post(
+        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/members',
         { displayName, email, password },
         {
           headers: {

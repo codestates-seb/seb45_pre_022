@@ -1,166 +1,52 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import SearchDropdown from './SearchDropdown';
+import {
+  HeaderContainer,
+  LogoDiv,
+  StyledSpan,
+  Navigation,
+  SearchForm,
+  LogInContainer,
+  LogInLink,
+  SignUpLink,
+  LoginNav,
+} from './HeaderStyles';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { styled } from 'styled-components';
-import { getCookieValue } from '../custom/getCookie';
-import { useEffect } from 'react';
-import { login } from '../features/loginSlice';
-
-const HeaderContainer = styled.header`
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  position: fixed;
-  right: 0;
-  overflow: hidden;
-
-  width: 100%;
-  height: 52px;
-  background-color: white;
-  border-bottom: 2px solid #e4e6e8;
-  border-top: 3px solid #f48224;
-`;
-
-const LogoDiv = styled.div`
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background-color: #e4e6e8;
-  }
-
-  > a {
-    display: flex;
-    align-items: center;
-    text-decoration-line: none;
-
-    color: black;
-    &:visited {
-      text-decoration: none;
-    }
-    &:active {
-      text-decoration: none;
-    }
-  }
-  > a > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    width: 150px;
-    height: 30px;
-    white-space: 'nowrap';
-  }
-`;
-
-const StyledSpan = styled.span`
-  font-size: 20px;
-  font-weight: 800;
-  margin-left: 2px;
-`;
-
-const Navigation = styled.ol`
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  list-style: none;
-
-  > li {
-    padding: 8px 10px;
-    border-radius: 1000px;
-    color: #888a8c;
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap; /* 줄바꿈 방지 */
-
-    &:hover {
-      background-color: #e4e6e8;
-    }
-  }
-`;
-
-const SearchForm = styled.form`
-  display: flex;
-  align-items: center;
-  width: 600px;
-
-  > div {
-    position: relative;
-    padding: 5px;
-    flex-grow: 1;
-  }
-  > div > input {
-    position: relative;
-    padding-left: 30px;
-    height: 30px;
-    width: 100%;
-    border: 2px solid #babfc4;
-    border-radius: 5px;
-
-    &:focus {
-      box-shadow:
-        0 0 10px #e1ecf8,
-        0 0 10px #e1ecf8,
-        10px 0 10px #e1ecf8,
-        -10px 0 10px #e1ecf8;
-    }
-  }
-`;
-
-const LogInContainer = styled.nav`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const LogInLink = styled(Link)`
-  background-color: #b3d3ea;
-  color: #436c89;
-
-  padding: 8px 10.4px;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 8px;
-  border: none;
-  white-space: nowrap; /* 줄바꿈 방지 */
-
-  &:hover {
-    background-color: #94b6ce;
-  }
-`;
-
-const SignUpLink = styled(Link)`
-  background-color: #0995ff;
-  color: white;
-  padding: 8px 10.4px;
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: 8px;
-  border: none;
-  white-space: nowrap; /* 줄바꿈 방지 */
-
-  &:hover {
-    background-color: #0073cc;
-  }
-`;
-
-const LoginNav = styled.nav`
-  ol {
-    display: flex;
-  }
-  ol > li {
-    list-style: none;
-  }
-  ol > li > button {
-    border: none;
-  }
-`;
 
 const Header = () => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
+  const navigate = useNavigate();
+
   const isLogin = useSelector((state) => state.login.isLogin);
 
-  useEffect(() => {});
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/?page=1&size=100&search=${searchText}`);
+  };
+
+  const handleInputClick = () => {
+    setShowDropdown(true);
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (e.target.tagName !== 'INPUT') {
+        setShowDropdown(false);
+      }
+    };
+
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
     <HeaderContainer>
       <LogoDiv>
@@ -176,12 +62,21 @@ const Header = () => {
         <li>Products</li>
         <li>For Teams</li>
       </Navigation>
-      <SearchForm>
+      <SearchForm onSubmit={handleSearchSubmit}>
         <div>
-          <input placeholder="Search..." />
+          <input
+            type="text"
+            placeholder="Search..."
+            onClick={handleInputClick}
+            onChange={handleSearchInputChange}
+            value={searchText}
+          />
           <i
+            role="button"
+            tabIndex={0}
             className="fa-solid fa-magnifying-glass fa-lg"
             style={{
+              cursor: 'pointer',
               position: 'absolute',
               left: '10px',
               top: '50%',
@@ -190,6 +85,7 @@ const Header = () => {
           ></i>
         </div>
       </SearchForm>
+      {showDropdown && <SearchDropdown />}
       {isLogin ? (
         <LoginNav>
           <ol>

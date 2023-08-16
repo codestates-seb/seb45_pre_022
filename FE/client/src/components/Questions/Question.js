@@ -17,14 +17,18 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const { search } = queryString.parse(location.search);
 
   useEffect(() => {
-    const fetchQuestions = async (page, size = 15) => {
+    const fetchQuestions = async (page, size = 100) => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/questions`,
@@ -32,6 +36,7 @@ const Question = () => {
             params: {
               page,
               size,
+              search,
             },
           },
         );
@@ -42,7 +47,7 @@ const Question = () => {
     };
 
     fetchQuestions(1);
-  }, []);
+  }, [search]);
 
   const onHandleClickUsername = (e) => {
     navigate(`/members/${e.target.id}`);

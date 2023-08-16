@@ -2,7 +2,7 @@ import { Suspense, lazy } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Loading from './Loading';
-import Header from './components/Header';
+import Header from './components/Header/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
 

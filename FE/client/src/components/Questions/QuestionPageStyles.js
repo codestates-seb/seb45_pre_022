@@ -35,7 +35,7 @@ export const Info = styled.div`
 export const QuestionSummary = styled.div`
   display: flex;
   flex-direction: column;
-  width: 611px;
+  width: 750px;
 `;
 
 // 질문 제목 스타일
@@ -88,6 +88,11 @@ export const User = styled.div`
 export const UserName = styled(User)`
   font-weight: bold;
   color: #0074cc;
+  cursor: pointer;
+
+  &:hover {
+    color: #0088ff;
+  }
 `;
 
 // 유저 팔로워 수

@@ -7,7 +7,7 @@ import axios from 'axios';
 const AskContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 751px;
+  width: 900px;
   height: 50px;
   margin-bottom: 12px;
 `;
@@ -23,7 +23,7 @@ const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 751px;
+  width: 900px;
   margin-bottom: 12px;
 `;
 

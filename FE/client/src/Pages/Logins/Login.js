@@ -6,6 +6,8 @@ import Form, { FormInput, FormLabel } from '../../components/Logins/Form';
 import LoginAndSignupButton from '../../components/Logins/LoginButton';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../features/loginSlice';
 
 const MainContainer = styled.div`
   display: flex;
@@ -65,6 +67,10 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const isLogin = useSelector((state) => state.login.isLogin);
+  const dispatch = useDispatch();
+  console.log(isLogin);
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -85,6 +91,9 @@ const Login = () => {
         },
       );
       console.log(response.data);
+      document.cookie = `access_token=${response.data.accessToken}; path=/;`; // 유효 30분
+      document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`; // 유효 1일
+      dispatch(login());
     } catch (error) {
       console.error('Error fetching data:', error);
     }

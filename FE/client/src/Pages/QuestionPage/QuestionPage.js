@@ -21,7 +21,7 @@ const QuestionPage = () => {
     const fetchData = async () => {
       try {
         const questionResponse = await axios.get(
-          `http://ec2-13-209-49-128.ap-northeast-2.compute.amazonaws.com:8080/questions/${questionId}`,
+          `${process.env.REACT_APP_API_URL}/${questionId}`,
         );
         const question = questionResponse.data;
         setQuestion(question);

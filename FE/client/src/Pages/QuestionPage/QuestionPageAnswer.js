@@ -51,7 +51,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
   const handleAnswerSubmit = async () => {
     try {
       const response = await axios.post(
-        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/answers',
+        `${process.env.REACT_APP_API_URL}/answers`,
         {
           questionId: question.questionId,
           //로그인-> 수정
@@ -94,7 +94,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
           {question.answers.length < 2 ? ' Answer' : ' Answers'}
         </LetterPart>
 
-        {question.answers.map((answer, idx) => (
+        {question.answers.map((answer) => (
           <Answers key={answer.answerId}>
             <p>{answer.body}</p>
             <When>

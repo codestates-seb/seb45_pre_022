@@ -10,7 +10,8 @@ public enum ExceptionCode {
     QUESTION_NOT_FOUND(404, "존재하지 않는 게시글 입니다." ),
     ANSWER_NOT_FOUND(404, "존재하지 않는 답변 입니다." ),
     COMMENT_NOT_FOUND(404, "존재하지 않는 답변 입니다."),
-    NOT_ALLOW_MEMBER(401, "올바른 회원이 아닙니다.");
+    NOT_ALLOW_MEMBER(401, "올바른 회원이 아닙니다."),
+    TOKEN_NOT_FOUND(404, "존재하지 토큰이 아닙니다.");
 
     @Getter
     private int status;

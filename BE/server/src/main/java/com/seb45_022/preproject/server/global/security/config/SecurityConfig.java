@@ -1,6 +1,7 @@
 package com.seb45_022.preproject.server.global.security.config;
 
 import com.seb45_022.preproject.server.domain.member.service.MemberService;
+import com.seb45_022.preproject.server.domain.refreshToken.service.RefreshTokenService;
 import com.seb45_022.preproject.server.global.security.filter.JwtAuthenticationFilter;
 import com.seb45_022.preproject.server.global.security.filter.JwtVerificationFilter;
 import com.seb45_022.preproject.server.global.security.handler.*;
@@ -33,6 +34,7 @@ public class SecurityConfig {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final MemberService memberService;
+    private final RefreshTokenService refreshTokenService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -54,12 +56,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() //스웨거 관련설정
                         .mvcMatchers(HttpMethod.POST, "/**").permitAll()
+                        .mvcMatchers(HttpMethod.PATCH, "*/members/**").hasRole("USER")
                         .mvcMatchers("members/my-page").authenticated()
                         .mvcMatchers(HttpMethod.GET, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, customAuthorityUtils, memberService))
+                        .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer, customAuthorityUtils, memberService, refreshTokenService))
                 );
         return http.build();
     }
@@ -81,7 +84,7 @@ public class SecurityConfig {
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, refreshTokenService);
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");

@@ -4,10 +4,14 @@ import com.google.gson.Gson;
 import com.seb45_022.preproject.server.domain.member.dto.MemberDto;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.service.MemberService;
+import com.seb45_022.preproject.server.domain.refreshToken.entity.RefreshToken;
+import com.seb45_022.preproject.server.domain.refreshToken.service.RefreshTokenService;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -25,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,6 +38,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final MemberService memberService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -68,6 +74,10 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setHeader("Authorization",headerValue);
         response.setHeader("Refresh",refreshToken);
 
+        RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setValue(refreshToken);
+        refreshTokenService.addRefreshToken(refreshTokenEntity);
+
 //        getRedirectStrategy().sendRedirect(request,response,uri);
         MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
                 .accessToken(accessToken)
@@ -80,6 +90,14 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(body);
+
+//        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+//                .httpOnly(true)
+//                .secure(true)
+//                .maxAge(TimeUnit.MINUTES.toSeconds(30))
+//                .build();
+//
+//        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     private String delegateAccessToken(Member member, List<String> authorities){

@@ -4,11 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.seb45_022.preproject.server.domain.member.dto.MemberDto;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
+import com.seb45_022.preproject.server.domain.refreshToken.entity.RefreshToken;
+import com.seb45_022.preproject.server.domain.refreshToken.service.RefreshTokenService;
 import com.seb45_022.preproject.server.global.dto.SingleResponseDto;
 import com.seb45_022.preproject.server.global.security.dto.LoginDto;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,12 +27,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
+    private final RefreshTokenService refreshTokenService;
 
     // 인증 시도
     @SneakyThrows
@@ -51,6 +57,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Authorization", "Bearer" + accessToken);
         response.setHeader("Refresh", refreshToken);
 
+        RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setValue(refreshToken);
+        refreshTokenService.addRefreshToken(refreshTokenEntity);
+
         MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -62,6 +72,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(body);
+
+//        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+//                .httpOnly(true)
+//                .secure(true)
+//                .maxAge(TimeUnit.MINUTES.toSeconds(30))
+//                .build();
+//
+//        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     // Access Token 생성 로직

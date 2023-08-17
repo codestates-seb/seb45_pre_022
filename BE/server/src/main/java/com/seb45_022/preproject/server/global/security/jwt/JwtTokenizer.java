@@ -72,7 +72,7 @@ public class JwtTokenizer {
     // JWT의 만료 일시를 지정
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, expirationMinutes);
+        calendar.add(Calendar.SECOND, expirationMinutes);
         Date expiration = calendar.getTime();
         return expiration;
     }
@@ -94,4 +94,20 @@ public class JwtTokenizer {
                         .build().parseClaimsJws(jws);
         return claims;
     }
+
+    public Claims parseRefreshToken(String refreshToken) {
+        return parseToken(refreshToken, secretKey.getBytes(StandardCharsets.UTF_8));
+    }
+    private Claims parseToken(String token, byte[] accessSecret) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey(accessSecret))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private Key getSigningKey(byte[] accessSecret) {
+        return Keys.hmacShaKeyFor(accessSecret);
+    }
+
 }

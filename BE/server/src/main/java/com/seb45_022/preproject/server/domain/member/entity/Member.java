@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
+import com.seb45_022.preproject.server.domain.refreshToken.entity.RefreshToken;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,6 +48,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
 
     @Column(name = "create_at")
     private LocalDateTime createAt = LocalDateTime.now();

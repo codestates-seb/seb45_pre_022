@@ -13,45 +13,11 @@ import {
   Follower,
   CreatedAt,
 } from './QuestionPageStyles';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
 
-const Question = () => {
-  const [questions, setQuestions] = useState([]);
-
+const Question = ({ questions }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { search } = queryString.parse(location.search);
-
-  useEffect(() => {
-    const fetchQuestions = async (page, size = 100) => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/questions`,
-
-          {
-            params: {
-              page,
-              size,
-              search,
-            },
-          },
-        );
-        const sortedQuestions = response.data.questions.sort((a, b) => {
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-        setQuestions(sortedQuestions);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchQuestions(1);
-  }, [search]);
 
   const onHandleClickUsername = (e) => {
     navigate(`/members/${e.target.id}`);

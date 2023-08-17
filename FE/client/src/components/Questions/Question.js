@@ -17,6 +17,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
@@ -27,7 +28,7 @@ const Question = () => {
     const fetchQuestions = async (page, size = 15) => {
       try {
         const response = await axios.get(
-          'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/questions',
+          'http://ec2-13-209-49-128.ap-northeast-2.compute.amazonaws.com:8080/questions',
           {
             params: {
               page,

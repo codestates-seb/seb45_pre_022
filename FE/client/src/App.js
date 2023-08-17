@@ -9,6 +9,7 @@ import Login from './Pages/Logins/Login';
 import Signup from './Pages/Logins/Signup';
 import UsersPage from './Pages/Users/UsersPage';
 import UserList from './Pages/Users/UserList';
+import QuestionPage from './Pages/QuestionPage/QuestionPage';
 
 const DefaultLayout = () => {
   return (
@@ -45,7 +46,7 @@ function App() {
               <Route path="ask" element={<AskPage />} />
               <Route path="members/:membersId" element={<UsersPage />} />
               <Route path="members" element={<UserList />} />
-              {/* <Route path="questions/:questionId" element={상세 페이지 컴포넌트.js} /> */}
+              <Route path="questions/:questionId" element={<QuestionPage />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

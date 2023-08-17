@@ -1,10 +1,9 @@
-import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { Link } from 'react-router-dom';
 
-const HeaderContainer = styled.header`
+export const HeaderContainer = styled.header`
   display: flex;
   justify-content: center;
-  gap: 5px;
   position: fixed;
   right: 0;
   overflow: hidden;
@@ -16,7 +15,7 @@ const HeaderContainer = styled.header`
   border-top: 3px solid #f48224;
 `;
 
-const LogoDiv = styled.div`
+export const LogoDiv = styled.div`
   display: flex;
   align-items: center;
 
@@ -48,13 +47,13 @@ const LogoDiv = styled.div`
   }
 `;
 
-const StyledSpan = styled.span`
+export const StyledSpan = styled.span`
   font-size: 20px;
   font-weight: 800;
   margin-left: 2px;
 `;
 
-const Navigation = styled.ol`
+export const Navigation = styled.ol`
   display: flex;
   align-items: center;
   gap: 3px;
@@ -74,10 +73,11 @@ const Navigation = styled.ol`
   }
 `;
 
-const SearchForm = styled.form`
+export const SearchForm = styled.form`
   display: flex;
   align-items: center;
   width: 600px;
+  position: relative;
 
   > div {
     position: relative;
@@ -102,13 +102,13 @@ const SearchForm = styled.form`
   }
 `;
 
-const LogInContainer = styled.nav`
+export const LogInContainer = styled.nav`
   display: flex;
   align-items: center;
   gap: 5px;
 `;
 
-const LogInLink = styled(Link)`
+export const LogInLink = styled(Link)`
   background-color: #b3d3ea;
   color: #436c89;
 
@@ -125,7 +125,7 @@ const LogInLink = styled(Link)`
   }
 `;
 
-const SignUpLink = styled(Link)`
+export const SignUpLink = styled(Link)`
   background-color: #0995ff;
   color: white;
   padding: 8px 10.4px;
@@ -141,42 +141,14 @@ const SignUpLink = styled(Link)`
   }
 `;
 
-const Header = () => {
-  return (
-    <HeaderContainer>
-      <LogoDiv>
-        <Link to="/">
-          <img src="/icons/Stack_Overflow_icon.png" alt="logo" width="30"></img>
-          <span>
-            stack <StyledSpan>overflow</StyledSpan>
-          </span>
-        </Link>
-      </LogoDiv>
-      <Navigation>
-        <li>About</li>
-        <li>Products</li>
-        <li>For Teams</li>
-      </Navigation>
-      <SearchForm>
-        <div>
-          <input placeholder="Search..." />
-          <i
-            className="fa-solid fa-magnifying-glass fa-lg"
-            style={{
-              position: 'absolute',
-              left: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }}
-          ></i>
-        </div>
-      </SearchForm>
-      <LogInContainer>
-        <LogInLink to="/login">Log in</LogInLink>
-        <SignUpLink to="/signup">Sign up</SignUpLink>
-      </LogInContainer>
-    </HeaderContainer>
-  );
-};
-
-export default Header;
+export const LoginNav = styled.nav`
+  ol {
+    display: flex;
+  }
+  ol > li {
+    list-style: none;
+  }
+  ol > li > button {
+    border: none;
+  }
+`;

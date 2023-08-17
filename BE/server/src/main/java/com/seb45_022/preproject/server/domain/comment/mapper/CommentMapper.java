@@ -20,4 +20,5 @@ public interface CommentMapper {
     @Mapping(source = "member.memberId", target = "memberId")
     @Mapping(source = "member.displayName", target = "displayName")
     CommentResponseDto commentToResponseDto(Comment comment);
+
 }

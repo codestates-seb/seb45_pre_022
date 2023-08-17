@@ -27,12 +27,12 @@ import javax.validation.constraints.Positive;
 @Slf4j
 @Api(tags = {"답변 CRUD API"})
 public class AnswerController {
-    private final AnswerService answerService;
+    private final AnswerService service;
     private final AnswerMapper mapper;
 
 
-    public AnswerController(AnswerService answerService, AnswerMapper mapper) {
-        this.answerService = answerService;
+    public AnswerController(AnswerService service, AnswerMapper mapper) {
+        this.service = service;
         this.mapper = mapper;
     }
 
@@ -46,14 +46,14 @@ public class AnswerController {
     public ResponseEntity postAnswer(@Valid @RequestBody AnswerPostDto answerPostDto,
                                      @LoginMemberId Long memberId) {
         answerPostDto.setMemberId(memberId);
-        Answer createdAnswer = answerService.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto));
+        Answer createdAnswer = service.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto));
         AnswerResponseDto response = mapper.answerToResponseDto(createdAnswer);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // 답변 수정
-    @ApiOperation(value = "하나의 답변을 수정하는 메서드", notes = "answerId, body를 사용해 답변을 수정한다")
+    @ApiOperation(value = "하나의 답변을 수정하는 메서드", notes = "body에 변경사항을 적용해 답변을 수정한다")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = AnswerResponseDto.class),
             @ApiResponse(code = 500, message = "Internal Sever Error"),
@@ -64,10 +64,10 @@ public class AnswerController {
     public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive long answerId,
                                       @Valid @RequestBody AnswerPatchDto answerPatchDto,
                                       @LoginMemberId Long memberId) {
-        answerPatchDto.setAnswerId(answerId);
         answerPatchDto.setMemberId(memberId);
+        answerPatchDto.setAnswerId(answerId);
         Answer answer = mapper.answerPatchDtoToAnswer(answerPatchDto);
-        AnswerResponseDto response = mapper.answerToResponseDto(answerService.updateAnswer(answer));
+        AnswerResponseDto response = mapper.answerToResponseDto(service.updateAnswer(answer));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -82,7 +82,7 @@ public class AnswerController {
     @DeleteMapping("/{answer-id}")
     public ResponseEntity deleteAnswer(@PathVariable("answer-id")@Positive long answerId,
                                        @LoginMemberId Long memberId) {
-        answerService.deleteAnswer(answerId, memberId);
+        service.deleteAnswer(answerId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -15,8 +15,10 @@ public interface AnswerMapper {
     @Mapping(source = "memberId", target = "member.memberId")
     Answer answerPostDtoToAnswer(AnswerPostDto requestBody);
 
+    @Mapping(source = "memberId", target = "member.memberId")
     Answer answerPatchDtoToAnswer(AnswerPatchDto requestBody);
 
     @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.displayName", target = "displayName")
     AnswerResponseDto answerToResponseDto(Answer answer);
 }

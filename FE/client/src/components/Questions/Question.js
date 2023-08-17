@@ -41,7 +41,10 @@ const Question = () => {
             },
           },
         );
-        setQuestions(response.data.questions);
+        const sortedQuestions = response.data.questions.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setQuestions(sortedQuestions);
       } catch (error) {
         console.error(error);
       }

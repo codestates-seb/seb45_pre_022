@@ -17,8 +17,9 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import queryString from 'query-string';
+
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
@@ -32,6 +33,7 @@ const Question = () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/questions`,
+
           {
             params: {
               page,

@@ -6,6 +6,7 @@ import com.seb45_022.preproject.server.domain.answer.dto.AnswerResponseDto;
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.answer.mapper.AnswerMapper;
 import com.seb45_022.preproject.server.domain.answer.service.AnswerService;
+import com.seb45_022.preproject.server.global.argu.LoginMemberId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,8 +43,10 @@ public class AnswerController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity postAnswer(@Valid @RequestBody AnswerPostDto requestBody) {
-        Answer createdAnswer = answerService.createAnswer(mapper.answerPostDtoToAnswer(requestBody));
+    public ResponseEntity postAnswer(@Valid @RequestBody AnswerPostDto answerPostDto,
+                                     @LoginMemberId Long memberId) {
+        answerPostDto.setMemberId(memberId);
+        Answer createdAnswer = answerService.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto));
         AnswerResponseDto response = mapper.answerToResponseDto(createdAnswer);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -59,9 +62,11 @@ public class AnswerController {
     @ResponseStatus(value = HttpStatus.OK)
     @PatchMapping("/{answer-id}")
     public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive long answerId,
-                                      @Valid @RequestBody AnswerPatchDto requestBody) {
-        requestBody.setAnswerId(answerId);
-        Answer answer = mapper.answerPatchDtoToAnswer(requestBody);
+                                      @Valid @RequestBody AnswerPatchDto answerPatchDto,
+                                      @LoginMemberId Long memberId) {
+        answerPatchDto.setAnswerId(answerId);
+        answerPatchDto.setMemberId(memberId);
+        Answer answer = mapper.answerPatchDtoToAnswer(answerPatchDto);
         AnswerResponseDto response = mapper.answerToResponseDto(answerService.updateAnswer(answer));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -75,8 +80,9 @@ public class AnswerController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id")@Positive long answerId) {
-        answerService.deleteAnswer(answerId);
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id")@Positive long answerId,
+                                       @LoginMemberId Long memberId) {
+        answerService.deleteAnswer(answerId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

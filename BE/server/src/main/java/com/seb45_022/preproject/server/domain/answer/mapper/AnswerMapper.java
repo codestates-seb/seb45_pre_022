@@ -17,5 +17,6 @@ public interface AnswerMapper {
 
     Answer answerPatchDtoToAnswer(AnswerPatchDto requestBody);
 
+    @Mapping(source = "member.memberId", target = "memberId")
     AnswerResponseDto answerToResponseDto(Answer answer);
 }

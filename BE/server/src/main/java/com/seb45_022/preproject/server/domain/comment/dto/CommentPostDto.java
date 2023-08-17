@@ -15,11 +15,15 @@ public class CommentPostDto {
     @Positive
     private long answerId;
 
-    @ApiModelProperty(example = "1", position = 2)
+    @ApiModelProperty(example = "1", position = 2, hidden = true)
     @Positive
     private long memberId;
 
     @ApiModelProperty(example = "SampleComment", position = 3)
     @NotBlank(message = "댓글 내용은 공백이 아니어야 합니다")
     private String body;
+
+    public void serMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
 }

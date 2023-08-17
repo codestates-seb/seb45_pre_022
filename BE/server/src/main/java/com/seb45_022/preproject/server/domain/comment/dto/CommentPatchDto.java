@@ -17,4 +17,9 @@ public class CommentPatchDto {
     @ApiModelProperty(example = "SampleComment", position = 2)
     @NotBlank(message = "댓글 내용은 공백이 아니어야 합니다")
     private String body;
+
+    private Long memberId;
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
 }

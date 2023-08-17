@@ -39,6 +39,9 @@ public class CommentService {
 
     public Comment updateComment(Comment comment) {
         Comment foundComment = findVerifiedComment(comment.getCommentId());
+
+        verifiedCommentOwner(comment.getMember().getMemberId(), foundComment);
+
         foundComment.setLastModifiedAt(LocalDateTime.now());
         foundComment.setBody(comment.getBody());
         return commentRepository.save(foundComment);
@@ -52,9 +55,16 @@ public class CommentService {
                         new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
         return findComment;
     }
-    public void deleteComment(long commentId) {
+    public void deleteComment(long commentId, long memberId) {
         Comment foundComment = findVerifiedComment(commentId);
+        verifiedCommentOwner(memberId, foundComment);
         commentRepository.delete(foundComment);
+    }
+
+    private void verifiedCommentOwner(long memberId, Comment foundComment) {
+        if (memberId != foundComment.getMember().getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_MEMBER);
+        }
     }
 
 

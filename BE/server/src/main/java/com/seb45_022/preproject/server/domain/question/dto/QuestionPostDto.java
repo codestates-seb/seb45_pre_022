@@ -1,6 +1,7 @@
 package com.seb45_022.preproject.server.domain.question.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -27,4 +28,10 @@ public class QuestionPostDto {
 
     @ApiModelProperty(value = "질문 태그 배열", required = false,example = "[this,is,sample,tag]", position =4)
     private List<String> tags;
+
+    public QuestionPostDto(String title, String body, List<String> tags) {
+        this.title = title;
+        this.body = body;
+        this.tags = tags;
+    }
 }

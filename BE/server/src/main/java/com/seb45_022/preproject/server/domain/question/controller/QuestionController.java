@@ -5,12 +5,17 @@ import com.seb45_022.preproject.server.domain.question.dto.*;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
 import com.seb45_022.preproject.server.domain.question.mapper.QuestionMapper;
 import com.seb45_022.preproject.server.domain.question.service.QuestionService;
+import com.seb45_022.preproject.server.global.argu.LoginMemberId;
+import com.seb45_022.preproject.server.global.dto.TokenPrincipalDto;
 import com.seb45_022.preproject.server.global.security.utils.JwtUtils;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,23 +33,23 @@ import java.util.stream.Collectors;
 public class QuestionController {
     private final QuestionMapper mapper;
     private final QuestionService service;
-    private final JwtUtils jwtUtils;
 
-    public QuestionController(QuestionMapper mapper, QuestionService service, JwtUtils jwtUtils) {
+    public QuestionController(QuestionMapper mapper, QuestionService service) {
         this.mapper = mapper;
         this.service = service;
-        this.jwtUtils = jwtUtils;
     }
 
-    @ApiOperation(value = "질문을 등록하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b>  JWT(필수) 질문 제목, 질문 내용, 질문 태그(선택)을 사용해서 질문을 생성한다")
+    @ApiOperation(value = "질문을 등록하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b> 질문 제목, 질문 내용, 질문 태그(선택)을 사용해서 질문을 생성한다")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created", response = QuestionResponseDto.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 500, message = "Internal Sever Error")
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity postQuestion(@RequestBody QuestionPostDto questionPostDto, HttpServletRequest request){
-        questionPostDto.setMemberId(jwtUtils.getMemberId(jwtUtils.getClaims(request)));
+    public ResponseEntity postQuestion(@LoginMemberId Long memberId, @RequestBody QuestionPostDto questionPostDto){
+
+        questionPostDto.setMemberId(memberId);
 
         Question question = mapper.QuestionPostDtoToQuestion(questionPostDto);
 
@@ -63,7 +68,7 @@ public class QuestionController {
     })
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping("/{question_id}")
-    public ResponseEntity getQuestion(@PathVariable("question_id") @Positive long questionId, HttpServletRequest request){
+    public ResponseEntity getQuestion(@PathVariable("question_id") @Positive long questionId){
         Question question = service.findQuestion(questionId);
         QuestionDetailsResponseDto response = mapper.QuestionToQuestionDetailsResponseDto(question);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -103,12 +108,14 @@ public class QuestionController {
             @ApiResponse(code = 200, message = "OK", response = QuestionResponseDto.class),
             @ApiResponse(code = 500, message = "Internal Sever Error"),
             @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized")
     })
     @ResponseStatus(value = HttpStatus.OK)
     @PatchMapping("/{question_id}")
     public ResponseEntity patchQuestion(@PathVariable("question_id") @Positive long questionId,
-                                        @RequestBody QuestionPatchDto questionPatchDto, HttpServletRequest request){
-        questionPatchDto.setMemberId(jwtUtils.getMemberId(jwtUtils.getClaims(request)));
+                                        @RequestBody QuestionPatchDto questionPatchDto, @LoginMemberId Long memberId){
+        questionPatchDto.setMemberId(memberId);
+
         questionPatchDto.setQuestionId(questionId);
 
         Question question = mapper.QuestionPatchtDtoToQuestion(questionPatchDto);
@@ -124,11 +131,11 @@ public class QuestionController {
             @ApiResponse(code = 204, message = "NO CONTENT"),
             @ApiResponse(code = 500, message = "Internal Sever Error"),
             @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized")
     })
     @DeleteMapping("/{question_id}")
-    public HttpStatus deleteQuestion(@PathVariable("question_id") @Positive long questionId, HttpServletRequest request){
+    public HttpStatus deleteQuestion(@PathVariable("question_id") @Positive long questionId, @LoginMemberId Long memberId){
 
-        long memberId = jwtUtils.getMemberId(jwtUtils.getClaims(request));
         service.deleteQuestion(questionId, memberId);
 
         return HttpStatus.NO_CONTENT;

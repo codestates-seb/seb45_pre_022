@@ -36,9 +36,11 @@ const Info = styled.span`
   margin-right: 10px;
 `;
 
-export const Line = styled.line`
+export const Line = styled.div`
   border-top: 1.5px solid #e3e3e3;
+  width: 100%;
 `;
+
 const QuestionPageHeader = ({ question }) => {
   return (
     <>

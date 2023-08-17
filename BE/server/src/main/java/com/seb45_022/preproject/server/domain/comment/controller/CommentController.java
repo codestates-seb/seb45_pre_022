@@ -27,11 +27,11 @@ import javax.validation.constraints.Positive;
 @Slf4j
 @Api(tags = {"댓글 CRUD API"})
 public class CommentController {
-    private final CommentService commentService;
+    private final CommentService service;
     private final CommentMapper mapper;
 
-    public CommentController(CommentService commentService, CommentMapper mapper) {
-        this.commentService = commentService;
+    public CommentController(CommentService service, CommentMapper mapper) {
+        this.service = service;
         this.mapper = mapper;
     }
 
@@ -43,16 +43,16 @@ public class CommentController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto,
-                                      @LoginMemberId long memberId) {
+                                      @LoginMemberId Long memberId) {
         commentPostDto.serMemberId(memberId);
-        Comment createComment = commentService.createComment(mapper.commentPostDtoToComment(commentPostDto));
+        Comment createComment = service.createComment(mapper.commentPostDtoToComment(commentPostDto));
         CommentResponseDto response = mapper.commentToResponseDto(createComment);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // 댓글 수정
-    @ApiOperation(value = "하나의 댓글을 수정하는 메서드", notes = "commentId, body를 이용해 댓글을 수정한다")
+    @ApiOperation(value = "하나의 댓글을 수정하는 메서드", notes = "body에 변경사항을 적용해 댓글을 수정한다")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = CommentResponseDto.class),
             @ApiResponse(code = 500, message = "Internal Sever Error"),
@@ -61,12 +61,12 @@ public class CommentController {
     @ResponseStatus(value = HttpStatus.OK)
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
-                                       @Valid @RequestBody CommentPatchDto commentPatchDto,
-                                       @LoginMemberId long memberId) {
-        commentPatchDto.setCommentId(commentId);
+                                       @RequestBody CommentPatchDto commentPatchDto,
+                                       @LoginMemberId Long memberId) {
         commentPatchDto.setMemberId(memberId);
+        commentPatchDto.setCommentId(commentId);
         Comment comment = mapper.commentPatchDtoToComment(commentPatchDto);
-        CommentResponseDto response = mapper.commentToResponseDto(commentService.updateComment(comment));
+        CommentResponseDto response = mapper.commentToResponseDto(service.updateComment(comment));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -80,8 +80,9 @@ public class CommentController {
     })
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@PathVariable("comment-id")@Positive long commentId,
-                                        @LoginMemberId long memberId) {
-        commentService.deleteComment(commentId, memberId);
+                                        @LoginMemberId Long memberId) {
+
+        service.deleteComment(commentId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

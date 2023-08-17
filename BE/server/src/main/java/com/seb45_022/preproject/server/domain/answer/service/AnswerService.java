@@ -30,7 +30,7 @@ public class AnswerService {
 
     public Answer createAnswer(Answer answer) {
         questionService.verifiedQuestion(answer.getQuestion().getQuestionId());
-        memberService.findVerifiedMember(answer.getMember().getMemberId());
+        answer.setMember(memberService.findVerifiedMember(answer.getMember().getMemberId()));
 
         answer.setCreatedAt(LocalDateTime.now());
         answer.setLastModifiedAt(LocalDateTime.now());

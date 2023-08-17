@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 
 public class AnswerPatchDto {
-    @ApiModelProperty(example = "1", position = 1)
+    @ApiModelProperty(example = "1", position = 1, hidden = true)
     private long answerId;
 
     @ApiModelProperty(example = "SampleAnswer", position = 2)

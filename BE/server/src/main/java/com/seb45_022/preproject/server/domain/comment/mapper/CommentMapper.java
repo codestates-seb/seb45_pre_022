@@ -14,6 +14,11 @@ public interface CommentMapper {
     @Mapping(source = "memberId", target = "member.memberId")
     Comment commentPostDtoToComment(CommentPostDto requestBody);
 
+    @Mapping(source = "memberId", target = "member.memberId")
     Comment commentPatchDtoToComment(CommentPatchDto requestBody);
+
+    @Mapping(source = "member.memberId", target = "memberId")
+    @Mapping(source = "member.displayName", target = "displayName")
     CommentResponseDto commentToResponseDto(Comment comment);
+
 }

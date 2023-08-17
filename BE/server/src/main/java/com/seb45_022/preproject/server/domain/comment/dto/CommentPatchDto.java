@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @AllArgsConstructor
 public class CommentPatchDto {
-    @ApiModelProperty(example = "1", position = 1)
+    @ApiModelProperty(example = "1", position = 1, hidden = true)
     private long commentId;
 
     @ApiModelProperty(example = "SampleComment", position = 2)
@@ -19,7 +19,8 @@ public class CommentPatchDto {
     private String body;
 
     private Long memberId;
-    public void setMemberId(Long memberId) {
+
+    public void setMemberId(long memberId) {
         this.memberId = memberId;
     }
 }

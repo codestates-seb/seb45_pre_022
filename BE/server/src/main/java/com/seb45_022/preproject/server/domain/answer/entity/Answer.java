@@ -37,7 +37,7 @@ public class Answer {
     private List<Comment> comments;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
 }

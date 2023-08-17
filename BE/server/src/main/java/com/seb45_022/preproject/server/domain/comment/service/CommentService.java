@@ -20,6 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final AnswerService answerService;
     private final MemberService memberService;
+
     public CommentService(CommentRepository commentRepository,
                           AnswerService answerService,
                           MemberService memberService) {
@@ -30,7 +31,7 @@ public class CommentService {
 
     public Comment createComment(Comment comment) {
         answerService.findVerifiedAnswer(comment.getAnswer().getAnswerId());
-        memberService.findVerifiedMember(comment.getMember().getMemberId());
+        comment.setMember(memberService.findVerifiedMember(comment.getMember().getMemberId()));
         comment.setCreatedAt(LocalDateTime.now());
         comment.setLastModifiedAt(LocalDateTime.now());
 

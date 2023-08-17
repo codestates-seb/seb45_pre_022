@@ -64,13 +64,10 @@ const Question = () => {
             <Info>{question.views} views</Info>
           </InfoContainer>
           <QuestionSummary>
-            <QuestionTitle
-              to={`/questions/${question.questionId}`}
-              activeClassName="active"
-            >
+            <QuestionTitle to={`/questions/${question.questionId}`}>
               {question.title}
             </QuestionTitle>
-            <QuestionContent maxLine={2} lineHeight={20}>
+            <QuestionContent $maxLine={2} $lineHeight={20}>
               {question.body}
             </QuestionContent>
             <UserContainer>

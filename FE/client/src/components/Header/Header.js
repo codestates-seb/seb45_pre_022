@@ -11,8 +11,7 @@ import {
   SignUpLink,
   LoginNav,
 } from './HeaderStyles';
-
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCookieValue } from '../../custom/getCookie';
 import { login } from '../../features/loginSlice';

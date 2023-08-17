@@ -35,6 +35,7 @@ const FormContainer = styled.form`
 `;
 
 const Signup = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -53,7 +54,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/members',
+        `${apiUrl}/members`,
         { displayName, email, password },
         {
           headers: {

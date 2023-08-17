@@ -93,7 +93,10 @@ export const SearchForm = styled.form`
     border-radius: 5px;
 
     &:focus {
-      box-shadow: 0 0 10px #e1ecf8, 0 0 10px #e1ecf8, 10px 0 10px #e1ecf8,
+      box-shadow:
+        0 0 10px #e1ecf8,
+        0 0 10px #e1ecf8,
+        10px 0 10px #e1ecf8,
         -10px 0 10px #e1ecf8;
     }
   }

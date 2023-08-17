@@ -11,17 +11,23 @@ import {
   SignUpLink,
   LoginNav,
 } from './HeaderStyles';
-import { useNavigate } from 'react-router';
+
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { getCookieValue } from '../../custom/getCookie';
+import { login } from '../../features/loginSlice';
+import axios from 'axios';
 
 const Header = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const dispatch = useDispatch();
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const navigate = useNavigate();
-
-  const isLogin = useSelector((state) => state.login.isLogin);
+  const { isLogin, memberId, email, displayName } = useSelector(
+    (state) => state.login,
+  );
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +52,18 @@ const Header = () => {
     window.addEventListener('click', handleClickOutside);
     return () => window.removeEventListener('click', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const memberCookieId = getCookieValue('memberId');
+    const refreshToken = getCookieValue('refresh_token');
+    if (memberCookieId) {
+      axios.get(`${apiUrl}/members/${memberCookieId}`).then((res) => {
+        dispatch(login(res.data.data));
+      });
+    } else if (refreshToken) {
+      alert('로그인이 만료되었습니다');
+    }
+  }, [isLogin]);
 
   return (
     <HeaderContainer>
@@ -89,6 +107,18 @@ const Header = () => {
       {isLogin ? (
         <LoginNav>
           <ol>
+            <li>
+              <Link>
+                <div>
+                  <img
+                    src="/icons/profile.png"
+                    alt="user-profile"
+                    width="24"
+                    height="24"
+                  ></img>
+                </div>
+              </Link>
+            </li>
             <li>
               <button>
                 <svg

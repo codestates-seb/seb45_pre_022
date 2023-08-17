@@ -21,7 +21,7 @@ const QuestionPage = () => {
     const fetchData = async () => {
       try {
         const questionResponse = await axios.get(
-          `${process.env.REACT_APP_API_URL}/${questionId}`,
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
         );
         const question = questionResponse.data;
         setQuestion(question);

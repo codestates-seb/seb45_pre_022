@@ -11,12 +11,18 @@ import {
 import { TitleContent, ProblemContent, TagsContent } from './Contents';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getCookieValue } from '../../custom/getCookie';
 
 const AskPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [titleDetails, setTitleDetails] = useState('');
   const [problemDetails, setProblemDetails] = useState('');
   const [tags, setTags] = useState([]);
+
+  const accessToken = getCookieValue('access_token');
+
+  const memberId = useSelector((state) => state.login.memberId);
 
   const navigate = useNavigate();
 
@@ -41,13 +47,17 @@ const AskPage = () => {
 
   const onPostButton = async () => {
     const questionDetails = {
-      memberId: 1, // 임시로 아이디를 가정함
+      memberId: memberId,
       title: titleDetails,
       body: problemDetails,
       tags: tags,
     };
 
-    console.log(questionDetails);
+    if (!accessToken) {
+      alert('로그인이 필요합니다.');
+      // navigate('/login');
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -56,6 +66,7 @@ const AskPage = () => {
         {
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );

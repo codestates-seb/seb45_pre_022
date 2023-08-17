@@ -58,13 +58,15 @@ public class QuestionService {
         return question;
     }
 
-    public Page<Question> findQuestions(int page, int size, String searchKeyword){
+    public Page<Question> findQuestions(int page, int size, String searchTitle,String searchTag){
         Page<Question> questions = null;
 
-        if(searchKeyword == null) {
+        if(searchTitle != null) {
+            questions = questionRepository.findByTitleContaining(searchTitle,PageRequest.of(page - 1, size));
+        } else if(searchTag != null) {
+            questions = questionRepository.findByTagsContaining(searchTag,PageRequest.of(page - 1, size));
+        } else {
             questions = questionRepository.findAll(PageRequest.of(page - 1, size));
-        }else {
-            questions = questionRepository.findByTitleContaining(searchKeyword,PageRequest.of(page - 1, size));
         }
 
         for (Question element :questions) {

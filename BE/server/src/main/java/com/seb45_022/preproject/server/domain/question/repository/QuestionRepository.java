@@ -10,5 +10,7 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     Page<Question> findAllByOrderByCreatedAtDesc(Question question, Pageable pageable);
 
-    Page<Question> findByTitleContaining(String serchKeyword, Pageable pageable);
+    Page<Question> findByTitleContaining(String searchTitle, Pageable pageable);
+
+    Page<Question> findByTagsContaining(String searchTag, Pageable pageable);
 }

@@ -74,11 +74,12 @@ public class QuestionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "메인페이지에서 질문을 조회하거나 검색하는 메서드", notes = "page와 한페이지에 표시할 질문의 갯수, 검색할 제목(선택)을 param으로 여러개의 질문을 조회하는 메서드")
+    @ApiOperation(value = "메인페이지에서 질문을 조회하거나 제목, 태그 검색을 하는 메서드", notes = "page와 한페이지에 표시할 질문의 갯수, 검색할 제목(선택)을 param으로 여러개의 질문을 조회하는 메서드")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "page", value = "조회 페이지", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "size", value = "한 페이지에 조회하는 글의 갯수", required = true, dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "search", value = "검색 키워드", required = false, dataType = "String", paramType = "query")
+            @ApiImplicitParam(name = "searchTitle", value = "제목 검색 키워드", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "searchTag", value = "태그 검색 키워드", required = false, dataType = "String", paramType = "query")
     })
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = QuestionMultiResponseDto.class),
@@ -89,9 +90,10 @@ public class QuestionController {
     @GetMapping
     public ResponseEntity getQuestions(@RequestParam("page") @Positive int page,
                                        @RequestParam("size") @Positive int size,
-                                       @RequestParam(value = "search",required = false) String searchKeyword){
+                                       @RequestParam(value = "searchTitle",required = false)String searchTitle,
+                                       @RequestParam(value = "searchTag", required = false) String searchTag){
 
-        Page<Question> questionsPage = service.findQuestions(page, size, searchKeyword);
+        Page<Question> questionsPage = service.findQuestions(page, size, searchTitle, searchTag);
         QuestionPageInfo pageInfo = new QuestionPageInfo(page, size, (int) questionsPage.getTotalElements(),questionsPage.getTotalPages());
 
         List<Question> questions = questionsPage.getContent();

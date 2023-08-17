@@ -1,7 +1,10 @@
 package com.seb45_022.preproject.server.domain.member.service;
 
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.member.dto.MemberGetResponseDto;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.repository.MemberRepository;
+import com.seb45_022.preproject.server.domain.question.entity.Question;
 import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
 import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
 import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
@@ -92,5 +95,21 @@ public class MemberService {
         member.setRoles(roles);
         verifyExistsEmail(member.getEmail());
         return memberRepository.save(member);
+    }
+
+    public MemberGetResponseDto findProfileMember(Long loginMemberId) {
+        Member member = findMember(loginMemberId);
+        List<Question> questions = member.getQuestions();
+        List<Answer> answers = member.getAnswers();
+
+        long totalQuestions = questions.size();
+        long totalAnswers = answers.size();
+
+        return MemberGetResponseDto.builder()
+                .email(member.getEmail())
+                .displayName(member.getDisplayName())
+                .totalQuestions(totalQuestions)
+                .totalAnswers(totalAnswers)
+                .build();
     }
 }

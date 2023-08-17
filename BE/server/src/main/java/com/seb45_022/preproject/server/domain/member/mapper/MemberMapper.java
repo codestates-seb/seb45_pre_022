@@ -12,5 +12,5 @@ public interface MemberMapper {
     Member memberToLoginMemberResponseDto(Member member);
     MemberPostResponseDto memberToMemberPostResponseDto(Member member);
     MemberPatchResponseDto memberToMemberPatchResponseDto(Member member);
-
+    MemberGetResponseDto memberToMemberGetResponseDto(Member member);
 }

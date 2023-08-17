@@ -63,10 +63,10 @@ public class MemberController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @ResponseStatus(value = HttpStatus.OK)
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
-        Member member = memberService.findMember(memberId);
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberPostResponseDto(member)), HttpStatus.OK);
+    @GetMapping("/my-page")
+    public ResponseEntity<MemberGetResponseDto> getMember(@LoginMemberId Long loginMemberId) {
+        MemberGetResponseDto memberGetResponseDto = memberService.findProfileMember(loginMemberId);
+        return new ResponseEntity<>(memberGetResponseDto, HttpStatus.OK);
     }
 
     @ApiOperation(value = "사용자 정보를 삭제하는 메서드", notes = "사용자 아이디를 사용해 정보를 삭제한다.")

@@ -52,6 +52,11 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
+    @Transactional(readOnly = true)
+    public Member findMember(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
     public void verifyAuthority(Member findMember, Long loginMemberId) {
         if (!findMember.getMemberId().equals(loginMemberId)) {
             throw new BusinessLogicException(ExceptionCode.NOT_IMPLEMENTATION);

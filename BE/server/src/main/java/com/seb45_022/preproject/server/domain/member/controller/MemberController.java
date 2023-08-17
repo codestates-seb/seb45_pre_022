@@ -4,8 +4,6 @@ import com.seb45_022.preproject.server.domain.member.dto.*;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.member.mapper.MemberMapper;
 import com.seb45_022.preproject.server.domain.member.service.MemberService;
-import com.seb45_022.preproject.server.domain.question.dto.QuestionDetailsResponseDto;
-import com.seb45_022.preproject.server.domain.question.dto.QuestionResponseDto;
 import com.seb45_022.preproject.server.global.argu.LoginMemberId;
 import com.seb45_022.preproject.server.global.dto.LoginMemberResponseDto;
 import com.seb45_022.preproject.server.global.dto.SingleResponseDto;

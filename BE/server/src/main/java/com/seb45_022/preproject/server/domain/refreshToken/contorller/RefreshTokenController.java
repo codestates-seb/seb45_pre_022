@@ -10,6 +10,7 @@ import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,12 +48,16 @@ public class RefreshTokenController {
 
         String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer" + accessToken);
+
         MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(requestHeader)
                 .memberId(member.getMemberId())
                 .displayName(member.getDisplayName())
                 .build();
-        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+
+        return ResponseEntity.ok().headers(headers).body(loginResponse);
     }
 }

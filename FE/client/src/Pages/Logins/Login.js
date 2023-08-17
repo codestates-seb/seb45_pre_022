@@ -92,7 +92,7 @@ const Login = () => {
       );
 
       const expirationDate = new Date();
-      expirationDate.setTime(expirationDate.getTime() + 1 * 60 * 1000);
+      expirationDate.setTime(expirationDate.getTime() + 30 * 60 * 1000);
 
       document.cookie = `access_token=${response.data.accessToken}; path=/;`;
       document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`;

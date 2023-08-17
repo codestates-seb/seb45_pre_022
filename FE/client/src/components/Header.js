@@ -163,16 +163,19 @@ const Header = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
 
-  const { isLogin, memeberId, email, displayName } = useSelector(
+  const { isLogin, memberId, email, displayName } = useSelector(
     (state) => state.login,
   );
 
   useEffect(() => {
-    const memberId = getCookieValue('memberId');
-    if (memberId) {
-      axios.get(`${apiUrl}/members/${memberId}`).then((res) => {
+    const memberCookieId = getCookieValue('memberId');
+    const refreshToken = getCookieValue('refresh_token');
+    if (memberCookieId) {
+      axios.get(`${apiUrl}/members/${memberCookieId}`).then((res) => {
         dispatch(login(res.data.data));
       });
+    } else if (refreshToken) {
+      alert('로그인이 만료되었습니다');
     }
   }, [isLogin]);
   return (

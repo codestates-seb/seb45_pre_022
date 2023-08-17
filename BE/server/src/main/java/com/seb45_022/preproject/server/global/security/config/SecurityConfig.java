@@ -7,7 +7,9 @@ import com.seb45_022.preproject.server.global.security.filter.JwtVerificationFil
 import com.seb45_022.preproject.server.global.security.handler.*;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -35,6 +37,15 @@ public class SecurityConfig {
     private final CustomAuthorityUtils customAuthorityUtils;
     private final MemberService memberService;
     private final RefreshTokenService refreshTokenService;
+
+    @Getter
+    @Value("${jwt.aws_ec2_url}")
+    private String ec2_url;
+
+    @Getter
+    @Value("${jwt.aws_buket_url}")
+    private String buket_url;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -70,7 +81,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000","http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:3000",ec2_url, buket_url));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
 

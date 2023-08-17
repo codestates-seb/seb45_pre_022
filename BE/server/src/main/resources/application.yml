@@ -61,3 +61,5 @@ jwt:
   key: ${JWT_SECRET_KEY}                             # 시스템 환경 변수
   access-token-expiration-minutes: 1800              # 30분
   refresh-token-expiration-minutes: 86400            # 1일
+  aws_ec2_url : ${AWS_EC2_URL}
+  aws_buket_url : ${AWS_BUKET_URL}

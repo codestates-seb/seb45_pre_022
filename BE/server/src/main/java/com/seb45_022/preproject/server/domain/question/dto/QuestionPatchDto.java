@@ -1,14 +1,16 @@
 package com.seb45_022.preproject.server.domain.question.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class QuestionPatchDto {
     @Positive
     @ApiModelProperty(value = "수정할 questionId",example = "1", position = 1, hidden = true)

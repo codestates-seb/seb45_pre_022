@@ -10,6 +10,7 @@ import javax.validation.constraints.Positive;
 @Getter
 @AllArgsConstructor
 public class CommentPostDto {
+
     @ApiModelProperty(example = "1", position = 1)
     @Positive
     private long answerId;

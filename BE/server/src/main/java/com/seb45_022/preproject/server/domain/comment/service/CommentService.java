@@ -20,6 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final AnswerService answerService;
     private final MemberService memberService;
+
     public CommentService(CommentRepository commentRepository,
                           AnswerService answerService,
                           MemberService memberService) {

@@ -19,6 +19,7 @@ public class CommentPatchDto {
     private String body;
 
     private Long memberId;
+
     public void setMemberId(long memberId) {
         this.memberId = memberId;
     }

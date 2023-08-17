@@ -6,6 +6,7 @@ import com.seb45_022.preproject.server.domain.comment.dto.CommentResponseDto;
 import com.seb45_022.preproject.server.domain.comment.entity.Comment;
 import com.seb45_022.preproject.server.domain.comment.mapper.CommentMapper;
 import com.seb45_022.preproject.server.domain.comment.service.CommentService;
+import com.seb45_022.preproject.server.global.argu.LoginMemberId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -41,8 +42,10 @@ public class CommentController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto requestBody) {
-        Comment createComment = commentService.createComment(mapper.commentPostDtoToComment(requestBody));
+    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto,
+                                      @LoginMemberId long memberId) {
+        commentPostDto.serMemberId(memberId);
+        Comment createComment = commentService.createComment(mapper.commentPostDtoToComment(commentPostDto));
         CommentResponseDto response = mapper.commentToResponseDto(createComment);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -58,9 +61,11 @@ public class CommentController {
     @ResponseStatus(value = HttpStatus.OK)
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive long commentId,
-                                      @Valid @RequestBody CommentPatchDto requestBody) {
-        requestBody.setCommentId(commentId);
-        Comment comment = mapper.commentPatchDtoToComment(requestBody);
+                                       @Valid @RequestBody CommentPatchDto commentPatchDto,
+                                       @LoginMemberId long memberId) {
+        commentPatchDto.setCommentId(commentId);
+        commentPatchDto.setMemberId(memberId);
+        Comment comment = mapper.commentPatchDtoToComment(commentPatchDto);
         CommentResponseDto response = mapper.commentToResponseDto(commentService.updateComment(comment));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -74,8 +79,9 @@ public class CommentController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id")@Positive long commentId) {
-        commentService.deleteComment(commentId);
+    public ResponseEntity deleteComment(@PathVariable("comment-id")@Positive long commentId,
+                                        @LoginMemberId long memberId) {
+        commentService.deleteComment(commentId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

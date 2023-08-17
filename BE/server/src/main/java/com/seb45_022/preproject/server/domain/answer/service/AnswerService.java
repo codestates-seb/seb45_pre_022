@@ -40,14 +40,19 @@ public class AnswerService {
 
     public Answer updateAnswer(Answer answer) {
         Answer foundAnswer = findVerifiedAnswer(answer.getAnswerId());
+
+        verifiedAnswerOwner(answer.getMember().getMemberId(), foundAnswer);
         foundAnswer.setLastModifiedAt(LocalDateTime.now());
         foundAnswer.setBody(answer.getBody());
         return answerRepository.save(foundAnswer);
     }
-    public void deleteAnswer(long answerId) {
+    public void deleteAnswer(long answerId, long memberId) {
         Answer foundAnswer = findVerifiedAnswer(answerId);
+        verifiedAnswerOwner(memberId, foundAnswer);
+
         answerRepository.delete(foundAnswer);
     }
+
 
     public Answer findVerifiedAnswer(long answerId) {
         Optional<Answer> optionalAnswer =
@@ -56,5 +61,10 @@ public class AnswerService {
                 optionalAnswer.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
         return findAnswer;
+    }
+    private void verifiedAnswerOwner(long memberId, Answer foundAnswer) {
+        if (memberId != foundAnswer.getMember().getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.NOT_ALLOW_MEMBER);
+        }
     }
 }

@@ -30,10 +30,7 @@ const Questions = () => {
             },
           },
         );
-        const sortedQuestions = response.data.questions.sort((a, b) => {
-          return b.questionId - a.questionId;
-        });
-        setQuestions(sortedQuestions);
+        setQuestions(response.data.questions);
         setTotalElements(response.data.pageInfo.totalElements);
       } catch (error) {
         console.error(error);

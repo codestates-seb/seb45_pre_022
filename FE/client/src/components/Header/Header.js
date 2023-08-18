@@ -12,7 +12,7 @@ import {
   LoginNav,
 } from './HeaderStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCookieValue } from '../../custom/getCookie';
 import { login } from '../../features/loginSlice';
 import axios from 'axios';
@@ -20,6 +20,7 @@ import axios from 'axios';
 const Header = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchText, setSearchText] = useState('');

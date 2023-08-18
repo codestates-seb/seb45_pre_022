@@ -13,42 +13,11 @@ import {
   Follower,
   CreatedAt,
 } from './QuestionPageStyles';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
 
-const Question = () => {
-  const [questions, setQuestions] = useState([]);
-
+const Question = ({ questions }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { search } = queryString.parse(location.search);
-
-  useEffect(() => {
-    const fetchQuestions = async (page, size = 100) => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/questions`,
-
-          {
-            params: {
-              page,
-              size,
-              search,
-            },
-          },
-        );
-        setQuestions(response.data.questions);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchQuestions(1);
-  }, [search]);
 
   const onHandleClickUsername = (e) => {
     navigate(`/members/${e.target.id}`);
@@ -56,8 +25,8 @@ const Question = () => {
 
   return (
     <>
-      {questions.map((question) => (
-        <QuestionContainer key={question.questionId}>
+      {questions.map((question, index) => (
+        <QuestionContainer key={index}>
           <InfoContainer>
             <Info>{question.votes} votes</Info>
             <Info>{question.answerCount} answers</Info>
@@ -72,8 +41,8 @@ const Question = () => {
             </QuestionContent>
             <UserContainer>
               <TagContainer>
-                {question.tags.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
+                {question.tags.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
                 ))}
               </TagContainer>
               <UserInfo>

@@ -25,8 +25,8 @@ const Question = ({ questions }) => {
 
   return (
     <>
-      {questions.map((question) => (
-        <QuestionContainer key={question.questionId}>
+      {questions.map((question, index) => (
+        <QuestionContainer key={index}>
           <InfoContainer>
             <Info>{question.votes} votes</Info>
             <Info>{question.answerCount} answers</Info>
@@ -41,8 +41,8 @@ const Question = ({ questions }) => {
             </QuestionContent>
             <UserContainer>
               <TagContainer>
-                {question.tags.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
+                {question.tags.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
                 ))}
               </TagContainer>
               <UserInfo>

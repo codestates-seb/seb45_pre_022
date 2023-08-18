@@ -61,7 +61,7 @@ const Header = () => {
         dispatch(login(res.data.data));
       });
     } else if (refreshToken) {
-      alert('로그인이 만료되었습니다');
+      // alert('로그인이 만료되었습니다');
     }
   }, [isLogin]);
 

@@ -10,16 +10,6 @@ const MainContainer = styled.div`
   padding: 24px;
 `;
 
-const Button = styled.button`
-  &:hover {
-    background-color: gray;
-  }
-
-  &active {
-    background-color: #f48225;
-  }
-`;
-
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;

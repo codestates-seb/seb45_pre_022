@@ -53,14 +53,30 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const memberCookieId = getCookieValue('memberId');
+    // accessToken이 있으면(로그인 상태라면)
+    const accessToken = getCookieValue('access_token');
     const refreshToken = getCookieValue('refresh_token');
-    if (memberCookieId) {
-      axios.get(`${apiUrl}/members/${memberCookieId}`).then((res) => {
-        dispatch(login(res.data.data));
-      });
-    } else if (refreshToken) {
-      alert('로그인이 만료되었습니다');
+    if (accessToken) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/members/user`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .then((res) => {
+          dispatch(login(res.data));
+        })
+        // access Token이 만료된다면 => 401 에러 가지고 온다.
+        // 쿠키 저장공간에 access_token과 refresh_token이 있지만 유효일은 알 수 없는 상태 (통신을 해봐야 알 수 있다.)
+        // 첫번째 상황) access_token은 만료되고, refresh_token은 유효일이 남아 있는 상태
+        // 두번째 상황) access_token, refresh_token 둘 다 만료된 상태
+
+        // 일단 두 상황 모두 로그아웃해서 먼저 정보(state)를 날린다.
+        // 그러고 refresh_token을 재발급 받는 엔드포인트로 통신을 한다.
+        // 통신 되면, access_token, refresh_token이 재발급
+        // 통신이 안되면, 다시 로그인 해달라는 로직.
+        .catch((err) => {
+          // dispatch(logout());
+          console.log(err);
+        });
     }
   }, [isLogin]);
 

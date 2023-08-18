@@ -1,12 +1,12 @@
-package com.seb45_022.preproject.server.domain.comment;
-
+package com.seb45_022.preproject.server.domain.answer;
 
 import com.google.gson.Gson;
-import com.seb45_022.preproject.server.domain.comment.dto.CommentPatchDto;
-import com.seb45_022.preproject.server.domain.comment.dto.CommentPostDto;
+import com.seb45_022.preproject.server.domain.answer.dto.AnswerPatchDto;
+import com.seb45_022.preproject.server.domain.answer.dto.AnswerPostDto;
+import com.seb45_022.preproject.server.domain.answer.entity.Answer;
+import com.seb45_022.preproject.server.domain.answer.mapper.AnswerMapper;
+import com.seb45_022.preproject.server.domain.answer.service.AnswerService;
 import com.seb45_022.preproject.server.domain.comment.entity.Comment;
-import com.seb45_022.preproject.server.domain.comment.mapper.CommentMapper;
-import com.seb45_022.preproject.server.domain.comment.service.CommentService;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.global.dto.TokenPrincipalDto;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
@@ -14,6 +14,7 @@ import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtil
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,16 +40,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CommentControllerTest {
+public class AnswerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CommentService service;
+    private AnswerService service;
 
     @Autowired
-    private CommentMapper mapper;
+    private AnswerMapper mapper;
 
     @Autowired
     private Gson gson;
@@ -92,14 +93,16 @@ public class CommentControllerTest {
 
     @BeforeAll
     public static void createTestAnswer() {
+        List<Comment> testComments = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
 
-        Comment.builder()
-                .commentId(1)
-                .body("Test Comment Body")
+        Answer.builder()
+                .answerId(1)
+                .body("Test Answer Body")
                 .createdAt(now)
                 .lastModifiedAt(now)
                 .member(testMember)
+                .comments(testComments)
                 .build();
     }
 
@@ -109,19 +112,18 @@ public class CommentControllerTest {
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
                 new TokenPrincipalDto(testMember.getMemberId(), testMember.getEmail()),null,authorities));
     }
-
     @Test
-    public void postCommentTest() throws Exception {
+    public void postAnswerTest() throws Exception {
         // Given
-        CommentPostDto commentPostDto = new CommentPostDto(1,1,"댓글 내용");
-        Comment comment = mapper.commentPostDtoToComment(commentPostDto);
+        AnswerPostDto answerPostDto = new AnswerPostDto(1, 1, "답변 내용");
+        Answer answer = mapper.answerPostDtoToAnswer(answerPostDto);
 
-        given(service.createComment(any(Comment.class))).willReturn(comment);
+        given(service.createAnswer(Mockito.any(Answer.class))).willReturn(answer);
 
-        String content = gson.toJson(commentPostDto);
+        String content = gson.toJson(answerPostDto);
 
         // When
-        URI uri = UriComponentsBuilder.newInstance().path("/comments").build().toUri();
+        URI uri = UriComponentsBuilder.newInstance().path("/answers").build().toUri();
 
         ResultActions actions = mockMvc.perform(
                 post(uri)
@@ -132,26 +134,27 @@ public class CommentControllerTest {
 
         // Then
         actions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.commentId").value(comment.getCommentId()))
-                .andExpect(jsonPath("$.memberId").value(comment.getMember().getMemberId()))
-                .andExpect(jsonPath("$.displayName").value(comment.getMember().getDisplayName()))
-                .andExpect(jsonPath("$.body").value(comment.getBody()))
-                .andExpect(jsonPath("$.createdAt").value(comment.getCreatedAt()))
-                .andExpect(jsonPath("$.lastModifiedAt").value(comment.getLastModifiedAt()));
+                .andExpect(jsonPath("$.answerId").value(answer.getAnswerId()))
+                .andExpect(jsonPath("$.memberId").value(answer.getMember().getMemberId()))
+                .andExpect(jsonPath("$.displayName").value(answer.getMember().getDisplayName()))
+                .andExpect(jsonPath("$.body").value(answer.getBody()))
+                .andExpect(jsonPath("$.createdAt").value(answer.getCreatedAt()))
+                .andExpect(jsonPath("$.lastModifiedAt").value(answer.getLastModifiedAt()))
+                .andExpect(jsonPath("$.comments").value(answer.getComments()));
     }
 
     @Test
-    public void patchCommentTest() throws Exception {
+    public void patchAnswerTest() throws Exception {
         // Given
-        CommentPatchDto commentPatchDto = new CommentPatchDto(1,"수정할 댓글 내용", 1L);
-        Comment comment = mapper.commentPatchDtoToComment(commentPatchDto);
+        AnswerPatchDto answerPatchDto = new AnswerPatchDto(1, 1, "수정할 답변 내용");
+        Answer answer = mapper.answerPatchDtoToAnswer(answerPatchDto);
 
-        given(service.updateComment(any(Comment.class))).willReturn(comment);
+        given(service.updateAnswer(Mockito.any(Answer.class))).willReturn(answer);
 
-        String content = gson.toJson(commentPatchDto);
+        String content = gson.toJson(answerPatchDto);
 
         // When
-        URI uri = UriComponentsBuilder.newInstance().path("/comments/{comment-id}")
+        URI uri = UriComponentsBuilder.newInstance().path("/answers/{answer-id}")
                 .buildAndExpand(1).toUri();
 
         ResultActions actions = mockMvc.perform(
@@ -163,24 +166,26 @@ public class CommentControllerTest {
 
         // Then
         actions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.commentId").value(comment.getCommentId()))
-                .andExpect(jsonPath("$.memberId").value(comment.getMember().getMemberId()))
-                .andExpect(jsonPath("$.displayName").value(comment.getMember().getDisplayName()))
-                .andExpect(jsonPath("$.body").value(comment.getBody()))
-                .andExpect(jsonPath("$.createdAt").value(comment.getCreatedAt()))
-                .andExpect(jsonPath("$.lastModifiedAt").value(comment.getLastModifiedAt()));
+                .andExpect(jsonPath("$.answerId").value(answer.getAnswerId()))
+                .andExpect(jsonPath("$.memberId").value(answer.getMember().getMemberId()))
+                .andExpect(jsonPath("$.displayName").value(answer.getMember().getDisplayName()))
+                .andExpect(jsonPath("$.body").value(answer.getBody()))
+                .andExpect(jsonPath("$.createdAt").value(answer.getCreatedAt()))
+                .andExpect(jsonPath("$.lastModifiedAt").value(answer.getLastModifiedAt()))
+                .andExpect(jsonPath("$.comments").value(answer.getComments()));
     }
 
     @Test
-    public void deleteComment() throws Exception {
+    public void deleteAnswer() throws Exception {
         // Given
-        Comment comment = new Comment();
-        comment.setCommentId(1L);
+        Answer answer = new Answer();
+        answer.setAnswerId(1L);
 
-        when(service.createComment(any(Comment.class))).thenReturn(comment);
+        when(service.createAnswer(any(Answer.class))).thenReturn(answer);
 
         // When
-        URI uri = UriComponentsBuilder.newInstance().path("/comments/{comment-id}").buildAndExpand(comment.getCommentId()).toUri();
+        URI uri = UriComponentsBuilder.newInstance().path("/answers/{answer-id}").buildAndExpand(answer.getAnswerId()).toUri();
+
         ResultActions actions = mockMvc.perform(
                 delete(uri)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -191,4 +196,3 @@ public class CommentControllerTest {
         actions.andExpect(status().isNoContent());
     }
 }
-

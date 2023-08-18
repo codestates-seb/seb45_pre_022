@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.seb45_022.preproject.server.domain.answer.entity.Answer;
 import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.question.entity.Question;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,7 +7,7 @@ import LoginAndSignupButton from '../../components/Logins/LoginButton';
 import { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { login } from '../../features/loginSlice';
+import { setUser } from '../../features/loginSlice';
 
 const MainContainer = styled.div`
   display: flex;
@@ -68,6 +68,7 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -96,10 +97,10 @@ const Login = () => {
 
       document.cookie = `access_token=${response.data.accessToken}; path=/;`;
       document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`;
-      document.cookie = `memberId=${
-        response.data.memberId
-      }; expires=${expirationDate.toUTCString()}; path=/`;
-      dispatch(login());
+      // document.cookie = `memberId=${
+      //   response.data.memberId
+      // }; expires=${expirationDate.toUTCString()}; path=/`;
+      dispatch(setUser());
       navigate('/');
     } catch (error) {
       console.error('Error fetching data:', error);

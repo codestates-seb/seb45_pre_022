@@ -33,10 +33,12 @@ import java.util.stream.Collectors;
 public class QuestionController {
     private final QuestionMapper mapper;
     private final QuestionService service;
+    private final JwtUtils jwtUtils;
 
-    public QuestionController(QuestionMapper mapper, QuestionService service) {
+    public QuestionController(QuestionMapper mapper, QuestionService service, JwtUtils jwtUtils) {
         this.mapper = mapper;
         this.service = service;
+        this.jwtUtils = jwtUtils;
     }
 
     @ApiOperation(value = "질문을 등록하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b> 질문 제목, 질문 내용, 질문 태그(선택)을 사용해서 질문을 생성한다")
@@ -47,9 +49,8 @@ public class QuestionController {
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity postQuestion(@LoginMemberId Long memberId, @RequestBody QuestionPostDto questionPostDto){
-
-        questionPostDto.setMemberId(memberId);
+    public ResponseEntity postQuestion(@RequestBody QuestionPostDto questionPostDto){
+        questionPostDto.setMemberId(jwtUtils.getMemberId());
 
         Question question = mapper.QuestionPostDtoToQuestion(questionPostDto);
 
@@ -105,6 +106,18 @@ public class QuestionController {
         return new ResponseEntity<>(new QuestionMultiResponseDto(response, pageInfo),HttpStatus.OK);
     }
 
+//    @ApiOperation(value = "모든 태그들을 총횟수, 1일내, 1주일내 사용된 횟수별로 조회하는 메서드", notes = "모든 태그들을 총횟수, 1일내, 1주일내 사용된 횟수별로 조회하는 메서드")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "OK"),
+//            @ApiResponse(code = 500, message = "Internal Sever Error"),
+//            @ApiResponse(code = 404, message = "Not Found")
+//    })
+//    @ResponseStatus(value = HttpStatus.OK)
+//    @GetMapping("/tags")
+//    public ResponseEntity getTags(){
+//        return new ResponseEntity<>(service.findDistinctTags(),HttpStatus.OK);
+//    }
+
     @ApiOperation(value = "하나의 질문을 수정하는 메서드", notes = "<b style=\"font-size: 18px;\"> JWT(필수) </b>  질문 제목, 질문 내용, 질문 태그를 수정하는 메서드")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = QuestionResponseDto.class),
@@ -115,8 +128,8 @@ public class QuestionController {
     @ResponseStatus(value = HttpStatus.OK)
     @PatchMapping("/{question_id}")
     public ResponseEntity patchQuestion(@PathVariable("question_id") @Positive long questionId,
-                                        @RequestBody QuestionPatchDto questionPatchDto, @LoginMemberId Long memberId){
-        questionPatchDto.setMemberId(memberId);
+                                        @RequestBody QuestionPatchDto questionPatchDto){
+        questionPatchDto.setMemberId(jwtUtils.getMemberId());
 
         questionPatchDto.setQuestionId(questionId);
 
@@ -136,9 +149,9 @@ public class QuestionController {
             @ApiResponse(code = 401, message = "Unauthorized")
     })
     @DeleteMapping("/{question_id}")
-    public HttpStatus deleteQuestion(@PathVariable("question_id") @Positive long questionId, @LoginMemberId Long memberId){
+    public HttpStatus deleteQuestion(@PathVariable("question_id") @Positive long questionId){
 
-        service.deleteQuestion(questionId, memberId);
+        service.deleteQuestion(questionId, jwtUtils.getMemberId());
 
         return HttpStatus.NO_CONTENT;
 

@@ -15,9 +15,11 @@ public class AnswerPatchDto {
     @ApiModelProperty(example = "1", position = 1, hidden = true)
     private long answerId;
 
-    @ApiModelProperty(example = "SampleAnswer", position = 2)
+    @ApiModelProperty(example = "1", position = 2, hidden = true)
+    private long memberId;
+
+    @ApiModelProperty(example = "SampleAnswer", position = 3)
     @NotBlank(message = "답변 내용은 공백이 아니어야 합니다")
     private String body;
 
-    private long memberId;
 }

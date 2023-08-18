@@ -11,15 +11,12 @@ import com.seb45_022.preproject.server.domain.question.entity.Question;
 import com.seb45_022.preproject.server.domain.question.repository.QuestionRepository;
 import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
 import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QuestionService {
@@ -27,9 +24,7 @@ public class QuestionService {
     private final MemberService memberService;
 
     public QuestionService(QuestionRepository questionRepository,
-                           MemberService memberService,
-                           AnswerRepository answerRepository,
-                           CommentRepository commentRepository) {
+                           MemberService memberService) {
 
         this.questionRepository = questionRepository;
         this.memberService = memberService;
@@ -66,13 +61,50 @@ public class QuestionService {
         } else if(searchTag != null) {
             questions = questionRepository.findByTagsContaining(searchTag,PageRequest.of(page - 1, size));
         } else {
-            questions = questionRepository.findAll(PageRequest.of(page - 1, size));
+            Sort sort = Sort.by(Sort.Direction.DESC, "questionId");
+            PageRequest pageRequest = PageRequest.of(page - 1, size, sort);
+            questions = questionRepository.findAll(pageRequest);
         }
 
         for (Question element :questions) {
             element.setAnswerCount(element.getAnswers().size());
         }
         return questions;
+    }
+
+    public HashMap<String, HashMap> findDistinctTags(){
+        List<Question> questions = questionRepository.findAll();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Duration oneDayHours = Duration.ofHours(24);
+        Duration oneWeekHours = Duration.ofHours(168);
+
+        HashMap<String, HashMap> tag = new HashMap<>();
+
+        for (Question QuestionElement : questions) {
+            LocalDateTime createdAt = QuestionElement.getCreatedAt();
+
+            for (String tagElement : QuestionElement.getTags()) {
+                HashMap<String, Integer> allTagCountHash = tag.getOrDefault(tagElement, new HashMap<>());
+
+                int allTagcount = allTagCountHash.getOrDefault("allTagCount",0);
+                int dailyTagCount = allTagCountHash.getOrDefault("dailyTagCount", 0);
+                int weeklyTagCount = allTagCountHash.getOrDefault("weeklyTagCount", 0);
+
+                allTagcount++;
+                if (Duration.between(createdAt, currentDateTime).compareTo(oneDayHours) <= 0) dailyTagCount++;
+                if (Duration.between(createdAt, currentDateTime).compareTo(oneWeekHours) <= 0) weeklyTagCount++;
+
+                allTagCountHash.put("allTagCount",allTagcount);
+                allTagCountHash.put("dailyTagCount", dailyTagCount);
+                allTagCountHash.put("weeklyTagCount", weeklyTagCount);
+
+                tag.put(tagElement, allTagCountHash);
+            }
+        }
+
+        HashMap<String, HashMap> tags = new HashMap<>();
+        tags.put("tags",tag);
+        return tags;
     }
 
     public Question updateQuestion(Question question) {
@@ -98,9 +130,9 @@ public class QuestionService {
         questionRepository.delete(verifiedQuestion);
     }
 
-//    public void deleteQuestions(){
-//        questionRepository.deleteAll();
-//    }
+    public void deleteQuestions(){
+        questionRepository.deleteAll();
+    }
 
     public Question verifiedQuestion(long questionId){
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);

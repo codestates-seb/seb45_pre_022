@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class QuestionPatchDto {
-    @Positive
     @ApiModelProperty(value = "수정할 questionId",example = "1", position = 1, hidden = true)
     private long questionId;
 
@@ -22,7 +21,6 @@ public class QuestionPatchDto {
 
 
     @ApiModelProperty(value = "사용자 memberId",example = "1", position = 2, hidden = true)
-    @Positive
     private long memberId;
 
     public void setMemberId(long memberId) {

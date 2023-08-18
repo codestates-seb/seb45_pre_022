@@ -1,7 +1,8 @@
 import { styled } from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loading from '../../Loading';
+import { getCookieValue } from '../../custom/getCookie';
 
 const Button = styled.button`
   border: 1px solid lightgrey;
@@ -34,22 +35,28 @@ const UserName = styled.div`
 `;
 
 const UsersPage = () => {
-  const { membersId } = useParams();
   const [user, setUser] = useState(null);
+
+  const accessToken = getCookieValue('access_token');
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${membersId}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/my-page`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
-        setUser(res.data.data);
+        setUser(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [membersId]);
+  }, []);
 
   if (!user) {
-    return <div>loading...</div>;
+    return <Loading />;
   }
 
   return (

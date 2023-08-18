@@ -18,6 +18,7 @@ public class CommentPatchDto {
     @NotBlank(message = "댓글 내용은 공백이 아니어야 합니다")
     private String body;
 
+    @ApiModelProperty(example = "1", position = 3, hidden = true)
     private Long memberId;
 
     public void setMemberId(long memberId) {

@@ -11,7 +11,6 @@ import java.util.List;
 public class QuestionPostDto {
 
     @ApiModelProperty(value = "작성자 memeberId", required = true,example = "1", position = 1, hidden = true)
-    @NotBlank(message = "작성자는 공백이 아니어야 합니다.")
     private long memberId;
 
     public void setMemberId(long memberId) {

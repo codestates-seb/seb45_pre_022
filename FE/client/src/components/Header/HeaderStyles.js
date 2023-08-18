@@ -142,13 +142,24 @@ export const SignUpLink = styled(Link)`
 `;
 
 export const LoginNav = styled.nav`
+  display: flex;
   ol {
     display: flex;
   }
   ol > li {
+    display: flex;
     list-style: none;
+    padding: 0 10px;
+    &:hover {
+      background-color: #e4e6e8;
+    }
   }
   ol > li > button {
     border: none;
+    background-color: transparent;
+  }
+  ol > li > a {
+    display: flex;
+    align-items: center;
   }
 `;

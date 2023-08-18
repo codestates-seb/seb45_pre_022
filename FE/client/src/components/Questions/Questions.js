@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import Loading from '../../Loading';
 
 const MainContainer = styled.div`
   padding: 24px;
@@ -13,19 +14,29 @@ const MainContainer = styled.div`
 const Questions = () => {
   const [questions, setQuestions] = useState([]);
   const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const location = useLocation();
   const { search } = queryString.parse(location.search);
 
+  const handleNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
   useEffect(() => {
-    const fetchQuestions = async (page = 1, size = 10000) => {
+    const fetchQuestions = async () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/questions`,
           {
             params: {
-              page,
-              size,
+              page: currentPage,
+              size: itemsPerPage,
               search,
             },
           },
@@ -38,10 +49,19 @@ const Questions = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [search, currentPage, itemsPerPage]);
 
   return (
     <MainContainer>
+      <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+        이전
+      </button>
+      <button
+        onClick={handleNextPage}
+        disabled={currentPage * itemsPerPage >= totalElements}
+      >
+        다음
+      </button>
       <QuestionsTopBar totalElements={totalElements} />
       <Question questions={questions} />
     </MainContainer>

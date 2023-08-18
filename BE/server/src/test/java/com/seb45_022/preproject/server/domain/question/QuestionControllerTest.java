@@ -11,7 +11,9 @@ import com.seb45_022.preproject.server.domain.question.service.QuestionService;
 import com.seb45_022.preproject.server.global.dto.TokenPrincipalDto;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +25,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -94,6 +100,13 @@ class QuestionControllerTest {
         testJwt = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
     }
 
+    @BeforeEach
+    public void createAuthenrication(){
+        Collection<GrantedAuthority> authorities = customAuthorityUtils.createAuthorities(testMember.getRoles());
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
+                new TokenPrincipalDto(testMember.getMemberId(), testMember.getEmail()), null, authorities));
+    }
+
     @BeforeAll
     public static void createTestQuestion() {
         List<Answer> testAnswers = new ArrayList<>();
@@ -122,9 +135,6 @@ class QuestionControllerTest {
 
     @Test
     void postQuestionTest() throws Exception {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                new TokenPrincipalDto(testMember.getMemberId(), testMember.getEmail()), null));
-
         List<String> testTags = Arrays.asList("test", "tag");
         QuestionPostDto postDto = new QuestionPostDto("Test Title", "Test Body", testTags);
 
@@ -192,9 +202,6 @@ class QuestionControllerTest {
 
     @Test
     void patchQuestionTest() throws Exception  {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                new TokenPrincipalDto(testMember.getMemberId(), testMember.getEmail()), null));
-
         List<String> testTags = Arrays.asList("test", "patch", "tag");
         QuestionPatchDto patchDto = QuestionPatchDto.builder()
                 .questionId(testQuestion1.getQuestionId())
@@ -232,9 +239,6 @@ class QuestionControllerTest {
 
     @Test
     void deleteQuestionTest() throws Exception  {
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-                new TokenPrincipalDto(testMember.getMemberId(), testMember.getEmail()), null));
-
         String deleteUrl = questionUrl + testQuestion1.getQuestionId();
 
         ResultActions actions=

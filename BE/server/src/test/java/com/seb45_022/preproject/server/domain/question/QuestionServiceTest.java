@@ -18,6 +18,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -42,8 +47,6 @@ class QuestionServiceTest {
     @Mock
     private MemberService memberService;
 
-    private static String testJwt;
-    private static JwtTokenizer jwtTokenizer;
     private static CustomAuthorityUtils customAuthorityUtils;
     private static Member testMember;
     private static List<Question> testQuestions;
@@ -122,13 +125,40 @@ class QuestionServiceTest {
 
     @Test
     void findQuestionsTest() {
+        int page = 1;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Question> expectedPage = new PageImpl<>(testQuestions);
+
+        given(repository.findAll(Mockito.any(PageRequest.class))).willReturn(expectedPage);
+
+        Page<Question> resultPage = questionService.findQuestions(page, size, null, null);
+
+        assertDoesNotThrow(() -> questionService.findQuestions(page, size, null, null));
+        assertEquals(expectedPage, resultPage);
     }
 
     @Test
     void updateQuestionTest() {
+        given(repository.findById(Mockito.anyLong())).willReturn(Optional.ofNullable(testQuestion1));
+        given(repository.save(Mockito.any(Question.class))).willReturn(testQuestion1);
+
+        Question question = questionService.updateQuestion(testQuestion1);
+
+        assertDoesNotThrow(() -> questionService.updateQuestion(testQuestion1));
+        assertEquals(testQuestion1, question);
+        assertEquals(testQuestion1.getQuestionId(), question.getQuestionId());
+        assertEquals(testQuestion1.getTitle(), question.getTitle());
+        assertEquals(testQuestion1.getBody(), question.getBody());
+        assertEquals(testQuestion1.getTags(), question.getTags());
     }
 
     @Test
     void deleteQuestionTest() {
+        given(repository.findById(Mockito.anyLong())).willReturn(Optional.ofNullable(testQuestion1));
+
+        questionService.deleteQuestion(testQuestion1.getQuestionId(), testQuestion1.getMember().getMemberId());
+
+        assertDoesNotThrow(() -> questionService.deleteQuestion(testQuestion1.getQuestionId(), testQuestion1.getMember().getMemberId()));
     }
 }

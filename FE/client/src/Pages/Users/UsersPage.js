@@ -34,7 +34,7 @@ const UserName = styled.div`
   margin: 4px 4px 12px 4px;
 `;
 
-const UsersPage = () => {
+const MyPage = () => {
   const [user, setUser] = useState(null);
 
   const accessToken = getCookieValue('access_token');
@@ -69,6 +69,9 @@ const UsersPage = () => {
         >
           <TestImage />
           <UserName>{user.displayName}</UserName>
+          <div>Email: {user.email}</div>
+          <div>Total Questions: {user.totalQuestions}</div>
+          <div>Total Answers: {user.totalAnswers}</div>
         </div>
         <Button>Edit Profile</Button>
       </Summary>
@@ -76,4 +79,4 @@ const UsersPage = () => {
   );
 };
 
-export default UsersPage;
+export default MyPage;

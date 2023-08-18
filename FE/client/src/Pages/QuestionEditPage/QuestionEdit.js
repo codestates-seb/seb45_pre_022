@@ -67,8 +67,6 @@ const QuestionEdit = ({ question, setQuestion }) => {
     e.preventDefault();
 
     try {
-      // 토큰 & 헤더
-
       console.log(updatedQuestion);
 
       const response = axios.patch(
@@ -83,8 +81,8 @@ const QuestionEdit = ({ question, setQuestion }) => {
       );
 
       console.log(response);
-      // window.alert('게시글이 수정되었습니다.');
-      // window.location.href = `/questions/${question.questionId}`;
+      window.alert('게시글이 수정되었습니다.');
+      window.location.href = `/questions/${question.questionId}`;
     } catch (error) {
       console.log(error);
     }

@@ -13,15 +13,14 @@ import {
   Follower,
   CreatedAt,
 } from './QuestionPageStyles';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
+import {useEffect} from 'react'
+import axios from 'axios';
 
-const Question = () => {
-  const [questions, setQuestions] = useState([]);
-
+const Question = ({ questions }) => {
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     const fetchQuestions = async (page, size = 15) => {
@@ -44,33 +43,31 @@ const Question = () => {
     fetchQuestions(1);
   }, []);
 
+
   const onHandleClickUsername = (e) => {
     navigate(`/members/${e.target.id}`);
   };
 
   return (
     <>
-      {questions.map((question) => (
-        <QuestionContainer key={question.questionId}>
+      {questions.map((question, index) => (
+        <QuestionContainer key={index}>
           <InfoContainer>
             <Info>{question.votes} votes</Info>
             <Info>{question.answers} answers</Info>
             <Info>{question.views} views</Info>
           </InfoContainer>
           <QuestionSummary>
-            <QuestionTitle
-              to={`/questions/${question.questionId}`}
-              activeClassName="active"
-            >
+            <QuestionTitle to={`/questions/${question.questionId}`}>
               {question.title}
             </QuestionTitle>
-            <QuestionContent maxLine={2} lineHeight={20}>
+            <QuestionContent $maxLine={2} $lineHeight={20}>
               {question.body}
             </QuestionContent>
             <UserContainer>
               <TagContainer>
-                {question.tags.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
+                {question.tags.map((tag, index) => (
+                  <Tag key={index}>{tag}</Tag>
                 ))}
               </TagContainer>
               <UserInfo>

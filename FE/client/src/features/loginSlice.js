@@ -9,7 +9,7 @@ export const loginSlice = createSlice({
     displayName: null,
   },
   reducers: {
-    login: (state, action) => {
+    setUser: (state, action) => {
       state.isLogin = true;
       if (action.payload) {
         state.memberId = action.payload.memberId;
@@ -17,11 +17,14 @@ export const loginSlice = createSlice({
         state.displayName = action.payload.displayName;
       }
     },
-    logout: (state) => {
+    deleteUser: (state) => {
       state.isLogin = false;
+      state.memberId = null;
+      state.email = null;
+      state.displayName = null;
     },
   },
 });
 
-export const { login, logout } = loginSlice.actions;
+export const { setUser, deleteUser } = loginSlice.actions;
 export default loginSlice.reducer;

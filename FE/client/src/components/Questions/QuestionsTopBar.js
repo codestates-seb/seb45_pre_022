@@ -1,7 +1,5 @@
 import { styled } from 'styled-components';
 import { AskButton } from '../Buttons/AskButton';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 // 제목과 버튼이 있는 컨테이너
 const AskContainer = styled.div`
@@ -76,21 +74,7 @@ const Filter = styled.div`
   border-radius: 7px;
 `;
 
-const QuestionsTopBar = () => {
-  const [totalElements, setTotalElements] = useState(0);
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/questions?page=1&size=15`)
-      .then((res) => {
-        const totalElements = res.data.pageInfo.totalElements;
-        setTotalElements(totalElements);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+const QuestionsTopBar = ({ totalElements }) => {
   return (
     <>
       <AskContainer>
@@ -104,7 +88,6 @@ const QuestionsTopBar = () => {
         ) : (
           <QuestionsCount>{totalElements} questions</QuestionsCount>
         )}
-        {/* TODO: 각 Tab 별 Style 지정 예정 */}
         <TabContainer>
           <Tab>Newest</Tab>
           <Tab>Active</Tab>

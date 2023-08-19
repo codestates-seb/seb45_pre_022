@@ -38,7 +38,7 @@ export const TitleContent = ({
 
 export const ProblemContent = ({
   currentStep,
-  problemDetails,
+  // problemDetails,
   onHandleProblemDetails,
   onHandleNext,
 }) => {
@@ -57,7 +57,8 @@ export const ProblemContent = ({
       {currentStep === 2 && (
         // 220자 미만 작성 시 버튼 비활성화
         <NextButton
-          disabled={problemDetails.length < 220}
+          // 테스트를 위해 잠시 주석 처리
+          // disabled={problemDetails.length < 220}
           onClick={onHandleNext}
         >
           Next

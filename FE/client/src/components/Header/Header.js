@@ -12,21 +12,20 @@ import {
   LoginNav,
 } from './HeaderStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getCookieValue } from '../../custom/getCookie';
-import { login } from '../../features/loginSlice';
+import { setUser, deleteUser } from '../../features/loginSlice';
 import axios from 'axios';
 
 const Header = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const { isLogin, memberId, email, displayName } = useSelector(
-    (state) => state.login,
-  );
+  const { isLogin } = useSelector((state) => state.login);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -41,6 +40,12 @@ const Header = () => {
     setSearchText(e.target.value);
   };
 
+  const handleLogout = () => {
+    axios.post(`${apiUrl}/members/logout`, { header: {} });
+    deleteCookie('access_token');
+    deleteCookie('refresh_token');
+  };
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (e.target.tagName !== 'INPUT') {
@@ -53,29 +58,46 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    // accessToken이 있으면(로그인 상태라면)
     const accessToken = getCookieValue('access_token');
     const refreshToken = getCookieValue('refresh_token');
+
     if (accessToken) {
       axios
-        .get(`${process.env.REACT_APP_API_URL}/members/user`, {
+        .get(`${apiUrl}/members/user`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then((res) => {
-          dispatch(login(res.data));
+          dispatch(setUser(res.data));
         })
-        // access Token이 만료된다면 => 401 에러 가지고 온다.
-        // 쿠키 저장공간에 access_token과 refresh_token이 있지만 유효일은 알 수 없는 상태 (통신을 해봐야 알 수 있다.)
-        // 첫번째 상황) access_token은 만료되고, refresh_token은 유효일이 남아 있는 상태
-        // 두번째 상황) access_token, refresh_token 둘 다 만료된 상태
-
-        // 일단 두 상황 모두 로그아웃해서 먼저 정보(state)를 날린다.
-        // 그러고 refresh_token을 재발급 받는 엔드포인트로 통신을 한다.
-        // 통신 되면, access_token, refresh_token이 재발급
-        // 통신이 안되면, 다시 로그인 해달라는 로직.
         .catch((err) => {
-          // dispatch(logout());
-          console.log(err);
+          // access Token이 만료된다면 => 401 에러 가지고 온다.
+          // 쿠키 저장공간에 access_token과 refresh_token이 있지만 유효일은 알 수 없는 상태 (통신을 해봐야 알 수 있다.)
+          if (err.response.data.status === 401) {
+            axios
+              .post(
+                `${apiUrl}/refreshToken`,
+                {},
+                {
+                  headers: { Refresh: refreshToken },
+                },
+              )
+              // 첫번째 상황) access_token은 만료되고, refresh_token은 유효일이 남아 있는 상태
+              // refresh_token을 재발급 받는 엔드포인트로 통신을 한다.
+              .then((res) => {
+                // 200, access_token, refresh_token이 재발급
+                dispatch(setUser());
+                document.cookie = `access_token=${res.data.accessToken}; path=/;`;
+              })
+              // 두번째 상황) access_token, refresh_token 둘 다 만료된 상태
+              .catch((err) => {
+                // 401, 다시 로그인 해달라는 로직.
+                if (err.response.data.status === 401) {
+                  console.error(err);
+                  alert('로그인이 만료되었습니다.');
+                  dispatch(deleteUser());
+                }
+              });
+          }
         });
     }
   }, [isLogin]);
@@ -174,7 +196,7 @@ const Header = () => {
               </button>
             </li>
             <li>
-              <button>
+              <button onClick={handleLogout}>
                 <svg
                   aria-hidden="true"
                   className="svg-icon iconStackExchange"

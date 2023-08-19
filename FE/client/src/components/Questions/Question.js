@@ -15,9 +15,34 @@ import {
 } from './QuestionPageStyles';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
+import {useEffect} from 'react'
+import axios from 'axios';
 
 const Question = ({ questions }) => {
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async (page, size = 15) => {
+      try {
+        const response = await axios.get(
+          'http://ec2-13-209-49-128.ap-northeast-2.compute.amazonaws.com:8080/questions',
+          {
+            params: {
+              page,
+              size,
+            },
+          },
+        );
+        setQuestions(response.data.questions);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchQuestions(1);
+  }, []);
+
 
   const onHandleClickUsername = (e) => {
     navigate(`/members/${e.target.id}`);
@@ -29,7 +54,7 @@ const Question = ({ questions }) => {
         <QuestionContainer key={index}>
           <InfoContainer>
             <Info>{question.votes} votes</Info>
-            <Info>{question.answerCount} answers</Info>
+            <Info>{question.answers} answers</Info>
             <Info>{question.views} views</Info>
           </InfoContainer>
           <QuestionSummary>

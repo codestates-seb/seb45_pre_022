@@ -1,5 +1,11 @@
 import { styled } from 'styled-components';
 import { Tag } from '../../components/Buttons/Tags';
+import { Link } from 'react-router-dom';
+import QuestionEditPage from '../QuestionEditPage/QuestionEditPage';
+import { useSelector } from 'react-redux';
+import { getCookieValue } from '../../custom/getCookie';
+import { useState } from 'react';
+import axios from 'axios';
 
 const QuestionBodyContainer = styled.div`
   display: flex;
@@ -42,25 +48,75 @@ export const UserImg = styled.img`
   width: 40px;
 `;
 
-const QuestionPageBody = ({ question }) => {
+const EditBtn = styled.button``;
+
+const DeleteBtn = styled.button``;
+
+const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
+  const loggedInMemberId = useSelector((state) => state.login.memberId);
+  const { isLogin } = useSelector((state) => state.login);
+
+  const token = getCookieValue('access_token');
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const handleEdit = () => {
+    if (isLogin) {
+      setIsEditing(true);
+    } else {
+      alert('게시글을 수정하려면 로그인이 필요합니다.');
+      window.location.href = '/login';
+    }
+  };
+
+  const handleDelete = () => {
+    if (!isLogin) {
+      alert('게시물을 삭제하려면 로그인이 필요합니다.');
+      window.location.href = '/login';
+    } else if (loggedInMemberId === question.memberId) {
+      const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
+      if (confirmDelete) {
+        try {
+          axios.delete(
+            `${process.env.REACT_APP_API_URL}/questions/${question.questionId}`,
+            { headers },
+          );
+          alert('게시물이 삭제되었습니다.');
+          window.location.href = '/';
+        } catch (error) {
+          console.error('Delete Error', error);
+        }
+      }
+    } else {
+      alert('게시물을 삭제할 수 있는 권한이 없습니다.');
+    }
+  };
   return (
     <QuestionBodyContainer>
-      <QuestionBody>{question.body}</QuestionBody>
-      <TagsContainer>
-        {question.tags.map((tag) => (
-          <TagWrapper key={tag}>
-            <Tag>{tag}</Tag>
-          </TagWrapper>
-        ))}
-      </TagsContainer>
-
-      <AboutWriter>
-        <UserImg
-          src="https://item.kakaocdn.net/do/a1866850b14ae47d0a2fd61f409dfc057154249a3890514a43687a85e6b6cc82"
-          alt=""
-        />
-        <Username> {question.displayName}</Username>
-      </AboutWriter>
+      {isEditing ? (
+        <QuestionEditPage />
+      ) : (
+        <>
+          <QuestionBody>{question.body}</QuestionBody>
+          <TagsContainer>
+            {question.tags.map((tag) => (
+              <TagWrapper key={tag}>
+                <Tag>{tag}</Tag>
+              </TagWrapper>
+            ))}
+          </TagsContainer>
+          <AboutWriter>
+            <UserImg
+              src="https://item.kakaocdn.net/do/a1866850b14ae47d0a2fd61f409dfc057154249a3890514a43687a85e6b6cc82"
+              alt=""
+            />
+            <Username> {question.displayName}</Username>
+          </AboutWriter>
+          <EditBtn onClick={handleEdit}>Edit</EditBtn>
+          <DeleteBtn onClick={handleDelete}>Delete</DeleteBtn>
+        </>
+      )}
     </QuestionBodyContainer>
   );
 };

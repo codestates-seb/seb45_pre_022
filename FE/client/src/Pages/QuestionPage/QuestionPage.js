@@ -16,6 +16,7 @@ const QuestionPageContainer = styled.div`
 const QuestionPage = () => {
   const { questionId } = useParams();
   const [question, setQuestion] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,9 +40,19 @@ const QuestionPage = () => {
 
   return (
     <QuestionPageContainer>
-      <QuestionPageHeader question={question} />
-      <QuestionPageBody question={question} />
-      <QuestionPageAnswer question={question} setQuestion={setQuestion} />
+      <QuestionPageHeader question={question} isEditing={isEditing} />
+      <QuestionPageBody
+        question={question}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+      />
+      {!isEditing && (
+        <QuestionPageAnswer
+          question={question}
+          setQuestion={setQuestion}
+          isEditing={isEditing}
+        />
+      )}
     </QuestionPageContainer>
   );
 };

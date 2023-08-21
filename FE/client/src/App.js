@@ -6,6 +6,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
 import QuestionEditPage from './Pages/QuestionEditPage/QuestionEditPage';
+import NotFound from './NotFound';
 
 const Questions = lazy(() => import('./components/Questions/Questions'));
 const AskPage = lazy(() => import('./Pages/AskPage/AskPage'));
@@ -63,6 +64,7 @@ function App() {
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </div>

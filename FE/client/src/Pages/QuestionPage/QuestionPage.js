@@ -5,6 +5,7 @@ import QuestionPageHeader from './QuestionPageHeader';
 import QuestionPageBody from './QuestionPageBody';
 import QuestionPageAnswer from './QuestionPageAnswer';
 import { styled } from 'styled-components';
+import Loading from '../../Loading';
 
 const QuestionPageContainer = styled.div`
   width: 100%;
@@ -35,7 +36,7 @@ const QuestionPage = () => {
 
   // Loading Indicator 만들기
   if (!question) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

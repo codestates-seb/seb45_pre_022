@@ -31,7 +31,12 @@ const Header = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    navigate(`/?page=1&size=100&search=${searchText}`);
+    let tagSearch = searchText.match(/\[(.*?)\]/);
+    if (tagSearch) {
+      navigate(`/?page=1&size=100&searchTag=${tagSearch[1]}`);
+    } else {
+      navigate(`/?page=1&size=100&searchTitle=${searchText}`);
+    }
   };
 
   const handleInputClick = () => {

@@ -42,7 +42,7 @@ const Questions = () => {
   const itemsPerPage = 10;
 
   const location = useLocation();
-  const { search } = queryString.parse(location.search);
+  const { searchTitle, searchTag } = queryString.parse(location.search);
 
   const handleNextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -61,7 +61,8 @@ const Questions = () => {
             params: {
               page: currentPage,
               size: itemsPerPage,
-              search,
+              searchTitle,
+              searchTag,
             },
           },
         );
@@ -73,7 +74,7 @@ const Questions = () => {
     };
 
     fetchQuestions();
-  }, [search, currentPage, itemsPerPage]);
+  }, [searchTitle, searchTag, currentPage, itemsPerPage]);
 
   const totalPages = Math.ceil(totalElements / itemsPerPage);
   const pageNumbers = [];

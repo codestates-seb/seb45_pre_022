@@ -9,6 +9,7 @@ import com.seb45_022.preproject.server.domain.refreshToken.service.RefreshTokenS
 import com.seb45_022.preproject.server.global.dto.SingleResponseDto;
 import com.seb45_022.preproject.server.global.security.dto.LoginDto;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -59,6 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         RefreshToken refreshTokenEntity = new RefreshToken();
         refreshTokenEntity.setValue(refreshToken);
+        refreshTokenEntity.setMember(member);
         refreshTokenService.addRefreshToken(refreshTokenEntity);
 
         MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
@@ -73,13 +76,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(body);
 
-//        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-//                .httpOnly(true)
-//                .secure(true)
-//                .maxAge(TimeUnit.MINUTES.toSeconds(30))
-//                .build();
-//
-//        response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
     // Access Token 생성 로직

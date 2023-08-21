@@ -18,7 +18,7 @@ public class MemberPostDto {
 
     @NotBlank
     @ApiModelProperty(example = "sample1234", position = 2)
-    @Pattern(regexp = "(?=.*\\d)(?=.*[a-zA-ZS]).{8,}", message = "영어와 숫자를 최소 1개 포함하여 8자 이상이어야합니다.")
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-zA-Z]).{8,}", message = "영어와 숫자를 최소 1개 포함하여 8자 이상이어야합니다.")
     private String password;
 
     @NotBlank

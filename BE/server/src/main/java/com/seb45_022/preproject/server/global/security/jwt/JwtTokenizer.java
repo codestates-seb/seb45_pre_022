@@ -1,24 +1,35 @@
 package com.seb45_022.preproject.server.global.security.jwt;
 
+import com.seb45_022.preproject.server.domain.member.entity.Member;
+import com.seb45_022.preproject.server.domain.refreshToken.entity.RefreshToken;
+import com.seb45_022.preproject.server.domain.refreshToken.service.RefreshTokenService;
+import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenizer {
+
+    private final RefreshTokenService refreshTokenService;
 
     @Getter
     @Value("${jwt.key}")
@@ -93,6 +104,10 @@ public class JwtTokenizer {
                         .setSigningKey(key)
                         .build().parseClaimsJws(jws);
         return claims;
+    }
+
+    public Claims parseAccessToken(String accessToken) {
+        return parseToken(accessToken, secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public Claims parseRefreshToken(String refreshToken) {

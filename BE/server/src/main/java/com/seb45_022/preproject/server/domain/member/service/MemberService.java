@@ -112,4 +112,10 @@ public class MemberService {
                 .totalAnswers(totalAnswers)
                 .build();
     }
+
+    public void verifyLoginMember(Long loginMemberId, Long memberId) {
+        if(loginMemberId != memberId){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+    }
 }

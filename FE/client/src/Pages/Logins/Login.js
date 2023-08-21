@@ -116,6 +116,9 @@ const Login = () => {
 
       document.cookie = `access_token=${response.data.accessToken}; path=/;`;
       document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`;
+      document.cookie = `memberId=${
+        response.data.memberId
+      }; expires=${expirationDate.toUTCString()}; path=/`;
 
       dispatch(setUser());
       navigate('/');

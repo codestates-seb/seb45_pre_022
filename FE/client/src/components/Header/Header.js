@@ -147,7 +147,7 @@ const Header = () => {
         <LoginNav>
           <ol>
             <li>
-              <Link>
+              <Link to="/mypage">
                 <div>
                   <img
                     src="/icons/profile.png"

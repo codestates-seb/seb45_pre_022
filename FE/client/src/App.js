@@ -55,6 +55,7 @@ function App() {
                   path="questions/:questionId"
                   element={<QuestionPage />}
                 />
+                <Route path="mypage" element={<UsersPage />} />
                 <Route
                   path="questions/:questionId/edit"
                   element={<QuestionEditPage />}

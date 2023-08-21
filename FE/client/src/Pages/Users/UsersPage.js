@@ -1,14 +1,17 @@
 import { styled } from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Loading from '../../Loading';
+import { getCookieValue } from '../../custom/getCookie';
+import { StyledButton } from '../../components/Buttons/AskButton';
 
 const Button = styled.button`
   border: 1px solid lightgrey;
-  width: 80px;
   height: 40px;
   background-color: white;
   border-radius: 7px;
+  padding: 7px;
+  cursor: pointer;
 `;
 
 const Container = styled.div`
@@ -30,26 +33,105 @@ const TestImage = styled.div`
 const UserName = styled.div`
   font-size: 2rem;
   font-weight: 600;
-  margin: 4px 4px 12px 4px;
+  margin-bottom: 10px;
 `;
 
-const UsersPage = () => {
-  const { membersId } = useParams();
-  const [user, setUser] = useState(null);
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  justify-content: center;
+`;
 
-  useEffect(() => {
+const EditContainer = styled.div`
+  margin: 20px;
+`;
+
+const StyledInput = styled.input`
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  margin: 10px 0;
+`;
+
+const MyPage = () => {
+  const [user, setUser] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [displayName, setDisplayName] = useState(user ? user.displayName : '');
+  const [password, setPassword] = useState('');
+
+  const accessToken = getCookieValue('access_token');
+  const memberId = getCookieValue('memberId');
+
+  const fetchMemberInfo = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${membersId}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/my-page`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
-        setUser(res.data.data);
+        setUser(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [membersId]);
+  };
+
+  const onHandleEdit = () => {
+    setIsEdit(true);
+  };
+
+  const onCloseEdit = () => {
+    setIsEdit(false);
+  };
+
+  const onSaveProfile = () => {
+    const url = `${process.env.REACT_APP_API_URL}/members/${memberId}`;
+
+    const updatedProfile = {
+      memberId: Number(memberId),
+      displayName: displayName,
+      password: password,
+    };
+
+    axios
+      .patch(url, updatedProfile, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        alert('수정이 완료되었습니다.');
+        setIsEdit(false);
+        window.location.reload(); // 페이지 새로고침
+      })
+      .catch((err) => {
+        if (
+          err.response &&
+          err.response.data &&
+          err.response.data.fieldErrors
+        ) {
+          const fieldErrors = err.response.data.fieldErrors;
+          const errorMessage = fieldErrors
+            .map((error) => `${error.field}: ${error.reason}`)
+            .join('\n');
+          alert(errorMessage);
+        } else {
+          console.log(err);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchMemberInfo();
+  }, []);
 
   if (!user) {
-    return <div>loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -61,12 +143,45 @@ const UsersPage = () => {
           }}
         >
           <TestImage />
-          <UserName>{user.displayName}</UserName>
+          <UserInfo>
+            <UserName>{user.displayName}</UserName>
+            <div>Email: {user.email}</div>
+            <div>Total Questions: {user.totalQuestions}</div>
+            <div>Total Answers: {user.totalAnswers}</div>
+          </UserInfo>
         </div>
-        <Button>Edit Profile</Button>
+        {!isEdit ? (
+          <Button onClick={onHandleEdit}>Edit Profile</Button>
+        ) : (
+          <Button onClick={onCloseEdit}>Close</Button>
+        )}
       </Summary>
+      {isEdit ? (
+        <EditContainer>
+          <div>
+            <h3>Display Name</h3>
+            <StyledInput
+              type="text"
+              placeholder={user.displayName}
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+            />
+          </div>
+          <div>
+            <h3>Password</h3>
+            <StyledInput
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <StyledButton onClick={onSaveProfile} disabled={!user}>
+            Save Profile
+          </StyledButton>
+        </EditContainer>
+      ) : null}
     </Container>
   );
 };
 
-export default UsersPage;
+export default MyPage;

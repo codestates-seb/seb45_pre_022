@@ -36,7 +36,7 @@ public class MemberController {
             @ApiResponse(code = 201, message = "CREATED", response = SingleResponseDto.class)
     })
     @PostMapping
-    public ResponseEntity postMember(@RequestBody MemberPostDto requestBody) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto requestBody) {
         Member member = memberService.createMember(mapper.memberPostDtoToMember(requestBody));
         URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, member.getMemberId());
         return ResponseEntity.created(location).body(new SingleResponseDto<>("success create account"));
@@ -49,7 +49,7 @@ public class MemberController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId, @Valid @RequestBody MemberPatchDto requestBody) {
+    public ResponseEntity patchMember(@Valid @PathVariable("member-id") @Positive long memberId, @Valid @RequestBody MemberPatchDto requestBody) {
         requestBody.setMemberId(memberId);
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
 

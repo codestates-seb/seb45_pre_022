@@ -62,7 +62,7 @@ public class MemberService {
 
     public void verifyAuthority(Member findMember, Long loginMemberId) {
         if (!findMember.getMemberId().equals(loginMemberId)) {
-            throw new BusinessLogicException(ExceptionCode.NOT_IMPLEMENTATION);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MODIFY);
         }
     }
 

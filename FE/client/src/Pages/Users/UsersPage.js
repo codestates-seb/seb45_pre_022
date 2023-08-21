@@ -107,11 +107,22 @@ const MyPage = () => {
       .then((res) => {
         alert('수정이 완료되었습니다.');
         setIsEdit(false);
-        console.log(res.data);
-        window.location.reload();
+        window.location.reload(); // 페이지 새로고침
       })
       .catch((err) => {
-        console.log(err);
+        if (
+          err.response &&
+          err.response.data &&
+          err.response.data.fieldErrors
+        ) {
+          const fieldErrors = err.response.data.fieldErrors;
+          const errorMessage = fieldErrors
+            .map((error) => `${error.field}: ${error.reason}`)
+            .join('\n');
+          alert(errorMessage);
+        } else {
+          console.log(err);
+        }
       });
   };
 

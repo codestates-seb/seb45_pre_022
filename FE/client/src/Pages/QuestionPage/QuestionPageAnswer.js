@@ -205,6 +205,161 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
     }
   };
 
+  // [Create] 댓글 작성하기
+  const [addingCommentTo, setAddingCommentTo] = useState(null);
+  const [comment, setComment] = useState('');
+
+  const handleAddComment = (answerId) => {
+    setAddingCommentTo(answerId);
+    setComment('');
+  };
+
+  const handleCommentSubmit = async (answer) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/comments`,
+        {
+          answerId: answer.answerId,
+          memberId: memberId,
+          body: comment,
+        },
+        { headers },
+      );
+      console.log('Response from API:', response);
+
+      const newComment = {
+        commentId: response.data.commentId,
+        memberId: memberId,
+        displayName: displayName,
+        body: response.data.body,
+        createdAt: response.data.createdAt,
+        lastModifiedAt: response.data.lastModifiedAt,
+      };
+
+      const updatedAnswers = question.answers.map((a) =>
+        a.answerId === answer.answerId
+          ? {
+              ...a,
+              comments: [...a.comments, newComment],
+            }
+          : a,
+      );
+
+      setQuestion((prevQuestion) => ({
+        ...prevQuestion,
+        answers: updatedAnswers,
+      }));
+
+      setAddingCommentTo(null);
+      setComment('');
+
+      window.alert('Your comment was successfully uploaded!');
+    } catch (error) {
+      console.error('Comment Post Error', error);
+    }
+  };
+
+  // [Update] Comment 수정하기 (작성자만 수정 가능)
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [commentContent, setCommentContent] = useState('');
+
+  const handleEditComment = (comment) => {
+    if (!isLogin) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    if (comment.memberId !== memberId) {
+      alert('작성자만 댓글을 수정할 수 있습니다.');
+      return;
+    }
+
+    setEditingCommentId(comment.commentId);
+    setCommentContent(comment.body);
+  };
+
+  const handleCancelEditComment = () => {
+    setEditingCommentId(null);
+    setCommentContent('');
+  };
+
+  const handleSaveCommentEdits = async (editedComment) => {
+    if (commentContent === editedComment.body) {
+      return;
+    } else {
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_API_URL}/comments/${editedComment.commentId}`,
+          {
+            body: commentContent,
+          },
+          { headers },
+        );
+
+        const updatedAnswers = question.answers.map((a) => ({
+          ...a,
+          comments: a.comments.map((c) =>
+            c.commentId === editedComment.commentId
+              ? {
+                  ...c,
+                  body: response.data.body,
+                  lastModifiedAt: response.data.lastModifiedAt,
+                }
+              : c,
+          ),
+        }));
+
+        setQuestion((prevQuestion) => ({
+          ...prevQuestion,
+          answers: updatedAnswers,
+        }));
+
+        setEditingCommentId(null);
+        setCommentContent('');
+      } catch (error) {
+        console.error('Edit Comment Error', error);
+      }
+    }
+  };
+
+  // [Delete] Comment 삭제하기
+  const handleDeleteComment = async (comment) => {
+    if (!isLogin) {
+      alert('댓글을 삭제하려면 로그인이 필요합니다.');
+      return;
+    }
+
+    if (memberId === comment.memberId) {
+      const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
+      if (confirmDelete) {
+        try {
+          await axios.delete(
+            `${process.env.REACT_APP_API_URL}/comments/${comment.commentId}`,
+            { headers },
+          );
+
+          const updatedAnswers = question.answers.map((a) => ({
+            ...a,
+            comments: a.comments.filter(
+              (c) => c.commentId !== comment.commentId,
+            ),
+          }));
+
+          setQuestion((prevQuestion) => ({
+            ...prevQuestion,
+            answers: updatedAnswers,
+          }));
+
+          window.alert('댓글이 삭제되었습니다.');
+        } catch (error) {
+          console.error('Delete Comment Error', error);
+        }
+      }
+    } else {
+      alert('댓글을 삭제할 수 있는 권한이 없습니다.');
+    }
+  };
+
   return (
     <>
       <AnswersContainer>
@@ -248,22 +403,67 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
                 <Button onClick={() => handleDeleteAnswer(answer)}>
                   Delete
                 </Button>
+                {addingCommentTo === answer.answerId ? (
+                  <div>
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Write your comment..."
+                    />
+                    <Button onClick={() => handleCommentSubmit(answer)}>
+                      Add a Comment
+                    </Button>
+                    <Button onClick={() => setAddingCommentTo(null)}>
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <Button onClick={() => handleAddComment(answer.answerId)}>
+                    Add a comment
+                  </Button>
+                )}
               </>
             )}
             {/* 댓글 리스팅 */}
             {answer.comments.map((comment) => (
               <Comments key={comment.commentId}>
-                <p>{comment.body}</p>
-                <When>
-                  <p>
-                    answered {moment.utc(comment.createdAt).local().fromNow()}
-                  </p>
-                  <p>
-                    edited{' '}
-                    {moment.utc(comment.lastModifiedAt).local().fromNow()}
-                  </p>
-                  <p> {comment.displayName}</p>
-                </When>
+                {editingCommentId === comment.commentId ? (
+                  <div>
+                    <AnswerComment
+                      value={commentContent}
+                      onChange={(e) => setCommentContent(e.target.value)}
+                    />
+                    <Button onClick={() => handleSaveCommentEdits(comment)}>
+                      Save Edits
+                    </Button>
+                    <Button onClick={handleCancelEditComment}>Cancel</Button>
+                  </div>
+                ) : (
+                  <>
+                    <p>{comment.body}</p>
+                    <When>
+                      <p>
+                        answered{' '}
+                        {moment.utc(comment.createdAt).local().fromNow()}
+                      </p>
+                      <p>
+                        edited{' '}
+                        {moment.utc(comment.lastModifiedAt).local().fromNow()}
+                      </p>
+                      <p> {comment.displayName}</p>
+                    </When>
+                    {isLogin && memberId === comment.memberId && (
+                      <>
+                        <Button onClick={() => handleEditComment(comment)}>
+                          Edit
+                        </Button>
+                        <Button onClick={() => handleDeleteComment(comment)}>
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </>
+                )}
               </Comments>
             ))}
           </Answers>

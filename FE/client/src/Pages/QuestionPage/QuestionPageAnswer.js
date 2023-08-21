@@ -34,7 +34,8 @@ const Comments = styled.div`
 
 const When = styled.div`
   display: flex;
-  font-size: 15px;
+  font-size: 13px;
+  font-weight: 600;
   color: gray;
   p {
     margin-right: 10px;
@@ -43,30 +44,43 @@ const When = styled.div`
 
 export const Button = styled.button`
   border: none;
-  font-size: 12px;
+  color: darkgray;
+  font-size: 13px;
+  font-weight:600
   margin-right: 10px;
   padding: 10px;
 `;
 
-const YourAnswer = styled.textarea`
+// const YourAnswer = styled.textarea`
+//   margin: 20px;
+//   height: 150px;
+//   font-family: Arial, sans-serif;
+//   font-size: 16px;
+//   border: 1px solid #c7c7c7;
+//   padding: 10px;
+//   width: 80%;
+// `;
+
+const Textarea = styled.textarea`
   margin-top: 20px;
   margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: 1px solid #c7c7c7;
+  padding: 10px;
+  width: 100%;
   height: 150px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  border: 1px solid #c7c7c7;
-  padding: 10px;
 `;
 
-const AnswerComment = styled.textarea`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  border: 1px solid #c7c7c7;
-  padding: 10px;
+const User = styled.span`
+  background-color: #d4e7f6;
+  border-radius: 4px;
+  width: content-fit;
+  height: content-fit;
+  padding: 0px 4px;
+  font-weight: 500;
+  color: #2176ff;
 `;
-
 const QuestionPageAnswer = ({ question, setQuestion }) => {
   // [Create] Your answer 작성하여 Post 요청 보내기
   const memberId = useSelector((state) => state.login.memberId);
@@ -253,7 +267,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
       setAddingCommentTo(null);
       setComment('');
 
-      window.alert('Your comment was successfully uploaded!');
+      window.alert('답변이 업로드되었습니다.');
     } catch (error) {
       console.error('Comment Post Error', error);
     }
@@ -374,7 +388,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
           <Answers key={answer.answerId}>
             {editingAnswerId === answer.answerId ? (
               <div>
-                <AnswerComment
+                <Textarea
                   ref={textareaRef}
                   value={answerContent}
                   onChange={(e) => setAnswerContent(e.target.value)}
@@ -397,7 +411,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
                   <p>
                     edited {moment.utc(answer.lastModifiedAt).local().fromNow()}
                   </p>
-                  <p> {answer.displayName}</p>
+                  <User> {answer.displayName}</User>
                 </When>
                 <Button onClick={() => handleEditAnswer(answer)}>Edit</Button>
                 <Button onClick={() => handleDeleteAnswer(answer)}>
@@ -405,7 +419,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
                 </Button>
                 {addingCommentTo === answer.answerId ? (
                   <div>
-                    <textarea
+                    <Textarea
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Write your comment..."
@@ -429,7 +443,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
               <Comments key={comment.commentId}>
                 {editingCommentId === comment.commentId ? (
                   <div>
-                    <AnswerComment
+                    <Textarea
                       value={commentContent}
                       onChange={(e) => setCommentContent(e.target.value)}
                     />
@@ -474,7 +488,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
       {isLogin && (
         <>
           <LetterPart>Your Answer</LetterPart>
-          <YourAnswer
+          <Textarea
             value={answerText}
             onChange={(e) => setAnswerText(e.target.value)}
           />

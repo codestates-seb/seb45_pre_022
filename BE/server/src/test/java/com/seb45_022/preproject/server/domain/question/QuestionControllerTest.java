@@ -11,7 +11,6 @@ import com.seb45_022.preproject.server.domain.question.service.QuestionService;
 import com.seb45_022.preproject.server.global.dto.TokenPrincipalDto;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
 import com.seb45_022.preproject.server.global.security.utils.CustomAuthorityUtils;
-import lombok.Getter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -77,7 +76,7 @@ class QuestionControllerTest {
         testMember = new Member();
         testMember.setMemberId(999L);
         testMember.setEmail("test@test.com");
-        testMember.setPassword("testPassword");
+        testMember.setPassword("testPassword1234");
         testMember.setDisplayName("testMember");
 
         List<String> roles = customAuthorityUtils.createRoles(testMember.getEmail());

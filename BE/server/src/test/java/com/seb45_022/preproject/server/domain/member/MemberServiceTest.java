@@ -41,7 +41,7 @@ class MemberServiceTest {
         testMember = new Member();
         testMember.setMemberId(999L);
         testMember.setEmail("test@test.com");
-        testMember.setPassword("testPassword");
+        testMember.setPassword("testPassword1234");
         testMember.setDisplayName("testMember");
 
         List<String> roles = customAuthorityUtils.createRoles(testMember.getEmail());

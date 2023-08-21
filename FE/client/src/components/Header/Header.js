@@ -42,10 +42,10 @@ const Header = () => {
     setSearchText(e.target.value);
   };
 
-  const handleLogout = () => {
-    axios.post(`${apiUrl}/members/logout`);
+  const handleLogout = async () => {
     deleteCookie('access_token');
     deleteCookie('refresh_token');
+    dispatch(deleteUser());
   };
 
   useEffect(() => {

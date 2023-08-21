@@ -6,6 +6,7 @@ import QuestionEditNotice from './QuestionEditNotice';
 import QuestionEdit from './QuestionEdit';
 import QiestionEditHowtoEdit from './QuestionEditHowtoEdit';
 
+// 수정 페이지 (컴포넌트 조합)
 const QuestionEditPageStyle = styled.div`
   display: flex;
   flex-direction: row;

@@ -5,7 +5,9 @@ import QuestionPageHeader from './QuestionPageHeader';
 import QuestionPageBody from './QuestionPageBody';
 import QuestionPageAnswer from './QuestionPageAnswer';
 import { styled } from 'styled-components';
+import Loading from '../../Loading';
 
+// Question 게시글 1개 조회하는 페이지
 const QuestionPageContainer = styled.div`
   width: 100%;
   padding: 20px;
@@ -35,7 +37,7 @@ const QuestionPage = () => {
 
   // Loading Indicator 만들기
   if (!question) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

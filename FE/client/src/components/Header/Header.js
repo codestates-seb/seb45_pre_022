@@ -14,6 +14,9 @@ import {
   SignUpLink,
   LoginNav,
 } from './HeaderStyles';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { getCookieValue } from '../../custom/getCookie';
 import { setUser, deleteUser } from '../../features/loginSlice';
 import { getCookieValue } from '../../custom/getCookie';
 import { deleteCookie } from '../../custom/deleteCookie';
@@ -21,6 +24,7 @@ import { deleteCookie } from '../../custom/deleteCookie';
 const Header = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchText, setSearchText] = useState('');

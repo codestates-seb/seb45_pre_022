@@ -4,8 +4,8 @@ import { styled } from 'styled-components';
 export const EllipsisText = styled.div`
   display: -webkit-box;
   overflow: hidden;
-  max-height: ${(props) => props.maxLine * props.lineHeight}px;
-  -webkit-line-clamp: ${(props) => props.maxLine};
+  max-height: ${(props) => (props.$maxLine || 1) * (props.$lineHeight || 16)}px;
+  -webkit-line-clamp: ${(props) => props.$maxLine || 1};
   -webkit-box-orient: vertical;
-  line-height: ${(props) => props.lineHeight}px;
+  line-height: ${(props) => props.$lineHeight || 16}px;
 `;

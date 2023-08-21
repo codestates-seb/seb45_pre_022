@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 
+// 수정 페이지 위 안내
+
 const NoticeBox = styled.div`
   padding: 20px;
   margin: 20px;

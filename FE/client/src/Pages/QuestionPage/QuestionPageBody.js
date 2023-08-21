@@ -1,11 +1,13 @@
 import { styled } from 'styled-components';
 import { Tag } from '../../components/Buttons/Tags';
-import { Link } from 'react-router-dom';
 import QuestionEditPage from '../QuestionEditPage/QuestionEditPage';
 import { useSelector } from 'react-redux';
 import { getCookieValue } from '../../custom/getCookie';
-import { useState } from 'react';
 import axios from 'axios';
+import { Button } from './QuestionPageAnswer';
+
+// Question 게시글 Body 부분 (질문 내용, 태그, 작성자)
+// 게시글 수정(수정페이지 이동) 및 삭제 기능
 
 const QuestionBodyContainer = styled.div`
   display: flex;
@@ -29,7 +31,11 @@ const TagWrapper = styled.div`
   margin-right: 5px;
 `;
 
-const AboutWriter = styled.div`
+export const AboutWriter = styled.div`
+display:flex;
+flex-direction:column;
+align-items: center;
+justify-content: center;
   margin-left: 700px;
   background-color: #d4e7f6;
   width: 200px;
@@ -37,36 +43,35 @@ const AboutWriter = styled.div`
   border-radius: 5px;
   color: hsl(206, 100%, 40%);
   margin-top: 10px;
-  padding: 10px;
-`;
-
-export const Username = styled.span`
   font-weight: 600;
   font-size: 15px;
-`;
-export const UserImg = styled.img`
-  width: 40px;
+
 `;
 
-const EditBtn = styled.button``;
+export const Info=styled.div`
+font-size:13px;
+font-weight:600;
+color:gray;`
 
-const DeleteBtn = styled.button``;
 
 const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
-  const loggedInMemberId = useSelector((state) => state.login.memberId);
   const { isLogin } = useSelector((state) => state.login);
-
+  const loggedInMemberId = useSelector((state) => state.login.memberId);
+  
   const token = getCookieValue('access_token');
   const headers = {
     Authorization: `Bearer ${token}`,
   };
 
   const handleEdit = () => {
-    if (isLogin) {
+    if (!isLogin) {
+      alert('게시물을 삭제하려면 로그인이 필요합니다.');
+      window.location.href = '/login';
+    } else if (loggedInMemberId === question.memberId) {
       setIsEditing(true);
     } else {
-      alert('게시글을 수정하려면 로그인이 필요합니다.');
-      window.location.href = '/login';
+      alert('게시물을 수정할 수 있는 권한이 없습니다.');
+      return;
     }
   };
 
@@ -85,7 +90,7 @@ const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
           alert('게시물이 삭제되었습니다.');
           window.location.href = '/';
         } catch (error) {
-          console.error('Delete Error', error);
+          console.error('Delete Error',error);
         }
       }
     } else {
@@ -106,15 +111,30 @@ const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
               </TagWrapper>
             ))}
           </TagsContainer>
+
           <AboutWriter>
-            <UserImg
-              src="https://item.kakaocdn.net/do/a1866850b14ae47d0a2fd61f409dfc057154249a3890514a43687a85e6b6cc82"
-              alt=""
-            />
-            <Username> {question.displayName}</Username>
+            <Info>asked: {new Date(question.createdAt).toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })}</Info>
+          <div>
+          <img
+                    src="/icons/profile.png"
+                    alt="user-profile"
+                    width="24"
+                    height="24"
+                  ></img>
+          <span> {question.displayName}</span>
+          </div>
           </AboutWriter>
-          <EditBtn onClick={handleEdit}>Edit</EditBtn>
-          <DeleteBtn onClick={handleDelete}>Delete</DeleteBtn>
+          <div>
+            <Button onClick={handleEdit}>Edit</Button>
+            <Button onClick={handleDelete}>Delete</Button>
+          </div>
         </>
       )}
     </QuestionBodyContainer>

@@ -1,4 +1,7 @@
 import { styled } from 'styled-components';
+
+// 수정 페이지 옆 콘텐츠
+
 const ContentBox = styled.div`
   display: flex;
   flex-direction: column;

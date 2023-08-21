@@ -1,11 +1,9 @@
 import { styled } from 'styled-components';
 import { getCookieValue } from '../../custom/getCookie';
-import { StyledButton } from '../../components/Buttons/AskButton';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import QuestionPage from '../QuestionPage/QuestionPage';
+import { Button } from '../QuestionPage/QuestionPageAnswer';
 
-// 자기 글 만 수정할 수 있게!
+//  수정 기능
 
 const EditForm = styled.form`
   display: flex;
@@ -35,11 +33,6 @@ const QuestionContent = styled.textarea`
   overflow: auto;
 `;
 
-const Button = styled(StyledButton)`
-  margin-left: 20px;
-`;
-const CancelBtn = styled.button``;
-
 const QuestionEdit = ({ question, setQuestion }) => {
   const token = getCookieValue('access_token');
 
@@ -55,7 +48,7 @@ const QuestionEdit = ({ question, setQuestion }) => {
   };
 
   const handleCancel = () => {
-    setPreviousPageUrl(window.location.href);
+    return;
   };
 
   const handleTagsChange = (e) => {
@@ -115,7 +108,7 @@ const QuestionEdit = ({ question, setQuestion }) => {
         <Button type="submit" onClick={handleEditSubmit}>
           Save edits
         </Button>
-        <CancelBtn onClick={handleCancel}>Cancel</CancelBtn>
+        <Button onClick={handleCancel}>Cancel</Button>
       </EditForm>
     </>
   );

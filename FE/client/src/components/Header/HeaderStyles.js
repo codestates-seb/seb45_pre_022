@@ -9,6 +9,7 @@ export const HeaderContainer = styled.header`
   overflow: hidden;
 
   width: 100%;
+
   height: 52px;
   background-color: white;
   border-bottom: 2px solid #e4e6e8;

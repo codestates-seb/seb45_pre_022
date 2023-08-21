@@ -40,18 +40,42 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [isSignupLoading, setIsSignupLoading] = useState(false);
+
+  const [errorEmailMsg, setErrorEmailMsg] = useState('');
+  const [errorPasswordMsg, setErrorPasswordMsg] = useState('');
+
   const onDisplayNameChange = (e) => {
     setDisplayName(e.target.value);
   };
   const onEmailChange = (e) => {
+    if (e.target.value !== '') {
+      setErrorEmailMsg('');
+    }
     setEmail(e.target.value);
   };
   const onPasswordChange = (e) => {
+    if (e.target.value !== '') {
+      setErrorPasswordMsg('');
+    }
     setPassword(e.target.value);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsSignupLoading(true);
+
+    if (!email || !password) {
+      if (!email) {
+        setErrorEmailMsg('Email cannot be empty.');
+      }
+      if (!password) {
+        setErrorPasswordMsg('Password cannot be empty.');
+      }
+      setIsSignupLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${apiUrl}/members`,
@@ -63,8 +87,10 @@ const Signup = () => {
         },
       );
       console.log(response.data);
+      setIsSignupLoading(false);
     } catch (error) {
       console.log(error);
+      setIsSignupLoading(false);
     }
   };
 
@@ -211,9 +237,22 @@ const Signup = () => {
                 size="21"
                 onChange={onDisplayNameChange}
               />
-              <Form label="Email" size="21" onChange={onEmailChange} />
-              <Form label="Password" size="21" onChange={onPasswordChange} />
-              <LoginAndSignupButton text="Sign up" />
+              <Form
+                label="Email"
+                size="21"
+                onChange={onEmailChange}
+                errorMsg={errorEmailMsg}
+              />
+              <Form
+                label="Password"
+                size="21"
+                onChange={onPasswordChange}
+                errorMsg={errorPasswordMsg}
+              />
+              <LoginAndSignupButton
+                text="Sign up"
+                isLoading={isSignupLoading}
+              />
             </FormContainer>
             <LoginNavBar situation="Sign up" />
           </div>

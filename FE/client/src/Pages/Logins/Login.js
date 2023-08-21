@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../../components/Logins/OAuth';
 import LoginNavBar from '../../components/Logins/LoginNav';
-import Form, { FormInput, FormLabel } from '../../components/Logins/Form';
+import Form from '../../components/Logins/Form';
 import LoginAndSignupButton from '../../components/Logins/LoginButton';
 import { useState } from 'react';
 import axios from 'axios';
@@ -68,19 +68,41 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoginLoading, setLoginLoading] = useState(false);
+  const [errorEmailMsg, setErrorEmailMsg] = useState('');
+  const [errorPasswordMsg, setErrorPasswordMsg] = useState('');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleEmailChange = (e) => {
+    if (e.target.value !== '') {
+      setErrorEmailMsg('');
+    }
     setEmail(e.target.value);
   };
   const handlePasswordChange = (e) => {
+    if (e.target.value !== '') {
+      setErrorPasswordMsg('');
+    }
     setPassword(e.target.value);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoginLoading(true);
+
+    if (!email || !password) {
+      if (!email) {
+        setErrorEmailMsg('Email cannot be empty.');
+      }
+      if (!password) {
+        setErrorPasswordMsg('Password cannot be empty.');
+      }
+      setLoginLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${apiUrl}/auth/login`,
@@ -92,19 +114,15 @@ const Login = () => {
         },
       );
 
-      const expirationDate = new Date();
-      expirationDate.setTime(expirationDate.getTime() + 30 * 60 * 1000);
-
       document.cookie = `access_token=${response.data.accessToken}; path=/;`;
       document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`;
-      // document.cookie = `memberId=${
-      //   response.data.memberId
-      // }; expires=${expirationDate.toUTCString()}; path=/`;
+
       dispatch(setUser());
       navigate('/');
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+    setLoginLoading(false);
   };
 
   return (
@@ -128,26 +146,19 @@ const Login = () => {
           <OAuth situation="Log in" />
           <FormContainer>
             <FormBox onSubmit={onSubmit}>
-              <Form label="Email" size="25" onChange={handleEmailChange} />
-              <div>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <FormLabel>Password</FormLabel>
-                  <FormLink>Forgot password?</FormLink>
-                </div>
-                <div>
-                  <FormInput
-                    type="password"
-                    onChange={handlePasswordChange}
-                  ></FormInput>
-                </div>
-              </div>
-              <LoginAndSignupButton text="Log in" />
+              <Form
+                label="Email"
+                size="25"
+                onChange={handleEmailChange}
+                errorMsg={errorEmailMsg}
+              />
+              <Form
+                label="Password"
+                size="25"
+                onChange={handlePasswordChange}
+                errorMsg={errorPasswordMsg}
+              />
+              <LoginAndSignupButton text="Log in" isLoading={isLoginLoading} />
             </FormBox>
           </FormContainer>
           <LoginNavBar situation="Log in" onSubmit={onSubmit} />

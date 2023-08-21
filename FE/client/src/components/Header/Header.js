@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import SearchDropdown from './SearchDropdown';
 import {
   HeaderContainer,
@@ -11,11 +14,9 @@ import {
   SignUpLink,
   LoginNav,
 } from './HeaderStyles';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getCookieValue } from '../../custom/getCookie';
 import { setUser, deleteUser } from '../../features/loginSlice';
-import axios from 'axios';
+import { getCookieValue } from '../../custom/getCookie';
+import { deleteCookie } from '../../custom/deleteCookie';
 
 const Header = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -40,7 +41,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    axios.post(`${apiUrl}/members/logout`, { header: {} });
+    axios.post(`${apiUrl}/members/logout`);
     deleteCookie('access_token');
     deleteCookie('refresh_token');
   };

@@ -47,21 +47,24 @@ const EditContainer = styled.div`
   margin: 20px;
 `;
 
+const StyledInput = styled.input`
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  margin: 10px 0;
+`;
+
 const MyPage = () => {
   const [user, setUser] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+  const [displayName, setDisplayName] = useState(user ? user.displayName : '');
+  const [password, setPassword] = useState('');
 
   const accessToken = getCookieValue('access_token');
+  const memberId = getCookieValue('memberId');
 
-  const onHandleEdit = () => {
-    setIsEdit(true);
-  };
-
-  const onCloseEdit = () => {
-    setIsEdit(false);
-  };
-
-  useEffect(() => {
+  const fetchMemberInfo = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/members/my-page`, {
         headers: {
@@ -75,6 +78,45 @@ const MyPage = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const onHandleEdit = () => {
+    setIsEdit(true);
+  };
+
+  const onCloseEdit = () => {
+    setIsEdit(false);
+  };
+
+  const onSaveProfile = () => {
+    const url = `${process.env.REACT_APP_API_URL}/members/${memberId}`;
+
+    const updatedProfile = {
+      memberId: Number(memberId),
+      displayName: displayName,
+      password: password,
+    };
+
+    console.log('Sending updated profile:', updatedProfile);
+
+    axios
+      .patch(url, updatedProfile, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        alert('수정이 완료되었습니다.');
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchMemberInfo();
   }, []);
 
   if (!user) {
@@ -107,19 +149,24 @@ const MyPage = () => {
         <EditContainer>
           <div>
             <h3>Display Name</h3>
-            <input
+            <StyledInput
               type="text"
-              value={user.displayName}
-              style={{
-                width: '300px',
-                padding: '10px',
-                borderRadius: '5px',
-                border: '1px solid gray',
-                margin: '10px 0',
-              }}
+              placeholder={user.displayName}
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
             />
           </div>
-          <StyledButton>Save Profile</StyledButton>
+          <div>
+            <h3>Password</h3>
+            <StyledInput
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <StyledButton onClick={onSaveProfile} disabled={!user}>
+            Save Profile
+          </StyledButton>
         </EditContainer>
       ) : null}
     </Container>

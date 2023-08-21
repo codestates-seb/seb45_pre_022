@@ -49,8 +49,13 @@ public class MemberController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@Valid @PathVariable("member-id") @Positive long memberId, @Valid @RequestBody MemberPatchDto requestBody) {
-        requestBody.setMemberId(memberId);
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+                                      @LoginMemberId Long loginMemberId,
+                                      @Valid @RequestBody MemberPatchDto requestBody) {
+        Member findMember = memberService.findMember(memberId);
+        memberService.verifyAuthority(findMember, loginMemberId);
+
+        requestBody.setMemberId(findMember.getMemberId());
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
 
         return new ResponseEntity<>(new SingleResponseDto<>("success modify member"), HttpStatus.OK);
@@ -77,8 +82,10 @@ public class MemberController {
             @ApiResponse(code = 404, message = "Not Found"),
     })
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
-        memberService.removeMember(memberId);
+    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId, @LoginMemberId Long loginMemberId) {
+        Member findMember = memberService.findMember(memberId);
+        memberService.verifyAuthority(findMember, loginMemberId);
+        memberService.removeMember(findMember.getMemberId());
         return new ResponseEntity<>(new SingleResponseDto<>("success delete member"), HttpStatus.OK);
     }
 

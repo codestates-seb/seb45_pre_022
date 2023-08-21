@@ -5,6 +5,7 @@ import lombok.Getter;
 public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "존재하지 않는 회원입니다."),
     MEMBER_EXISTS(409, "존재하는 회원입니다."),
+    MEMBER_NOT_MODIFY(400, "수정권한이 없습니다."),
     NOT_IMPLEMENTATION(501, "구현되지 않은 기능입니다."),
     INVALID_MEMBER_STATUS(400, "잘못된 회원 상태입니다."),
     QUESTION_NOT_FOUND(404, "존재하지 않는 게시글 입니다." ),

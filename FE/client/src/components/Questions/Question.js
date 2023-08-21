@@ -29,7 +29,7 @@ const Question = ({ questions }) => {
         <QuestionContainer key={index}>
           <InfoContainer>
             <Info>{question.votes} votes</Info>
-            <Info>{question.answerCount} answers</Info>
+            <Info>{question.answers} answers</Info>
             <Info>{question.views} views</Info>
           </InfoContainer>
           <QuestionSummary>

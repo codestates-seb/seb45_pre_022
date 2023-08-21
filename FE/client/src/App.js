@@ -5,6 +5,7 @@ import Loading from './Loading';
 import Header from './components/Header/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
+import QuestionEditPage from './Pages/QuestionEditPage/QuestionEditPage';
 
 const Questions = lazy(() => import('./components/Questions/Questions'));
 const AskPage = lazy(() => import('./Pages/AskPage/AskPage'));
@@ -55,6 +56,10 @@ function App() {
                   element={<QuestionPage />}
                 />
                 <Route path="mypage" element={<UsersPage />} />
+                <Route
+                  path="questions/:questionId/edit"
+                  element={<QuestionEditPage />}
+                />
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />

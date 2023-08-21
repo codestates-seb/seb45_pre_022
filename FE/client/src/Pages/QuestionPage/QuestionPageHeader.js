@@ -41,25 +41,30 @@ export const Line = styled.div`
   width: 100%;
 `;
 
-const QuestionPageHeader = ({ question }) => {
+const QuestionPageHeader = ({ question, isEditing }) => {
   return (
     <>
-      <QuestionHeaderContainer>
-        <QuestionHeader>
-          <QuestionTitle>{question.title}</QuestionTitle>
-          <QuestionInfo>
-            <Info>
-              Asked: {moment.utc(question.createdAt).local().fromNow()}
-            </Info>
-            <Info>
-              Modified: {moment.utc(question.lastModifiedAt).local().fromNow()}
-            </Info>
-            <Info>Viewed: {question.views}</Info>
-          </QuestionInfo>
-        </QuestionHeader>
-        <AskButton />
-      </QuestionHeaderContainer>
-      <Line />
+      {!isEditing && (
+        <div>
+          <QuestionHeaderContainer>
+            <QuestionHeader>
+              <QuestionTitle>{question.title}</QuestionTitle>
+              <QuestionInfo>
+                <Info>
+                  Asked: {moment.utc(question.createdAt).local().fromNow()}
+                </Info>
+                <Info>
+                  Modified:{' '}
+                  {moment.utc(question.lastModifiedAt).local().fromNow()}
+                </Info>
+                <Info>Viewed: {question.views}</Info>
+              </QuestionInfo>
+            </QuestionHeader>
+            <AskButton />
+          </QuestionHeaderContainer>
+          <Line />
+        </div>
+      )}
     </>
   );
 };

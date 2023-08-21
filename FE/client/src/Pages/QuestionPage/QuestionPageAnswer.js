@@ -4,6 +4,9 @@ import { styled } from 'styled-components';
 import { StyledButton as Button } from '../../components/Buttons/AskButton';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { getCookieValue } from '../../custom/getCookie';
+import { useSelector } from 'react-redux';
+
 const AnswersContainer = styled.div`
   margin-top: 20px;
 `;
@@ -45,7 +48,14 @@ const YourAnswer = styled.textarea`
   padding: 10px;
 `;
 
-const QuestionPageAnswer = ({ question, setQuestion }) => {
+const QuestionPageAnswer = ({ question, setQuestion, isEditing }) => {
+  const memberId = useSelector((state) => state.login.memberId);
+  const displayName = useSelector((state) => state.login.displayName);
+
+  const token = getCookieValue('access_token');
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   const [answerText, setAnswerText] = useState('');
 
   const handleAnswerSubmit = async () => {
@@ -54,17 +64,16 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
         `${process.env.REACT_APP_API_URL}/answers`,
         {
           questionId: question.questionId,
-          //로그인-> 수정
-          memberId: 1,
+          memberId: question.memberId,
           body: answerText,
         },
+        { headers },
       );
 
       const newAnswer = {
         answerId: response.data.answerId,
-        //로그인-> 수정
-        memberId: 1,
-        displayName: 'HGD',
+        memberId: memberId,
+        displayName: displayName,
         body: response.data.body,
         createdAt: response.data.createdAt,
         lastModifiedAt: response.data.lastModifiedAt,
@@ -80,6 +89,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
       setAnswerText('');
     } catch (error) {
       console.error('Post error', error);
+      console.log('Error response:', error.response);
     }
   };
   if (!question) {

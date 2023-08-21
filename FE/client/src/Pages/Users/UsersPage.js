@@ -97,8 +97,6 @@ const MyPage = () => {
       password: password,
     };
 
-    console.log('Sending updated profile:', updatedProfile);
-
     axios
       .patch(url, updatedProfile, {
         headers: {
@@ -108,7 +106,9 @@ const MyPage = () => {
       })
       .then((res) => {
         alert('수정이 완료되었습니다.');
+        setIsEdit(false);
         console.log(res.data);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

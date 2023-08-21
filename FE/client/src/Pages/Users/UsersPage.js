@@ -34,6 +34,11 @@ const UserName = styled.div`
   margin: 4px 4px 12px 4px;
 `;
 
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const MyPage = () => {
   const [user, setUser] = useState(null);
 
@@ -68,10 +73,12 @@ const MyPage = () => {
           }}
         >
           <TestImage />
-          <UserName>{user.displayName}</UserName>
-          <div>Email: {user.email}</div>
-          <div>Total Questions: {user.totalQuestions}</div>
-          <div>Total Answers: {user.totalAnswers}</div>
+          <UserInfo>
+            <UserName>{user.displayName}</UserName>
+            <div>Email: {user.email}</div>
+            <div>Total Questions: {user.totalQuestions}</div>
+            <div>Total Answers: {user.totalAnswers}</div>
+          </UserInfo>
         </div>
         <Button>Edit Profile</Button>
       </Summary>

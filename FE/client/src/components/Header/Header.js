@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchDropdown from './SearchDropdown';
 import {
   HeaderContainer,
@@ -14,9 +14,7 @@ import {
   SignUpLink,
   LoginNav,
 } from './HeaderStyles';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { getCookieValue } from '../../custom/getCookie';
+
 import { setUser, deleteUser } from '../../features/loginSlice';
 import { getCookieValue } from '../../custom/getCookie';
 import { deleteCookie } from '../../custom/deleteCookie';

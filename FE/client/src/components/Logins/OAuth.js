@@ -56,16 +56,10 @@ const OAuthButton = styled.button`
         : '0px 2px 6px rgba(0, 0, 0, 0.3)'};
   }
 `;
-
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiURL = process.env.REACT_APP_API_URL;
 
 const handleGoogleLogin = async () => {
-  try {
-    const response = await axios.post(`${apiUrl}/oauth2/authorization/google`);
-    console.log(response);
-  } catch (error) {
-    console.log(error);
-  }
+  window.location.assign(`${apiURL}/oauth2/authorization/google`);
 };
 
 const OAuth = ({ situation }) => {

@@ -6,12 +6,13 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
 import QuestionEditPage from './Pages/QuestionEditPage/QuestionEditPage';
+import NotFound from './NotFound';
 
 const Questions = lazy(() => import('./components/Questions/Questions'));
 const AskPage = lazy(() => import('./Pages/AskPage/AskPage'));
 const Login = lazy(() => import('./Pages/Logins/Login'));
 const Signup = lazy(() => import('./Pages/Logins/Signup'));
-const UsersPage = lazy(() => import('./Pages/Users/UsersPage'));
+const MyPage = lazy(() => import('./Pages/Users/MyPage'));
 const UserList = lazy(() => import('./Pages/Users/UserList'));
 const QuestionPage = lazy(() => import('./Pages/QuestionPage/QuestionPage'));
 
@@ -49,13 +50,12 @@ function App() {
               <Route path="/" element={<DefaultLayout />}>
                 <Route path="" element={<Questions />} />
                 <Route path="ask" element={<AskPage />} />
-                <Route path="members/:membersId" element={<UsersPage />} />
                 <Route path="members" element={<UserList />} />
                 <Route
                   path="questions/:questionId"
                   element={<QuestionPage />}
                 />
-                <Route path="mypage" element={<UsersPage />} />
+                <Route path="mypage" element={<MyPage />} />
                 <Route
                   path="questions/:questionId/edit"
                   element={<QuestionEditPage />}
@@ -63,6 +63,7 @@ function App() {
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </div>

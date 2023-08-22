@@ -6,6 +6,7 @@ import LoginAndSignupButton from '../../components/Logins/LoginButton';
 import LoginNavBar from '../../components/Logins/LoginNav';
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const MainContainer = styled.div`
   display: flex;
@@ -39,6 +40,8 @@ const Signup = () => {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const [isSignupLoading, setIsSignupLoading] = useState(false);
 
@@ -96,8 +99,10 @@ const Signup = () => {
           },
         },
       );
-      console.log(response.data);
-      setIsSignupLoading(false);
+      if (response.data.status === 200) {
+        navigate('/login');
+        setIsSignupLoading(false);
+      }
     } catch (error) {
       const errors = error.response.data.fieldErrors;
       if (errors) {

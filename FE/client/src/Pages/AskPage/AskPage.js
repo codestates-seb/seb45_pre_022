@@ -23,7 +23,7 @@ const AskPage = () => {
   const accessToken = getCookieValue('access_token');
 
   const memberId = useSelector((state) => state.login.memberId);
-
+  
   const navigate = useNavigate();
 
   const onHandleNext = () => {

@@ -127,6 +127,8 @@ class MemberControllerTest {
 
         Member member = mapper.memberPatchDtoToMember(memberPatchDto);
 
+        given(memberService.findMember(Mockito.any(Long.class)))
+                .willReturn(testMember);
         given(memberService.updateMember(Mockito.any(Member.class)))
                 .willReturn(member);
 
@@ -166,6 +168,9 @@ class MemberControllerTest {
 
     @Test
     void deleteMemberTest() throws Exception  {
+        given(memberService.findMember(Mockito.any(Long.class)))
+                .willReturn(testMember);
+
         String deleteUrl = memberUrl + testMember.getMemberId();
 
         ResultActions actions=

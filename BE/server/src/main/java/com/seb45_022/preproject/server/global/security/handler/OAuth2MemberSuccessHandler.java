@@ -132,9 +132,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host(serverName)
+                .host("localhost")
                 //.host("localhost")
-                .port(80)
+                .port(3000)
                 .path("/")
                 .queryParams(queryParams)
                 .build()

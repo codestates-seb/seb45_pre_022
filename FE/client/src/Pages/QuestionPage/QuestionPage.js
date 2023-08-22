@@ -9,7 +9,7 @@ import Loading from '../../Loading';
 
 // Question 게시글 1개 조회하는 페이지
 const QuestionPageContainer = styled.div`
-  width: 100%;
+  width: 948px;
   padding: 20px;
   display: flex;
   flex-direction: column;

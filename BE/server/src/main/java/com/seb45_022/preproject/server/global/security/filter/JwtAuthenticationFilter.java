@@ -7,14 +7,22 @@ import com.seb45_022.preproject.server.domain.member.entity.Member;
 import com.seb45_022.preproject.server.domain.refreshToken.entity.RefreshToken;
 import com.seb45_022.preproject.server.domain.refreshToken.service.RefreshTokenService;
 import com.seb45_022.preproject.server.global.dto.SingleResponseDto;
+import com.seb45_022.preproject.server.global.exception.businessLogic.BusinessLogicException;
+import com.seb45_022.preproject.server.global.exception.code.ExceptionCode;
+import com.seb45_022.preproject.server.global.exception.response.ErrorResponse;
 import com.seb45_022.preproject.server.global.security.dto.LoginDto;
 import com.seb45_022.preproject.server.global.security.jwt.JwtTokenizer;
+import com.seb45_022.preproject.server.global.security.utils.ErrorResponder;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,12 +34,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.seb45_022.preproject.server.global.security.utils.AuthenticationUtils.isValidPassword;
+import static com.seb45_022.preproject.server.global.security.utils.AuthenticationUtils.isValidUsername;
+
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -44,6 +54,30 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         ObjectMapper objectMapper = new ObjectMapper();
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class);
+
+        boolean isValidUsername = isValidUsername(loginDto.getUsername());
+        boolean isValidPassword = isValidPassword(loginDto.getPassword());
+
+        List<ErrorResponse> errorResponses = new ArrayList<>();
+
+        if (!isValidUsername) {
+            ErrorResponse emailErrorResponse = ErrorResponse.of(ExceptionCode.INVALID_EMAIL_FORMAT);
+            errorResponses.add(emailErrorResponse);
+        }
+
+        if (!isValidPassword) {
+            ErrorResponse passwordErrorResponse = ErrorResponse.of(ExceptionCode.INVALID_PASSWORD_FORMAT);
+            errorResponses.add(passwordErrorResponse);
+        }
+
+        if (!errorResponses.isEmpty()) {
+            Gson gson = new Gson();
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.getWriter().write(gson.toJson(errorResponses));
+            return null;
+        }
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }

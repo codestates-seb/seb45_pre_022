@@ -68,7 +68,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String accessToken = delegateAccessToken(member, authorities);
         String refreshToken = delegateRefreshToken(member);
 
-//        String uri = createURI(request, accessToken, refreshToken).toString();
+        String uri = createURI(request, accessToken, refreshToken).toString();
 
         String headerValue = "Bearer "+ accessToken;
         response.setHeader("Authorization",headerValue);
@@ -78,18 +78,19 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         refreshTokenEntity.setValue(refreshToken);
         refreshTokenService.addRefreshToken(refreshTokenEntity);
 
-//        getRedirectStrategy().sendRedirect(request,response,uri);
-        MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .memberId(member.getMemberId())
-                .displayName(member.getDisplayName())
-                .build();
+        getRedirectStrategy().sendRedirect(request,response,uri);
 
-        String body = new Gson().toJson(loginResponse);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(body);
+//        MemberDto.LoginResponse loginResponse = MemberDto.LoginResponse.builder()
+//                .accessToken(accessToken)
+//                .refreshToken(refreshToken)
+//                .memberId(member.getMemberId())
+//                .displayName(member.getDisplayName())
+//                .build();
+//
+//        String body = new Gson().toJson(loginResponse);
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().write(body);
 
 //        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
 //                .httpOnly(true)
@@ -121,22 +122,22 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
     }
 
-//    private URI createURI(HttpServletRequest request, String accessToken, String refreshToken){
-//        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-//        queryParams.add("access_token", accessToken);
-//        queryParams.add("refresh_token", refreshToken);
-//
-//        String serverName = request.getServerName();
-//
-//        return UriComponentsBuilder
-//                .newInstance()
-//                .scheme("http")
-//                .host(serverName)
-//                //.host("localhost")
-//                .port(80)
-//                .path("/user")
-//                .queryParams(queryParams)
-//                .build()
-//                .toUri();
-//    }
+    private URI createURI(HttpServletRequest request, String accessToken, String refreshToken){
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("access_token", accessToken);
+        queryParams.add("refresh_token", refreshToken);
+
+        String serverName = request.getServerName();
+
+        return UriComponentsBuilder
+                .newInstance()
+                .scheme("http")
+                .host(serverName)
+                //.host("localhost")
+                .port(80)
+                .path("/")
+                .queryParams(queryParams)
+                .build()
+                .toUri();
+    }
 }

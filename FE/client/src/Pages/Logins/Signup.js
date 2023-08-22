@@ -42,6 +42,9 @@ const Signup = () => {
 
   const [isSignupLoading, setIsSignupLoading] = useState(false);
 
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [errorDisplayMsg, setErrorDisplayMsg] = useState('');
   const [errorEmailMsg, setErrorEmailMsg] = useState('');
   const [errorPasswordMsg, setErrorPasswordMsg] = useState('');
 
@@ -64,8 +67,15 @@ const Signup = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsSignupLoading(true);
+    setErrorMsg('');
+    setErrorDisplayMsg('');
+    setErrorEmailMsg('');
+    setErrorPasswordMsg('');
 
-    if (!email || !password) {
+    if (!displayName || !email || !password) {
+      if (!displayName) {
+        setErrorDisplayMsg('Display name cannot be empty.');
+      }
       if (!email) {
         setErrorEmailMsg('Email cannot be empty.');
       }
@@ -89,7 +99,21 @@ const Signup = () => {
       console.log(response.data);
       setIsSignupLoading(false);
     } catch (error) {
-      console.log(error);
+      const errors = error.response.data.fieldErrors;
+      if (errors) {
+        for (let i = 0; i < errors.length; i++) {
+          if (errors[i].field === 'displayName') {
+            setErrorDisplayMsg(errors[i].reason);
+          } else if (errors[i].field === 'email') {
+            setErrorEmailMsg(errors[i].reason);
+          } else if (errors[i].field === 'password') {
+            setErrorPasswordMsg(errors[i].reason);
+          }
+        }
+      }
+      if (error.response.status === 409) {
+        setErrorMsg('이미 존재하는 유저입니다.');
+      }
       setIsSignupLoading(false);
     }
   };
@@ -236,6 +260,7 @@ const Signup = () => {
                 label="Display name"
                 size="21"
                 onChange={onDisplayNameChange}
+                errorMsg={errorDisplayMsg}
               />
               <Form
                 label="Email"
@@ -253,6 +278,7 @@ const Signup = () => {
                 text="Sign up"
                 isLoading={isSignupLoading}
               />
+              {errorMsg ? <div>{errorMsg}</div> : null}
             </FormContainer>
             <LoginNavBar situation="Sign up" />
           </div>

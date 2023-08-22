@@ -42,7 +42,6 @@ export const FormContainer = styled.div`
 const FormBox = styled.form`
   display: flex;
   flex-direction: column;
-
   gap: 15px;
   width: 100%;
 `;
@@ -69,6 +68,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoginLoading, setLoginLoading] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState('');
   const [errorEmailMsg, setErrorEmailMsg] = useState('');
   const [errorPasswordMsg, setErrorPasswordMsg] = useState('');
 
@@ -88,9 +89,22 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidePassword = (password) => {
+    const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoginLoading(true);
+    setErrorMsg('');
+    setErrorEmailMsg('');
+    setErrorPasswordMsg('');
 
     if (!email || !password) {
       if (!email) {
@@ -99,6 +113,20 @@ const Login = () => {
       if (!password) {
         setErrorPasswordMsg('Password cannot be empty.');
       }
+      setLoginLoading(false);
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setErrorEmailMsg('유효한 이메일 주소를 입력해주세요.');
+      setLoginLoading(false);
+      return;
+    }
+
+    if (!isValidePassword(password)) {
+      setErrorPasswordMsg(
+        '최소 하나의 숫자, 최소 하나의 영문자, 최소 8자 이상의 길이를 가져야 함.',
+      );
       setLoginLoading(false);
       return;
     }
@@ -124,6 +152,9 @@ const Login = () => {
       navigate('/');
     } catch (error) {
       console.error('Error fetching data:', error);
+      if (error.response.data.status === 401) {
+        setErrorMsg('일치하는 유저가 없습니다.');
+      }
     }
     setLoginLoading(false);
   };
@@ -161,6 +192,17 @@ const Login = () => {
                 onChange={handlePasswordChange}
                 errorMsg={errorPasswordMsg}
               />
+              {errorMsg ? (
+                <p
+                  style={{
+                    display: 'inline-block',
+                    width: '400px',
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {errorMsg}
+                </p>
+              ) : null}
               <LoginAndSignupButton text="Log in" isLoading={isLoginLoading} />
             </FormBox>
           </FormContainer>

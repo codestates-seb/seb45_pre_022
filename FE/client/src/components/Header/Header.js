@@ -42,11 +42,25 @@ const Header = () => {
     setSearchText(e.target.value);
   };
 
-  const handleLogout = () => {
-    axios.post(`${apiUrl}/members/logout`);
+  const handleLogout = async () => {
     deleteCookie('access_token');
     deleteCookie('refresh_token');
+    dispatch(deleteUser());
   };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+
+    const search = url.search;
+    if (search) {
+      const accessToken = search.split('=')[1].split('&')[0];
+      const refreshToken = search.split('=')[2];
+
+      document.cookie = `access_token=${accessToken}; path=/;`;
+      document.cookie = `refresh_token=${refreshToken}; path=/;`;
+      navigate('/');
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

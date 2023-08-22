@@ -74,6 +74,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const expirationDate = new Date(Date.now() + 3600000);
 
   const handleEmailChange = (e) => {
     if (e.target.value !== '') {

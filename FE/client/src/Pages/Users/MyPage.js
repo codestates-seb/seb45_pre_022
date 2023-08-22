@@ -24,10 +24,9 @@ const Summary = styled.div`
   justify-content: space-between;
 `;
 
-const TestImage = styled.div`
+const UserImage = styled.div`
   width: 128px;
   height: 128px;
-  border: 1px solid red;
 `;
 
 const UserName = styled.div`
@@ -55,6 +54,17 @@ const StyledInput = styled.input`
   margin: 10px 0;
 `;
 
+const DeleteProfile = styled(Button)`
+  background-color: red;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  bottom: 0;
+  margin-left: 10px;
+`;
+
 const MyPage = () => {
   const [user, setUser] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
@@ -63,6 +73,8 @@ const MyPage = () => {
 
   const accessToken = getCookieValue('access_token');
   const memberId = getCookieValue('memberId');
+
+  const url = `${process.env.REACT_APP_API_URL}/members/${memberId}`;
 
   const fetchMemberInfo = () => {
     axios
@@ -88,9 +100,23 @@ const MyPage = () => {
     setIsEdit(false);
   };
 
-  const onSaveProfile = () => {
-    const url = `${process.env.REACT_APP_API_URL}/members/${memberId}`;
+  const onHandleDelete = () => {
+    axios
+      .delete(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((res) => {
+        alert('프로필이 삭제되었습니다.');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
+  const onSaveProfile = () => {
     const updatedProfile = {
       memberId: Number(memberId),
       displayName: displayName,
@@ -142,7 +168,14 @@ const MyPage = () => {
             display: 'flex',
           }}
         >
-          <TestImage />
+          <UserImage>
+            <img
+              src="/icons/profile.png"
+              alt="user-profile"
+              width="128"
+              height="128"
+            ></img>
+          </UserImage>
           <UserInfo>
             <UserName>{user.displayName}</UserName>
             <div>Email: {user.email}</div>
@@ -151,7 +184,12 @@ const MyPage = () => {
           </UserInfo>
         </div>
         {!isEdit ? (
-          <Button onClick={onHandleEdit}>Edit Profile</Button>
+          <div>
+            <Button onClick={onHandleEdit}>Edit Profile</Button>
+            <DeleteProfile onClick={onHandleDelete}>
+              Delete Profile
+            </DeleteProfile>
+          </div>
         ) : (
           <Button onClick={onCloseEdit}>Close</Button>
         )}

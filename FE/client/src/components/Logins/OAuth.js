@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { styled } from 'styled-components';
+
 const OAuthContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -54,12 +56,17 @@ const OAuthButton = styled.button`
         : '0px 2px 6px rgba(0, 0, 0, 0.3)'};
   }
 `;
+const apiURL = process.env.REACT_APP_API_URL;
+
+const handleGoogleLogin = async () => {
+  window.location.assign(`${apiURL}/oauth2/authorization/google`);
+};
 
 const OAuth = ({ situation }) => {
   return (
     <OAuthContainer>
-      <OAuthButton backgroundcolor={'#ffffff'}>
-        <img src="/icons/Google_G_Logo.png" alt="githublogo" width="18px"></img>
+      <OAuthButton backgroundcolor={'#ffffff'} onClick={handleGoogleLogin}>
+        <img src="/icons/Google_G_Logo.png" alt="googlelogo" width="18px"></img>
         <span>
           {situation === 'Log in'
             ? 'Log in with Google'

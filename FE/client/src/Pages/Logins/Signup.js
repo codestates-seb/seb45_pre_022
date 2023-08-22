@@ -35,25 +35,60 @@ const FormContainer = styled.form`
 `;
 
 const Signup = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [isSignupLoading, setIsSignupLoading] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [errorDisplayMsg, setErrorDisplayMsg] = useState('');
+  const [errorEmailMsg, setErrorEmailMsg] = useState('');
+  const [errorPasswordMsg, setErrorPasswordMsg] = useState('');
 
   const onDisplayNameChange = (e) => {
     setDisplayName(e.target.value);
   };
   const onEmailChange = (e) => {
+    if (e.target.value !== '') {
+      setErrorEmailMsg('');
+    }
     setEmail(e.target.value);
   };
   const onPasswordChange = (e) => {
+    if (e.target.value !== '') {
+      setErrorPasswordMsg('');
+    }
     setPassword(e.target.value);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsSignupLoading(true);
+    setErrorMsg('');
+    setErrorDisplayMsg('');
+    setErrorEmailMsg('');
+    setErrorPasswordMsg('');
+
+    if (!displayName || !email || !password) {
+      if (!displayName) {
+        setErrorDisplayMsg('Display name cannot be empty.');
+      }
+      if (!email) {
+        setErrorEmailMsg('Email cannot be empty.');
+      }
+      if (!password) {
+        setErrorPasswordMsg('Password cannot be empty.');
+      }
+      setIsSignupLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(
-        'http://ec2-3-39-189-62.ap-northeast-2.compute.amazonaws.com:8080/members',
+        `${apiUrl}/members`,
         { displayName, email, password },
         {
           headers: {
@@ -62,8 +97,24 @@ const Signup = () => {
         },
       );
       console.log(response.data);
+      setIsSignupLoading(false);
     } catch (error) {
-      console.log(error);
+      const errors = error.response.data.fieldErrors;
+      if (errors) {
+        for (let i = 0; i < errors.length; i++) {
+          if (errors[i].field === 'displayName') {
+            setErrorDisplayMsg(errors[i].reason);
+          } else if (errors[i].field === 'email') {
+            setErrorEmailMsg(errors[i].reason);
+          } else if (errors[i].field === 'password') {
+            setErrorPasswordMsg(errors[i].reason);
+          }
+        }
+      }
+      if (error.response.status === 409) {
+        setErrorMsg('이미 존재하는 유저입니다.');
+      }
+      setIsSignupLoading(false);
     }
   };
 
@@ -209,10 +260,25 @@ const Signup = () => {
                 label="Display name"
                 size="21"
                 onChange={onDisplayNameChange}
+                errorMsg={errorDisplayMsg}
               />
-              <Form label="Email" size="21" onChange={onEmailChange} />
-              <Form label="Password" size="21" onChange={onPasswordChange} />
-              <LoginAndSignupButton text="Sign up" />
+              <Form
+                label="Email"
+                size="21"
+                onChange={onEmailChange}
+                errorMsg={errorEmailMsg}
+              />
+              <Form
+                label="Password"
+                size="21"
+                onChange={onPasswordChange}
+                errorMsg={errorPasswordMsg}
+              />
+              <LoginAndSignupButton
+                text="Sign up"
+                isLoading={isSignupLoading}
+              />
+              {errorMsg ? <div>{errorMsg}</div> : null}
             </FormContainer>
             <LoginNavBar situation="Sign up" />
           </div>

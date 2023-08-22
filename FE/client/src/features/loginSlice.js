@@ -5,19 +5,26 @@ export const loginSlice = createSlice({
   initialState: {
     isLogin: false,
     memberId: null,
-    accessToken: null,
+    email: null,
+    displayName: null,
   },
   reducers: {
-    login: (state, action) => {
+    setUser: (state, action) => {
       state.isLogin = true;
-      state.memberId = action.payload.memberId;
-      state.accessToken = action.payload.accessToken;
+      if (action.payload) {
+        state.memberId = action.payload.memberId;
+        state.email = action.payload.email;
+        state.displayName = action.payload.displayName;
+      }
     },
-    logout: (state) => {
+    deleteUser: (state) => {
       state.isLogin = false;
+      state.memberId = null;
+      state.email = null;
+      state.displayName = null;
     },
   },
 });
 
-export const { login, logout } = loginSlice.actions;
+export const { setUser, deleteUser } = loginSlice.actions;
 export default loginSlice.reducer;

@@ -1,11 +1,11 @@
 <div align=center>
 
 
-# [📃 백지장 📃](http://baegjijang.s3-website.ap-northeast-2.amazonaws.com/)
+# [📃 백지장 📃](http://seb045022pre.shop/)
 
 ## Stackoverflow 클론 코딩
 
-[배포 링크](http://baegjijang.s3-website.ap-northeast-2.amazonaws.com/)
+[배포 링크](http://seb045022pre.shop/)
 
 | 이름   | 역할   | 그룹     |
 | ------ | ------ | -------- |

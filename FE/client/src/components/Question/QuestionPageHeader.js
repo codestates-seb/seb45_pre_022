@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { AskButton } from '../../components/Buttons/AskButton';
+import { AskButton } from '../Buttons/AskButton';
 import moment from 'moment';
 
 // Question 게시글 관련 정보 표시 헤더 (제목, 작성 및 수정 날짜, 작성자)

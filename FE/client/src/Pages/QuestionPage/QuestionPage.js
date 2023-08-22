@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import QuestionPageHeader from './QuestionPageHeader';
-import QuestionPageBody from './QuestionPageBody';
+import QuestionPageHeader from '../../components/Question/QuestionPageHeader';
+import QuestionPageBody from '../../components/Question/QuestionPageBody';
 import QuestionPageAnswer from './QuestionPageAnswer';
 import { styled } from 'styled-components';
 import Loading from '../../Loading';
@@ -35,11 +35,9 @@ const QuestionPage = () => {
     fetchData();
   }, []);
 
-  // Loading Indicator 만들기
   if (!question) {
     return <Loading />;
   }
-
   return (
     <QuestionPageContainer>
       <QuestionPageHeader question={question} isEditing={isEditing} />

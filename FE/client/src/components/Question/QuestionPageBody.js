@@ -1,13 +1,21 @@
 import { styled } from 'styled-components';
-import { Tag } from '../../components/Buttons/Tags';
-import QuestionEditPage from '../QuestionEditPage/QuestionEditPage';
+import { Tag } from '../Buttons/Tags';
+import QuestionEditPage from '../../Pages/QuestionEditPage/QuestionEditPage';
 import { useSelector } from 'react-redux';
 import { getCookieValue } from '../../custom/getCookie';
 import axios from 'axios';
-import { Button } from './QuestionPageAnswer';
 
 // Question 게시글 Body 부분 (질문 내용, 태그, 작성자)
 // 게시글 수정(수정페이지 이동) 및 삭제 기능
+
+const EditButton = styled.button`
+  border: none;
+  color: darkgray;
+  font-size: 13px;
+  font-weight:600
+  margin-right: 10px;
+  padding: 10px;
+`;
 
 const QuestionBodyContainer = styled.div`
   display: flex;
@@ -140,8 +148,8 @@ const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
             </UserInfo>
           </AboutWriter>
           <div>
-            <Button onClick={handleEdit}>Edit</Button>
-            <Button onClick={handleDelete}>Delete</Button>
+            <EditButton onClick={handleEdit}>Edit</EditButton>
+            <EditButton onClick={handleDelete}>Delete</EditButton>
           </div>
         </>
       )}

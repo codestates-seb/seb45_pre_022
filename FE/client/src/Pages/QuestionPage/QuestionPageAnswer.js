@@ -1,130 +1,35 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import { styled } from 'styled-components';
-import { StyledButton } from '../../components/Buttons/AskButton';
 import moment from 'moment';
 import { getCookieValue } from '../../custom/getCookie';
 import { useSelector } from 'react-redux';
+import Comment from '../../components/Question/Comment';
+import {
+  AnswersContainer,
+  LetterPart,
+  Answers,
+  Comments,
+  Button,
+  When,
+  Textarea,
+  User,
+} from './QuestionsPageStyles.js';
+import YourAnswer from '../../components/Question/YourAnswer';
 
 // Question 게시글에 대한 Answers, Comments 조회
 // Answers, Comments 수정 및 삭제 기능
 // Your Answer post 기능 (로그인 상태만)
 
-const AnswersContainer = styled.div`
-  margin-top: 20px;
-`;
-
-const LetterPart = styled.h3`
-  font: 45px;
-  font-weight: 500;
-`;
-
-const Answers = styled.div`
-  padding: 20px;
-  margin-top: 10px;
-  line-height: 2;
-  width: 85%;
-`;
-
-const Comments = styled.div`
-  padding: 10px 20px;
-  margin-top: 10px;
-  line-height: 2;
-`;
-
-const When = styled.div`
-  display: flex;
-  font-size: 13px;
-  font-weight: 600;
-  color: gray;
-  p {
-    margin-right: 10px;
-  }
-`;
-
-export const Button = styled.button`
-  border: none;
-  color: darkgray;
-  font-size: 13px;
-  font-weight:600
-  margin-right: 10px;
-  padding: 10px;
-`;
-
-// const YourAnswer = styled.textarea`
-//   margin: 20px;
-//   height: 150px;
-//   font-family: Arial, sans-serif;
-//   font-size: 16px;
-//   border: 1px solid #c7c7c7;
-//   padding: 10px;
-//   width: 80%;
-// `;
-
-const Textarea = styled.textarea`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  border: 1px solid #c7c7c7;
-  padding: 10px;
-  width: 100%;
-  height: 150px;
-`;
-
-const User = styled.span`
-  background-color: #d4e7f6;
-  border-radius: 4px;
-  width: content-fit;
-  height: content-fit;
-  padding: 0px 4px;
-  font-weight: 500;
-  color: #2176ff;
-`;
 const QuestionPageAnswer = ({ question, setQuestion }) => {
   // [Create] Your answer 작성하여 Post 요청 보내기
-  const memberId = useSelector((state) => state.login.memberId);
-  const displayName = useSelector((state) => state.login.displayName);
-  const { isLogin } = useSelector((state) => state.login);
+
+  const { isLogin, displayName, memberId } = useSelector(
+    (state) => state.login,
+  );
 
   const token = getCookieValue('access_token');
   const headers = {
     Authorization: `Bearer ${token}`,
-  };
-  const [answerText, setAnswerText] = useState('');
-
-  const handleAnswerSubmit = async () => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/answers`,
-        {
-          questionId: question.questionId,
-          memberId: memberId,
-          body: answerText,
-        },
-        { headers },
-      );
-
-      const newAnswer = {
-        answerId: response.data.answerId,
-        memberId: memberId,
-        displayName: displayName,
-        body: response.data.body,
-        createdAt: response.data.createdAt,
-        lastModifiedAt: response.data.lastModifiedAt,
-        comments: [],
-      };
-
-      const updatedAnswers = [...question.answers, newAnswer];
-      setQuestion((prevQuestion) => ({
-        ...prevQuestion,
-        answers: updatedAnswers,
-      }));
-
-      setAnswerText('');
-    } catch (error) {
-      console.error('Post error', error);
-    }
   };
 
   // [Update] Answer 수정하기 (작성자만 수정 가능)
@@ -273,106 +178,44 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
     }
   };
 
-  // [Update] Comment 수정하기 (작성자만 수정 가능)
-  const [editingCommentId, setEditingCommentId] = useState(null);
-  const [commentContent, setCommentContent] = useState('');
+  // const handleSaveCommentEdits = async (editedComment) => {
+  //   if (commentContent === editedComment.body) {
+  //     return;
+  //   } else {
+  //     try {
+  //       const response = await axios.patch(
+  //         `${process.env.REACT_APP_API_URL}/comments/${editedComment.commentId}`,
+  //         {
+  //           body: commentContent,
+  //         },
+  //         { headers },
+  //       );
 
-  const handleEditComment = (comment) => {
-    if (!isLogin) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
+  //       const updatedAnswers = question.answers.map((a) => ({
+  //         ...a,
+  //         comments: a.comments.map((c) =>
+  //           c.commentId === editedComment.commentId
+  //             ? {
+  //                 ...c,
+  //                 body: response.data.body,
+  //                 lastModifiedAt: response.data.lastModifiedAt,
+  //               }
+  //             : c,
+  //         ),
+  //       }));
 
-    if (comment.memberId !== memberId) {
-      alert('작성자만 댓글을 수정할 수 있습니다.');
-      return;
-    }
+  //       setQuestion((prevQuestion) => ({
+  //         ...prevQuestion,
+  //         answers: updatedAnswers,
+  //       }));
 
-    setEditingCommentId(comment.commentId);
-    setCommentContent(comment.body);
-  };
-
-  const handleCancelEditComment = () => {
-    setEditingCommentId(null);
-    setCommentContent('');
-  };
-
-  const handleSaveCommentEdits = async (editedComment) => {
-    if (commentContent === editedComment.body) {
-      return;
-    } else {
-      try {
-        const response = await axios.patch(
-          `${process.env.REACT_APP_API_URL}/comments/${editedComment.commentId}`,
-          {
-            body: commentContent,
-          },
-          { headers },
-        );
-
-        const updatedAnswers = question.answers.map((a) => ({
-          ...a,
-          comments: a.comments.map((c) =>
-            c.commentId === editedComment.commentId
-              ? {
-                  ...c,
-                  body: response.data.body,
-                  lastModifiedAt: response.data.lastModifiedAt,
-                }
-              : c,
-          ),
-        }));
-
-        setQuestion((prevQuestion) => ({
-          ...prevQuestion,
-          answers: updatedAnswers,
-        }));
-
-        setEditingCommentId(null);
-        setCommentContent('');
-      } catch (error) {
-        console.error('Edit Comment Error', error);
-      }
-    }
-  };
-
-  // [Delete] Comment 삭제하기
-  const handleDeleteComment = async (comment) => {
-    if (!isLogin) {
-      alert('댓글을 삭제하려면 로그인이 필요합니다.');
-      return;
-    }
-
-    if (memberId === comment.memberId) {
-      const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
-      if (confirmDelete) {
-        try {
-          await axios.delete(
-            `${process.env.REACT_APP_API_URL}/comments/${comment.commentId}`,
-            { headers },
-          );
-
-          const updatedAnswers = question.answers.map((a) => ({
-            ...a,
-            comments: a.comments.filter(
-              (c) => c.commentId !== comment.commentId,
-            ),
-          }));
-
-          setQuestion((prevQuestion) => ({
-            ...prevQuestion,
-            answers: updatedAnswers,
-          }));
-
-          window.alert('댓글이 삭제되었습니다.');
-        } catch (error) {
-          console.error('Delete Comment Error', error);
-        }
-      }
-    } else {
-      alert('댓글을 삭제할 수 있는 권한이 없습니다.');
-    }
-  };
+  //       setEditingCommentId(null);
+  //       setCommentContent('');
+  //     } catch (error) {
+  //       console.error('Edit Comment Error', error);
+  //     }
+  //   }
+  // };
 
   return (
     <>
@@ -441,43 +284,12 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
             {/* 댓글 리스팅 */}
             {answer.comments.map((comment) => (
               <Comments key={comment.commentId}>
-                {editingCommentId === comment.commentId ? (
-                  <div>
-                    <Textarea
-                      value={commentContent}
-                      onChange={(e) => setCommentContent(e.target.value)}
-                    />
-                    <Button onClick={() => handleSaveCommentEdits(comment)}>
-                      Save Edits
-                    </Button>
-                    <Button onClick={handleCancelEditComment}>Cancel</Button>
-                  </div>
-                ) : (
-                  <>
-                    <p>{comment.body}</p>
-                    <When>
-                      <p>
-                        answered{' '}
-                        {moment.utc(comment.createdAt).local().fromNow()}
-                      </p>
-                      <p>
-                        edited{' '}
-                        {moment.utc(comment.lastModifiedAt).local().fromNow()}
-                      </p>
-                      <p> {comment.displayName}</p>
-                    </When>
-                    {isLogin && memberId === comment.memberId && (
-                      <>
-                        <Button onClick={() => handleEditComment(comment)}>
-                          Edit
-                        </Button>
-                        <Button onClick={() => handleDeleteComment(comment)}>
-                          Delete
-                        </Button>
-                      </>
-                    )}
-                  </>
-                )}
+                <Comment
+                  key={comment.commentId}
+                  question={question}
+                  setQuestion={setQuestion}
+                  comment={comment}
+                />
               </Comments>
             ))}
           </Answers>
@@ -485,18 +297,7 @@ const QuestionPageAnswer = ({ question, setQuestion }) => {
       </AnswersContainer>
 
       {/* 로그인 상태에만 답변 작성 가능 */}
-      {isLogin && (
-        <>
-          <LetterPart>Your Answer</LetterPart>
-          <Textarea
-            value={answerText}
-            onChange={(e) => setAnswerText(e.target.value)}
-          />
-          <StyledButton onClick={handleAnswerSubmit}>
-            Post Your Answer
-          </StyledButton>
-        </>
-      )}
+      {isLogin && <YourAnswer question={question} setQuestion={setQuestion} />}
     </>
   );
 };

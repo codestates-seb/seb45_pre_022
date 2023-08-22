@@ -1,9 +1,16 @@
 import { styled } from 'styled-components';
 import { getCookieValue } from '../../custom/getCookie';
 import axios from 'axios';
-import { Button } from '../QuestionPage/QuestionPageAnswer';
 
 //  수정 기능
+const Button = styled.button`
+  border: none;
+  color: darkgray;
+  font-size: 13px;
+  font-weight:600
+  margin-right: 10px;
+  padding: 10px;
+`;
 
 const EditForm = styled.form`
   display: flex;

@@ -145,6 +145,8 @@ const Login = () => {
 
       document.cookie = `access_token=${response.data.accessToken}; path=/;`;
       document.cookie = `refresh_token=${response.data.refreshToken}; path=/;`;
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 7);
       document.cookie = `memberId=${
         response.data.memberId
       }; expires=${expirationDate.toUTCString()}; path=/`;

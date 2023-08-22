@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import QuestionPageHeader from './QuestionPageHeader';
-import QuestionPageBody from './QuestionPageBody';
+import QuestionPageHeader from '../../components/Question/QuestionPageHeader';
+import QuestionPageBody from '../../components/Question/QuestionPageBody';
 import QuestionPageAnswer from './QuestionPageAnswer';
 import { styled } from 'styled-components';
 import Loading from '../../Loading';
 
 // Question 게시글 1개 조회하는 페이지
 const QuestionPageContainer = styled.div`
-  width: 100%;
+  width: 948px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -35,11 +35,9 @@ const QuestionPage = () => {
     fetchData();
   }, []);
 
-  // Loading Indicator 만들기
   if (!question) {
     return <Loading />;
   }
-
   return (
     <QuestionPageContainer>
       <QuestionPageHeader question={question} isEditing={isEditing} />

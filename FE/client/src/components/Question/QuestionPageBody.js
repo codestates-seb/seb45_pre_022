@@ -1,13 +1,21 @@
 import { styled } from 'styled-components';
-import { Tag } from '../../components/Buttons/Tags';
-import QuestionEditPage from '../QuestionEditPage/QuestionEditPage';
+import { Tag } from '../Buttons/Tags';
+import QuestionEditPage from '../../Pages/QuestionEditPage/QuestionEditPage';
 import { useSelector } from 'react-redux';
 import { getCookieValue } from '../../custom/getCookie';
 import axios from 'axios';
-import { Button } from './QuestionPageAnswer';
 
 // Question 게시글 Body 부분 (질문 내용, 태그, 작성자)
 // 게시글 수정(수정페이지 이동) 및 삭제 기능
+
+const EditButton = styled.button`
+  border: none;
+  color: darkgray;
+  font-size: 13px;
+  font-weight:600
+  margin-right: 10px;
+  padding: 10px;
+`;
 
 const QuestionBodyContainer = styled.div`
   display: flex;
@@ -32,10 +40,10 @@ const TagWrapper = styled.div`
 `;
 
 export const AboutWriter = styled.div`
-display:flex;
-flex-direction:column;
-align-items: center;
-justify-content: center;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: center;
   margin-left: 700px;
   background-color: #d4e7f6;
   width: 200px;
@@ -45,19 +53,29 @@ justify-content: center;
   margin-top: 10px;
   font-weight: 600;
   font-size: 15px;
-
 `;
 
-export const Info=styled.div`
-font-size:13px;
-font-weight:600;
-color:gray;`
+export const Info = styled.div`
+  font-size: 11px;
+  font-weight: 500;
+  color: gray;
+`;
 
+const Img = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
   const { isLogin } = useSelector((state) => state.login);
   const loggedInMemberId = useSelector((state) => state.login.memberId);
-  
+
   const token = getCookieValue('access_token');
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -90,7 +108,7 @@ const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
           alert('게시물이 삭제되었습니다.');
           window.location.href = '/';
         } catch (error) {
-          console.error('Delete Error',error);
+          console.error('Delete Error', error);
         }
       }
     } else {
@@ -113,27 +131,25 @@ const QuestionPageBody = ({ question, isEditing, setIsEditing }) => {
           </TagsContainer>
 
           <AboutWriter>
-            <Info>asked: {new Date(question.createdAt).toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  })}</Info>
-          <div>
-          <img
-                    src="/icons/profile.png"
-                    alt="user-profile"
-                    width="24"
-                    height="24"
-                  ></img>
-          <span> {question.displayName}</span>
-          </div>
+            <Img src="/icons/profile.png" alt="user-profile"></Img>
+            <UserInfo>
+              <Info>
+                asked:{' '}
+                {new Date(question.createdAt).toLocaleString('ko-KR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                })}
+              </Info>
+              <span> {question.displayName}</span>
+            </UserInfo>
           </AboutWriter>
           <div>
-            <Button onClick={handleEdit}>Edit</Button>
-            <Button onClick={handleDelete}>Delete</Button>
+            <EditButton onClick={handleEdit}>Edit</EditButton>
+            <EditButton onClick={handleDelete}>Delete</EditButton>
           </div>
         </>
       )}

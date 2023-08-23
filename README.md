@@ -5,7 +5,8 @@
 
 ## Stackoverflow 클론 코딩
 
-[배포 링크](http://seb045022pre.shop/)\n
+[배포 링크](http://seb045022pre.shop/)
+
 [팀 노션](https://zrr.kr/SzFm)
 
 | 이름   | 역할   | 그룹     |

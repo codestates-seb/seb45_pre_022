@@ -68,7 +68,7 @@ export const ProblemContent = ({
   );
 };
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
   display: inline-flex;
   flex-wrap: wrap;
   width: 100%;
@@ -76,7 +76,7 @@ const InputWrapper = styled.div`
   background-color: white;
 `;
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   border: none;
   outline: none;
   flex-grow: 1;

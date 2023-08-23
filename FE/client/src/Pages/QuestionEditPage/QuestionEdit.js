@@ -1,6 +1,9 @@
 import { styled } from 'styled-components';
 import { getCookieValue } from '../../custom/getCookie';
 import axios from 'axios';
+import { InputWrapper, StyledInput } from '../AskPage/Contents';
+import { useState, useEffect } from 'react';
+import { Tag } from '../../components/Buttons/Tags';
 
 //  수정 기능
 const Button = styled.button`
@@ -40,13 +43,45 @@ const QuestionContent = styled.textarea`
   overflow: auto;
 `;
 
+const TagContainer = styled.div`
+  margin: 5px 0px 20px 20px;
+  padding: 8px;
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  max-width: 800px;
+`;
 const QuestionEdit = ({ question, setQuestion }) => {
+  const isEditMode = true;
+  const [tags, setTags] = useState([]);
+
+  const handleTagInput = (e) => {
+    if (e.key === ' ') {
+      const newTag = e.target.value.trim();
+
+      if (newTag !== '') {
+        setTags([...tags, newTag]);
+        e.target.value = '';
+      }
+    }
+  };
+
+  const handleTagDelete = (index) => {
+    const newTags = tags.filter((_, i) => i !== index);
+    setTags(newTags);
+  };
+
+  useEffect(() => {
+    if (question.tags) {
+      setTags(question.tags);
+    }
+  }, [question.tags]);
+
   const token = getCookieValue('access_token');
 
   const updatedQuestion = {
     title: question.title,
     body: question.body,
-    tags: question.tags,
+    tags: tags,
   };
 
   const handleInputChange = (e) => {
@@ -58,18 +93,11 @@ const QuestionEdit = ({ question, setQuestion }) => {
     return;
   };
 
-  const handleTagsChange = (e) => {
-    const newTags = e.target.value.split(',');
-    setQuestion((prevData) => ({ ...prevData, tags: newTags }));
-  };
-
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      console.log(updatedQuestion);
-
-      const response = axios.patch(
+      const response = await axios.patch(
         `${process.env.REACT_APP_API_URL}/questions/${question.questionId}`,
         updatedQuestion,
         {
@@ -79,8 +107,6 @@ const QuestionEdit = ({ question, setQuestion }) => {
           },
         },
       );
-
-      console.log(response);
       window.alert('게시글이 수정되었습니다.');
       window.location.href = `/questions/${question.questionId}`;
     } catch (error) {
@@ -106,12 +132,21 @@ const QuestionEdit = ({ question, setQuestion }) => {
           onChange={handleInputChange}
         />
         <LetterPart>Tags</LetterPart>
-        <QuestionInput
-          type="text"
-          name="tags"
-          value={question.tags.join(',')}
-          onChange={handleTagsChange}
-        />
+        <TagContainer>
+          <InputWrapper>
+            {tags.map((tag, index) => (
+              <Tag key={index} onClick={() => handleTagDelete(index)}>
+                {tag}
+              </Tag>
+            ))}
+            <StyledInput
+              type="text"
+              placeholder="e.g. (javascript) (react)"
+              onKeyDown={handleTagInput}
+              disabled={!isEditMode}
+            />
+          </InputWrapper>
+        </TagContainer>
         <Button type="submit" onClick={handleEditSubmit}>
           Save edits
         </Button>

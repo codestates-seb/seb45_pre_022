@@ -23,7 +23,7 @@ const AskPage = () => {
   const accessToken = getCookieValue('access_token');
 
   const memberId = useSelector((state) => state.login.memberId);
-  
+
   const navigate = useNavigate();
 
   const onHandleNext = () => {
@@ -70,7 +70,6 @@ const AskPage = () => {
           },
         },
       );
-      console.log(response.data);
       navigate(`/questions/${response.data.questionId}`);
     } catch (error) {
       console.log(error);

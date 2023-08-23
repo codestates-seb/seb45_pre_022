@@ -99,9 +99,10 @@ const Signup = () => {
           },
         },
       );
-      if (response.data.status === 200) {
-        navigate('/login');
+      if (response.data.data === 'success create account') {
         setIsSignupLoading(false);
+        alert('회원 등록이 완료되었습니다.');
+        navigate('/login');
       }
     } catch (error) {
       const errors = error.response.data.fieldErrors;

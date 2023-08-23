@@ -12,4 +12,5 @@ public class MemberGetResponseDto {
     private String displayName;
     private Long totalQuestions;
     private Long totalAnswers;
+
 }

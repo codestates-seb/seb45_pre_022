@@ -75,6 +75,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setHeader("Refresh",refreshToken);
 
         RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setMember(member);
         refreshTokenEntity.setValue(refreshToken);
         refreshTokenService.addRefreshToken(refreshTokenEntity);
 
@@ -132,7 +133,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("http://seb045022pre.shop/")
+                .host("seb045022pre.shop")
                 //.host("localhost")
                 .port(80)
                 .path("/")
